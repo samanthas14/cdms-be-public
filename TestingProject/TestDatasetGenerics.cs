@@ -9,7 +9,7 @@ namespace TestingProject
 {
 
     /**
-     * This test requires the CDMS_SAMPLE database.
+     * This test assumes CDMS_PROD_LOCAL database. 
      * 
      * There are three types of entities in CDMS:
      * 1) CDMS System Entities - system-level classes like:
@@ -37,22 +37,22 @@ namespace TestingProject
         public void TestGetProjectById()
         {
             var db = ServicesContext.Current;
-            Project project = db.Projects.Find(1);
+            Project project = db.Projects.Find(1140);
 
-            Assert.AreEqual("Demo Watertemp Project", project.Name);
+            Assert.AreEqual("Steelhead Supplementation Evaluation", project.Name);
         }
 
 
         /**
          * Test if a core CDMS dataset is being loaded properly. We'll use
-         *  "NOSA" dataset as our test example.
+         *  "Adult Weir" dataset as our test example.
          */ 
         [TestMethod]
         public void TestGetCoreDatasetByActivityId()
         {
-            var db = ServicesContext.Current;
-            StreamNet_NOSA ds = new StreamNet_NOSA(13); //13 is an activityID that exists in the Sample database
-            Assert.AreEqual(13, ds.Header.ActivityId); //if the header loaded, the activity id will be set
+            //var db = ServicesContext.Current;
+            AdultWeir ds = new AdultWeir(412); //an activityID that exists 
+            Assert.AreEqual(412, ds.Header.ActivityId); //if the header loaded, the activity id will be set
         }
 
         /**
@@ -62,10 +62,10 @@ namespace TestingProject
         [TestMethod]
         public void TestGetPrivateDatasetByActivityId()
         {
-            var db = ServicesContext.Current;
-            Appraisal ds = new Appraisal(1013);
-            ds.Header.AllotmentName = "Test Appraisal";
-            Assert.AreEqual(1013, ds.Header.ActivityId); //if the header loaded, the activity id will be set
+            //var db = ServicesContext.Current;
+            Appraisal ds = new Appraisal(18699);
+            ds.Header.Allotment = "537";
+            Assert.AreEqual(18699, ds.Header.ActivityId); //if the header loaded, the activity id will be set
         }
 
     }
