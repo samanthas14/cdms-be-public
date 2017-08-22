@@ -3,6 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NLog; // For the logger.Debug
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class CreelSurveyExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<CreelSurvey_Header> CreelSurvey_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("CreelSurvey_Header").Cast<CreelSurvey_Header>();
+        }
+
+        public static DbSet<CreelSurvey_Detail> CreelSurvey_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("CreelSurvey_Detail").Cast<CreelSurvey_Detail>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
@@ -29,11 +53,11 @@ namespace services.Models.Data
             Details = new List<CreelSurvey_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.CreelSurvey_Header
+            var headers_q = from h in ndb.CreelSurvey_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.CreelSurvey_Header
+                                  from hh in ndb.CreelSurvey_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -52,12 +76,12 @@ namespace services.Models.Data
             //if (debugMode) logger.Info("Dataset = " + Dataset);
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.CreelSurvey_Detail
+            var details_q = from h in ndb.CreelSurvey_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.CreelSurvey_Detail
+                                    from hh in ndb.CreelSurvey_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

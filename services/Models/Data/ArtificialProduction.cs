@@ -1,13 +1,38 @@
-﻿using System;
+﻿using services.Models;
+using services.Models.Data;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using services.ExtensionMethods;
 
 /*
  * insert into Fields (FieldCategoryId, Name, Description, Units, Validation, DataType, PossibleValues, [Rule], DbColumnName, ControlType)
 select 6, Name, Description, Units, Validation, DataType, PossibleValues, [Rule], DbColumnName, ControlType from Fields 
 WHERE DbColumnName in ('Sex','RunYear','Origin','LifeStage','FinClip','Disposition','Species','Tag','ReleaseSite')
  * */
+
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */ 
+namespace services.ExtensionMethods
+{
+    public static class ArtificialProductionExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<ArtificialProduction_Header> ArtificialProduction_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("ArtificialProduction_Header").Cast<ArtificialProduction_Header>();
+        }
+
+        public static DbSet<ArtificialProduction_Detail> ArtificialProduction_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("ArtificialProduction_Detail").Cast<ArtificialProduction_Detail>();
+        }
+    }
+}
+
 
 namespace services.Models.Data
 {
@@ -30,11 +55,11 @@ namespace services.Models.Data
             Details = new List<ArtificialProduction_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.ArtificialProduction_Header
+            var headers_q = from h in ndb.ArtificialProduction_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in ndb.ArtificialProduction_Header
+                                    from hh in ndb.ArtificialProduction_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -49,12 +74,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.ArtificialProduction_Detail
+            var details_q = from h in ndb.ArtificialProduction_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.ArtificialProduction_Detail
+                                    from hh in ndb.ArtificialProduction_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

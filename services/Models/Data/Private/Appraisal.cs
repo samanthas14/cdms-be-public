@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using services.Models;
 using System.Data.Entity;
 using services.Models.Data;
@@ -11,45 +12,46 @@ using services.ExtensionMethods;
  */
 namespace services.ExtensionMethods
 {
-    public static class WaterQualityExtensions
+    public static class AppraisalExtensions
     {
         //Extension method to give ServicesContext this property.
-        public static DbSet<WaterQuality_Header> WaterQuality_Header(this ServicesContext ctx)
+        public static DbSet<Appraisal_Header> Appraisal_Header(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("WaterQuality_Header").Cast<WaterQuality_Header>();
+            return ctx.GetDbSet("Appraisal_Header").Cast<Appraisal_Header>();
         }
 
-        public static DbSet<WaterQuality_Detail> WaterQuality_Detail(this ServicesContext ctx)
+        public static DbSet<Appraisal_Detail> Appraisal_Detail(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("WaterQuality_Detail").Cast<WaterQuality_Detail>();
+            return ctx.GetDbSet("Appraisal_Detail").Cast<Appraisal_Detail>();
         }
     }
 }
 
 namespace services.Models.Data
 {
-    public class WaterQuality : DatasetData
+    public class Appraisal: DatasetData
     {
         public Dataset Dataset { get; set; }
-        public WaterQuality_Header Header { get; set; }
-        public List<WaterQuality_Detail> Details { get; set; }
+        public Appraisal_Header Header { get; set; }
+        public List<Appraisal_Detail> Details { get; set; }
 
-        public WaterQuality() {
-            Details = new List<WaterQuality_Detail>();
+        public Appraisal() {
+            Details = new List<Appraisal_Detail>();
         }
 
-
-        public WaterQuality(int ActivityId)
+        //load an existing one
+        public Appraisal(int ActivityId)
         { 
+            
             var ndb = ServicesContext.Current;
-            Details = new List<WaterQuality_Detail>();
+            Details = new List<Appraisal_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.WaterQuality_Header()
+            var headers_q = from h in ndb.Appraisal_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.WaterQuality_Header()
+                                  from hh in ndb.Appraisal_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -64,12 +66,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.WaterQuality_Detail()
+            var details_q = from h in ndb.Appraisal_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.WaterQuality_Detail()
+                                    from hh in ndb.Appraisal_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig
@@ -81,6 +83,8 @@ namespace services.Models.Data
             {
                 Details.Add(detail);
             }
+
         }
+
     }
 }

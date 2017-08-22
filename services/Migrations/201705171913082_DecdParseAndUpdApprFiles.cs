@@ -8,9 +8,8 @@ namespace services.Migrations
     using services.Models.Data;
     using System.Data.Entity;
     using System.Data.SqlClient;
-    using System.Diagnostics;
-    using System.IO;
     using System.Linq;
+    using services.ExtensionMethods;
     
     public partial class DecdParseAndUpdApprFiles : DbMigration
     {
@@ -40,7 +39,7 @@ namespace services.Migrations
 
             var db = ServicesContext.Current;
 
-            List<Appraisal_Detail> appraisalDetail = db.Appraisal_Detail.AsEnumerable().ToList();
+            List<Appraisal_Detail> appraisalDetail = db.Appraisal_Detail().AsEnumerable().ToList();
             foreach (var aDet in appraisalDetail)
             {
                 outFile.WriteLine("aDet.Id = " + aDet.Id + ", aDet.AppraisalFiles = " + aDet.AppraisalFiles);
@@ -144,14 +143,14 @@ namespace services.Migrations
                                     {
                                         outFile.WriteLine("Detail " + detRec.Id + " has this file:  " + strFileId + ".  Updating...");
 
-                                        var theAppraisal_Detail = db.Appraisal_Detail.Find(detRec.Id);
+                                        var theAppraisal_Detail = db.Appraisal_Detail().Find(detRec.Id);
 
                                         string str3 = str1.Substring(4);
                                         string newString = "[{\"Id\":" + fileRec.FileNewId.ToString() + str3;
 
                                         //Appraisal_Detail d1 = new Appraisal_Detail();
 
-                                        Appraisal_Detail d1 = db.Appraisal_Detail.Find(detRec.Id);
+                                        Appraisal_Detail d1 = db.Appraisal_Detail().Find(detRec.Id);
 
                                         //d1.Id = theAppraisal_Detail.Id;
                                         d1.AppraisalYear = theAppraisal_Detail.AppraisalYear;

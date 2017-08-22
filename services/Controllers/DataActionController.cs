@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,7 +20,7 @@ using NLog;
 using services.Models;
 using services.Models.Data;
 using services.Resources;
-using FieldType = Microsoft.Ajax.Utilities.FieldType;
+using services.ExtensionMethods;
 
 namespace services.Controllers
 {
@@ -88,7 +87,7 @@ namespace services.Controllers
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
             logger.Debug("project.Id = " + project.Id);
 
-            var s = (from item in db.Subproject_Hab
+            var s = (from item in db.Subproject_Hab()
                      //where item.Id > 1
                      where item.Id > 1 && item.ProjectId == project.Id
                      orderby item.EffDt descending
@@ -2163,7 +2162,7 @@ namespace services.Controllers
 
                 Project project = db.Projects.Find(ProjectId);
 
-                Subproject_Crpp subproject = db.Subproject_Crpp.Find(SubprojectId);
+                Subproject_Crpp subproject = db.Subproject_Crpp().Find(SubprojectId);
 
                 if (project == null)
                     throw new Exception("Project ID not found: " + ProjectId);
@@ -2376,7 +2375,7 @@ namespace services.Controllers
                 Project project = db.Projects.Find(ProjectId);
                 logger.Debug("project.Id = " + project.Id);
 
-                Subproject_Hab subproject = db.Subproject_Hab.Find(SubprojectId);
+                Subproject_Hab subproject = db.Subproject_Hab().Find(SubprojectId);
                 logger.Debug("subproject.Id = " + subproject.Id);
 
                 if (project == null)
@@ -2627,7 +2626,7 @@ namespace services.Controllers
             if (!project.isOwnerOrEditor(me))
                 throw new Exception("Authorization Error:  The user attempting to make changes is not an Owner or Editor.");
 
-            Subproject_Hab subproject = db.Subproject_Hab.Find(json.SubprojectId.ToObject<int>());
+            Subproject_Hab subproject = db.Subproject_Hab().Find(json.SubprojectId.ToObject<int>());
             if (subproject == null)
                 throw new Exception("Configuration Error:  Could not find the SubprojectId in the database.");
 

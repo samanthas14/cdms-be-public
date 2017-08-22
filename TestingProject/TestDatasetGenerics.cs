@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using services.Controllers;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using services.Models;
-using System.Collections.Generic;
 using services.Models.Data;
 
 namespace TestingProject

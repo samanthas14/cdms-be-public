@@ -3,12 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class Subproject_CrppExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<Subproject_Crpp> Subproject_Crpp(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Subproject_Crpp").Cast<Subproject_Crpp>();
+        }
+
+        public static DbSet<CorrespondenceEvents> CorrespondenceEvents(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("CorrespondenceEvents").Cast<CorrespondenceEvents>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
-    public class Subproject_Crpp
+    public class Subproject_Crpp : DatasetStandalone
     {
-        public int Id { get; set; }
         public string ProjectName { get; set; }
         public string Agency { get; set; }
         public string ProjectProponent { get; set; }
@@ -17,8 +40,6 @@ namespace services.Models.Data
         public string YearDate { get; set; }
         public string Closed { get; set; } // Note:  On this Subproject form, this is the "Additional CRPP Action Expected" box.
         public string ProjectLead { get; set; }
-        public DateTime EffDt { get; set; }
-        public int ByUserId { get; set; }
         public virtual List<File> Files { get; set; }
         public string County { get; set; }
         public string ProjectDescription { get; set; }
@@ -33,9 +54,8 @@ namespace services.Models.Data
         public virtual List<CorrespondenceEvents> CorrespondenceEvents { get; set; }
     }
 
-    public class CorrespondenceEvents
+    public class CorrespondenceEvents : DatasetStandalone
     {
-        public int Id { get; set; }
         public int SubprojectId { get; set; }
         public DateTime CorrespondenceDate { get; set; }
         public string ResponseType { get; set; }
@@ -44,8 +64,6 @@ namespace services.Models.Data
         public string StaffMember { get; set; }
         public string EventFiles { get; set; }
         public string EventComments { get; set; }
-        public DateTime EffDt { get; set; }
-        public int ByUserId { get; set; }
         public string CorrespondenceType { get; set; }
         //public string ActionNeeded { get; set; }
 

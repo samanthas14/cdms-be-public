@@ -2,7 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
 
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class FishTransportExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<FishTransport_Header> FishTransport_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("FishTransport_Header").Cast<FishTransport_Header>();
+        }
+
+        public static DbSet<FishTransport_Detail> FishTransport_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("FishTransport_Detail").Cast<FishTransport_Detail>();
+        }
+    }
+}
 //TODO: this needs to be generalized in a refactor sometime soon.
 namespace services.Models.Data
 {
@@ -24,11 +47,11 @@ namespace services.Models.Data
             Details = new List<FishTransport_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.FishTransport_Header
+            var headers_q = from h in ndb.FishTransport_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.FishTransport_Header
+                                  from hh in ndb.FishTransport_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -43,12 +66,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.FishTransport_Detail
+            var details_q = from h in ndb.FishTransport_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.FishTransport_Detail
+                                    from hh in ndb.FishTransport_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

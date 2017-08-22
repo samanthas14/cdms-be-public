@@ -2,7 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog; // For the logger.Debug
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
 
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class DriftExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<Drift_Header> Drift_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Drift_Header").Cast<Drift_Header>();
+        }
+
+        public static DbSet<Drift_Detail> Drift_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Drift_Detail").Cast<Drift_Detail>();
+        }
+    }
+}
 namespace services.Models.Data
 {
     public class Drift : DatasetData
@@ -28,11 +51,11 @@ namespace services.Models.Data
             Details = new List<Drift_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in db.Drift_Header
+            var headers_q = from h in db.Drift_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in db.Drift_Header
+                                    from hh in db.Drift_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -52,12 +75,12 @@ namespace services.Models.Data
             if (debugMode) logger.Info("Dataset = " + Dataset);
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in db.Drift_Detail
+            var details_q = from h in db.Drift_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in db.Drift_Detail
+                                    from hh in db.Drift_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

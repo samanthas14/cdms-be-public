@@ -8,8 +8,7 @@ namespace services.Migrations
     using services.Models.Data;
     using System.Data.Entity;
     using System.Data.SqlClient;
-    using System.Linq;
-    using System.IO;
+    using services.ExtensionMethods;
     
     public partial class CreelConvertTimeHeaders : DbMigration
     {
@@ -85,7 +84,7 @@ namespace services.Migrations
 
                 foreach (var item in csDateTimeInfoList)
                 {
-                    CreelSurvey_Header csHeader = db.CreelSurvey_Header.Find(item.intCreelSurvey_Header_ID);
+                    CreelSurvey_Header csHeader = db.CreelSurvey_Header().Find(item.intCreelSurvey_Header_ID);
 
                     // First copy in all the old data, exept for the StartTime, EndTime.
                     csHeader.Id = csHeader.Id;
