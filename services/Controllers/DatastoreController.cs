@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Transactions;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
@@ -12,9 +9,6 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,7 +18,7 @@ using services.Resources;
 using System.Net.Mail;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using Microsoft.Office.Interop.Outlook;
+using services.ExtensionMethods;
 
 //kb 5/1/2014
 // this is a partial, so basically just a nice logical way of adding more to our DataActionController...
@@ -125,7 +119,7 @@ namespace services.Controllers
              */
 
             // ***** This works.
-            List<Subproject_Crpp> s = (from item in db.Subproject_Crpp
+            List<Subproject_Crpp> s = (from item in db.Subproject_Crpp()
                                   where item.Id > 1
                                   orderby item.EffDt descending
                                   select item).ToList();
@@ -183,7 +177,7 @@ namespace services.Controllers
              */
 
             // ***** This works.
-            List<Subproject_Hab> s = (from item in db.Subproject_Hab
+            List<Subproject_Hab> s = (from item in db.Subproject_Hab()
                                       where item.Id > 1
                                       //where item.Id > 1 && item.ProjectId == Id
                                       orderby item.EffDt descending
@@ -357,7 +351,7 @@ namespace services.Controllers
             var db = ServicesContext.Current;
             User me = AuthorizationManager.getCurrentUser();
 
-            List<Subproject_Hab> s = (from item in db.Subproject_Hab
+            List<Subproject_Hab> s = (from item in db.Subproject_Hab()
                                       where item.Id == Id
                                       select item).ToList();
 
@@ -1113,7 +1107,7 @@ namespace services.Controllers
             if (!p.isOwnerOrEditor(me))
                 throw new System.Exception("Authorization error.");
 
-            Subproject_Crpp crppSubproject = db.Subproject_Crpp.Find(json.SubprojectId.ToObject<int>());
+            Subproject_Crpp crppSubproject = db.Subproject_Crpp().Find(json.SubprojectId.ToObject<int>());
             if (p == null || crppSubproject == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
@@ -1135,7 +1129,7 @@ namespace services.Controllers
                 logger.Debug("Could not find folder: " + strSubprojectsPath);
             }
 
-            db.Subproject_Crpp.Remove(crppSubproject);
+            db.Subproject_Crpp().Remove(crppSubproject);
             if (debugMode) logger.Debug("Just removed this subproject from table CrppSubprojects:  " + crppSubproject.Id);
 
             //db.CrppSubprojects.State = EntityState.Modified;
@@ -1167,7 +1161,7 @@ namespace services.Controllers
             int intSubprojectId = json.SubprojectId.ToObject<int>();
             logger.Debug("SubprojectId to delete:  " + intSubprojectId);
 
-            Subproject_Hab habSubproject = db.Subproject_Hab.Find(intSubprojectId);
+            Subproject_Hab habSubproject = db.Subproject_Hab().Find(intSubprojectId);
             if (p == null || habSubproject == null)
                 throw new System.Exception("Configuration error.  Please try again.");
             logger.Debug("habSubproject.ProjectName = " + habSubproject.ProjectName);
@@ -1287,7 +1281,7 @@ namespace services.Controllers
                 logger.Debug("Could not find folder: " + strSubprojectsPath);
             }
 
-            db.Subproject_Hab.Remove(habSubproject);
+            db.Subproject_Hab().Remove(habSubproject);
             if (debugMode) logger.Debug("Just removed this subproject from table Subproject_Hab:  " + habSubproject.Id);
 
             db.SaveChanges();
@@ -1315,13 +1309,13 @@ namespace services.Controllers
             if (!p.isOwnerOrEditor(me))
                 throw new System.Exception("Authorization error.");
 
-            Subproject_Crpp subproject = db.Subproject_Crpp.Find(json.SubprojectId.ToObject<int>());
+            Subproject_Crpp subproject = db.Subproject_Crpp().Find(json.SubprojectId.ToObject<int>());
             if (p == null || subproject == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
             logger.Debug("crppSubprojectId = " + subproject.Id);
 
-            CorrespondenceEvents correspondenceEvent = db.CorrespondenceEvents.Find(json.CorrespondenceEventId.ToObject<int>());
+            CorrespondenceEvents correspondenceEvent = db.CorrespondenceEvents().Find(json.CorrespondenceEventId.ToObject<int>());
             if (p == null || correspondenceEvent == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
@@ -1407,7 +1401,7 @@ namespace services.Controllers
             if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
             */
 
-            db.CorrespondenceEvents.Remove(correspondenceEvent);
+            db.CorrespondenceEvents().Remove(correspondenceEvent);
             if (debugMode) logger.Debug("Just removed this event from table CorrespondenceEvents:  " + correspondenceEvent.Id);
 
             //db.CrppSubprojects.State = EntityState.Modified;
@@ -1435,7 +1429,7 @@ namespace services.Controllers
             if (!p.isOwnerOrEditor(me))
                 throw new System.Exception("Authorization error.");
 
-            Subproject_Hab subproject = db.Subproject_Hab.Find(json.SubprojectId.ToObject<int>());
+            Subproject_Hab subproject = db.Subproject_Hab().Find(json.SubprojectId.ToObject<int>());
             if (p == null || subproject == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
@@ -1444,11 +1438,11 @@ namespace services.Controllers
             int intHabitatItemId = json.HabitatItemId.ToObject<int>();
             logger.Debug("intHabitatItemId = " + intHabitatItemId);
 
-            if (db.HabitatItems.Any(u => u.Id == intHabitatItemId))
+            if (db.HabitatItem().Any(u => u.Id == intHabitatItemId))
             {
                 logger.Debug("The Habitat Item exists...");
                 //HabitatItem habitatItem = db.HabitatItems.Find(json.HabitatItemId.ToObject<int>());
-                HabitatItem habitatItem = db.HabitatItems.Find(intHabitatItemId);
+                HabitatItem habitatItem = db.HabitatItem().Find(intHabitatItemId);
                 if (p == null || habitatItem == null)
                     throw new System.Exception("Configuration error.  Please try again.");
 
@@ -1558,7 +1552,7 @@ namespace services.Controllers
                 if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
                 */
 
-                db.HabitatItems.Remove(habitatItem);
+                db.HabitatItem().Remove(habitatItem);
                 if (debugMode) logger.Debug("Just removed this event from table HabitatItems:  " + habitatItem.Id);
 
                 //db.CrppSubprojects.State = EntityState.Modified;
@@ -1753,7 +1747,7 @@ namespace services.Controllers
             if (s.Id == 0)
             {
                 logger.Debug("About to add new subproject...");
-                db.Subproject_Crpp.Add(s);
+                db.Subproject_Crpp().Add(s);
                 logger.Debug("created new subproject");
             }
             else
@@ -1761,7 +1755,7 @@ namespace services.Controllers
                 logger.Debug("About to update subproject...");
                 try
                 {
-                    Subproject_Crpp s2 = db.Subproject_Crpp.Find(s.Id);
+                    Subproject_Crpp s2 = db.Subproject_Crpp().Find(s.Id);
 
                     s2.ProjectName = s.ProjectName;
                     s2.Agency = s.Agency;
@@ -1975,7 +1969,7 @@ namespace services.Controllers
             if (s.Id == 0)
             {
                 logger.Debug("About to add new habSubproject...");
-                db.Subproject_Hab.Add(s);
+                db.Subproject_Hab().Add(s);
                 logger.Debug("created new habSubproject");
             }
             else
@@ -2472,12 +2466,12 @@ namespace services.Controllers
                     logger.Debug("Save DB just before adding the new correspondence event.");
 
                     // Add the CorrespondenceEvent
-                    db.CorrespondenceEvents.Add(ce);
+                    db.CorrespondenceEvents().Add(ce);
                     logger.Debug("created new correspondence event");
                 }
                 else
                 {
-                    CorrespondenceEvents ce2 = db.CorrespondenceEvents.Find(ce.Id);
+                    CorrespondenceEvents ce2 = db.CorrespondenceEvents().Find(ce.Id);
 
                     ce2.SubprojectId = ce.SubprojectId;
                     ce2.CorrespondenceDate = ce.CorrespondenceDate;
@@ -2565,7 +2559,7 @@ namespace services.Controllers
                     logger.Debug("submittingUser = " + submittingUser.Username);
 
                     // Get the Project Lead's username from the subproject.
-                    Subproject_Crpp subProj = db.Subproject_Crpp.Find(spId);
+                    Subproject_Crpp subProj = db.Subproject_Crpp().Find(spId);
                     logger.Debug("subProject = " + subProj.ProjectName);
                     logger.Debug("subProj.ProjectLead = " + subProj.ProjectLead);
                     subProj.EffDt = DateTime.Now;
@@ -2623,7 +2617,7 @@ namespace services.Controllers
                 db.Configuration.ValidateOnSaveEnabled = true;
 
                 //ok, lets try to delete the correspondence event that went bad.
-                db.CorrespondenceEvents.Remove(db.CorrespondenceEvents.Find(ce.Id));
+                db.CorrespondenceEvents().Remove(db.CorrespondenceEvents().Find(ce.Id));
                 db.SaveChanges();
 
                 logger.Debug("ok so we auto-deleted the correspondence event we created: " + ce.Id);
@@ -2679,8 +2673,8 @@ namespace services.Controllers
             if (debugMode) logger.Debug("spId = " + spId);
 
             // Locate the associated subproject.
-            Subproject_Hab spH1 = db.Subproject_Hab.Find(spId);
-            Subproject_Hab spH2 = db.Subproject_Hab.Find(spId);
+            Subproject_Hab spH1 = db.Subproject_Hab().Find(spId);
+            Subproject_Hab spH2 = db.Subproject_Hab().Find(spId);
             HabitatItem hi = new HabitatItem();
             logger.Debug("Created hi...");
 
@@ -2832,13 +2826,13 @@ namespace services.Controllers
                     logger.Debug("Save DB just before adding the new habitat item.");
 
                     // Add the HabitatItem
-                    db.HabitatItems.Add(hi);
+                    db.HabitatItem().Add(hi);
                     logger.Debug("created new habitat item");
                     db.Entry(spH2).State = EntityState.Modified;
                 }
                 else
                 {
-                    HabitatItem hi2 = db.HabitatItems.Find(hi.Id);
+                    HabitatItem hi2 = db.HabitatItem().Find(hi.Id);
 
                     hi2.Id = hi.Id;
                     hi2.SubprojectId = hi.SubprojectId;
@@ -2940,7 +2934,7 @@ namespace services.Controllers
                 db.Configuration.ValidateOnSaveEnabled = true;
 
                 //ok, lets try to delete the correspondence event that went bad.
-                db.CorrespondenceEvents.Remove(db.CorrespondenceEvents.Find(hi.Id));
+                db.CorrespondenceEvents().Remove(db.CorrespondenceEvents().Find(hi.Id));
                 db.SaveChanges();
 
                 logger.Debug("ok so we auto-deleted the Habitat item we created: " + hi.Id);

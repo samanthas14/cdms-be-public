@@ -1,7 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
 
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class ElectrofishingExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<Electrofishing_Header> Electrofishing_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Electrofishing_Header").Cast<Electrofishing_Header>();
+        }
+
+        public static DbSet<Electrofishing_Detail> Electrofishing_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Electrofishing_Detail").Cast<Electrofishing_Detail>();
+        }
+    }
+}
 namespace services.Models.Data
 {
     public class Electrofishing : DatasetData
@@ -22,11 +45,11 @@ namespace services.Models.Data
             Details = new List<Electrofishing_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.Electrofishing_Header
+            var headers_q = from h in ndb.Electrofishing_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.Electrofishing_Header
+                                  from hh in ndb.Electrofishing_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -41,12 +64,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.Electrofishing_Detail
+            var details_q = from h in ndb.Electrofishing_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.Electrofishing_Detail
+                                    from hh in ndb.Electrofishing_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

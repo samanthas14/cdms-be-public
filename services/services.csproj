@@ -1521,8 +1521,10 @@
     <Compile Include="Models\Data\BSample.cs" />
     <Compile Include="Models\Data\BSample_Detail.cs" />
     <Compile Include="Models\Data\BSample_Header.cs" />
-    <Compile Include="Models\Data\CrppContracts_Detail.cs" />
-    <Compile Include="Models\Data\CrppContracts_Header.cs" />
+    <Compile Include="Models\Data\DatasetStandalone.cs" />
+    <Compile Include="Models\Data\Private\CrppContracts.cs" />
+    <Compile Include="Models\Data\Private\CrppContracts_Detail.cs" />
+    <Compile Include="Models\Data\Private\CrppContracts_Header.cs" />
     <Compile Include="Models\Data\Drift.cs" />
     <Compile Include="Models\Data\Drift_Detail.cs" />
     <Compile Include="Models\Data\Drift_Header.cs" />
@@ -1555,9 +1557,9 @@
     <Compile Include="Models\Data\Electrofishing_Detail.cs" />
     <Compile Include="Models\Data\SnorkelFish_Header.cs" />
     <Compile Include="Models\Data\Electrofishing_Header.cs" />
-    <Compile Include="Models\Data\Appraisal.cs" />
-    <Compile Include="Models\Data\Appraisal_Detail.cs" />
-    <Compile Include="Models\Data\Appraisal_Header.cs" />
+    <Compile Include="Models\Data\Private\Appraisal.cs" />
+    <Compile Include="Models\Data\Private\Appraisal_Detail.cs" />
+    <Compile Include="Models\Data\Private\Appraisal_Header.cs" />
     <Compile Include="Models\Data\ArtificialProduction.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Detail.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Header.cs" />
@@ -1570,7 +1572,6 @@
     <Compile Include="Models\Data\FishTransport.cs" />
     <Compile Include="Models\Data\FishTransport_Detail.cs" />
     <Compile Include="Models\Data\FishTransport_Header.cs" />
-    <Compile Include="Models\Data\DataDetailRelation.cs" />
     <Compile Include="Models\Data\StreamNet_NOSA.cs" />
     <Compile Include="Models\Data\StreamNet_SAR.cs" />
     <Compile Include="Models\Data\StreamNet_RperS.cs" />
@@ -1580,7 +1581,7 @@
     <Compile Include="Models\Data\StreamNet_NOSA_Header .cs" />
     <Compile Include="Models\Data\StreamNet_SAR_Header.cs" />
     <Compile Include="Models\Data\StreamNet_RperS_Header.cs" />
-    <Compile Include="Models\Data\Subproject_Crpp.cs" />
+    <Compile Include="Models\Data\Private\Subproject_Crpp.cs" />
     <Compile Include="Models\Data\Subproject_Hab.cs" />
     <Compile Include="Models\Data\WaterQuality.cs" />
     <Compile Include="Models\Data\SpawningGroundSurvey.cs" />

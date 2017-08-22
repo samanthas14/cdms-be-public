@@ -3,6 +3,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class WaterTempExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<WaterTemp_Header> WaterTemp_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("WaterTemp_Header").Cast<WaterTemp_Header>();
+        }
+
+        public static DbSet<WaterTemp_Detail> WaterTemp_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("WaterTemp_Detail").Cast<WaterTemp_Detail>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
@@ -26,11 +50,11 @@ namespace services.Models.Data
             Details = new List<WaterTemp_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.WaterTemp_Header
+            var headers_q = from h in ndb.WaterTemp_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.WaterTemp_Header
+                                  from hh in ndb.WaterTemp_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -45,12 +69,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = (from h in ndb.WaterTemp_Detail
-                            where h.ActivityId == ActivityId
+            var details_q = (from h in ndb.WaterTemp_Detail()
+                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.WaterTemp_Detail
+                                    from hh in ndb.WaterTemp_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

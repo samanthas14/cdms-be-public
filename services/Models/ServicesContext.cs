@@ -1,6 +1,11 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using services.Models.Data;
+using System.Reflection;
+using System;
+using System.Linq;
+using System.Collections;
+using NLog;
+using System.Diagnostics;
 
 namespace services.Models
 {
@@ -18,8 +23,36 @@ namespace services.Models
         public ServicesContext() : base("name=ServicesContext")
         {
             this.Configuration.LazyLoadingEnabled = true;
-            this.Configuration.ProxyCreationEnabled = true;  
+            this.Configuration.ProxyCreationEnabled = true;
         }
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /*    
+             * There are three types of entities in CDMS:
+             * 1) CDMS System Entities - system-level classes like:
+             *      - projects
+             *      - datasets
+             *      - locations
+             *      - activities
+             *      
+             *      These are defined in this file statically and are in the namespace: services.Models
+             *      
+             *  2) CDMS "Core" Datasets - datasets that are dynamically loaded but
+             *     are shared with everyone. These are the fisheries datasets like:
+             *      - Adult Weir
+             *      - Screw Trap
+             *      - StreamNet_NOSA
+             *      
+             *  3) CDMS "Private" Datasets - datasets that are dynamically loaded but the code for these 
+             *     are not shared with everyone. These are datasets that tribes create
+             *     that they want to have only within their organization.
+             *     
+             *     Both type 2 and type 3 are loaded dynamically from the namespace: services.Models.Data
+             *     These are loaded at runtime during the OnModelCreating method below.
+             *     
+             *  
+         */
 
         public DbSet<Project> Projects { get; set; }
         public DbSet<MetadataValue> MetadataValue { get; set; }
@@ -44,9 +77,7 @@ namespace services.Models
         public DbSet<FieldCategory> FieldCategories { get; set; }
         public DbSet<FieldRole> FieldRoles { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
-        //public DbSet<Laboratory> Laboratories { get; set; }
-        //public DbSet<LaboratoryCharacteristic> LaboratoryCharacteristics { get; set; }
-        
+
         public DbSet<InstrumentType> InstrumentType { get; set; }
         public DbSet<InstrumentAccuracyCheck> AccuracyChecks { get; set; }
         public DbSet<Source> Sources { get; set; }
@@ -57,82 +88,9 @@ namespace services.Models
         public DbSet<ActivityQA> ActivityQAs { get; set; }
         public DbSet<ActivityType> ActivityTypes { get; set; }
 
-        public DbSet<AdultWeir_Detail> AdultWeir_Detail { get; set; }
-        public DbSet<AdultWeir_Header> AdultWeir_Header { get; set; }
-
-        public DbSet<SpawningGroundSurvey_Detail> SpawningGroundSurvey_Detail { get; set; }
-        public DbSet<SpawningGroundSurvey_Header> SpawningGroundSurvey_Header { get; set; }
-
-        public DbSet<WaterQuality_Detail> WaterQuality_Detail { get; set; }
-        public DbSet<WaterQuality_Header> WaterQuality_Header { get; set; }
-
-        public DbSet<ScrewTrap_Detail> ScrewTrap_Detail { get; set; }
-        public DbSet<ScrewTrap_Header> ScrewTrap_Header { get; set; }
-
-        public DbSet<FishScales_Detail> FishScales_Detail { get; set; }
-        public DbSet<FishScales_Header> FishScales_Header { get; set; }
-
-        public DbSet<SnorkelFish_Detail> SnorkelFish_Detail { get; set; }
-        public DbSet<SnorkelFish_Header> SnorkelFish_Header { get; set; }
-
-        public DbSet<Electrofishing_Detail> Electrofishing_Detail { get; set; }
-        public DbSet<Electrofishing_Header> Electrofishing_Header { get; set; }
-
-        public DbSet<StreamNet_RperS_Detail> StreamNet_RperS_Detail { get; set; }
-        public DbSet<StreamNet_RperS_Header> StreamNet_RperS_Header { get; set; }
-
-        public DbSet<StreamNet_NOSA_Detail> StreamNet_NOSA_Detail { get; set; }
-        public DbSet<StreamNet_NOSA_Header> StreamNet_NOSA_Header { get; set; }
-
-        public DbSet<StreamNet_SAR_Detail> StreamNet_SAR_Detail { get; set; }
-        public DbSet<StreamNet_SAR_Header> StreamNet_SAR_Header { get; set; }
-
-        public DbSet<FishTransport_Detail> FishTransport_Detail { get; set; }
-        public DbSet<FishTransport_Header> FishTransport_Header { get; set; }
-
-        public DbSet<WaterTemp_Detail> WaterTemp_Detail { get; set; }
-        public DbSet<WaterTemp_Header> WaterTemp_Header { get; set; }
-
-        public DbSet<Appraisal_Detail> Appraisal_Detail { get; set; }
-        public DbSet<Appraisal_Header> Appraisal_Header { get; set; }
-
-        public DbSet<ArtificialProduction_Header> ArtificialProduction_Header { get; set; }
-        public DbSet<ArtificialProduction_Detail> ArtificialProduction_Detail { get; set; }
-
-        public DbSet<CreelSurvey_Header> CreelSurvey_Header { get; set; }
-        public DbSet<CreelSurvey_Detail> CreelSurvey_Detail { get; set; }
-        //public DbSet<CreelSurvey_Carcass> CreelSurvey_Carcass { get; set; }
         public DbSet<Fisherman> Fishermen { get; set; }
-
-        public DbSet<CrppContracts_Header> CrppContracts_Header { get; set; }
-        public DbSet<CrppContracts_Detail> CrppContracts_Detail { get; set; }
-        public DbSet<Subproject_Crpp> Subproject_Crpp { get; set; }
-        public DbSet<CorrespondenceEvents> CorrespondenceEvents { get; set; }
-
-        public DbSet<Subproject_Hab> Subproject_Hab { get; set; }
-        public DbSet<HabitatItem> HabitatItems { get; set; }
-        //public DbSet<SubprojectFiles> SubprojectFiles { get; set; }
-        //public DbSet<SubprojectUrls> SubprojectUrls { get; set; }
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<Funding> Funding { get; set; }
-
-        public DbSet<Metrics_Header> Metrics_Header { get; set; }
-        public DbSet<Metrics_Detail> Metrics_Detail { get; set; }
-
-        public DbSet<BSample_Header> BSample_Header { get; set; }
-        public DbSet<BSample_Detail> BSample_Detail { get; set; }
-
-        public DbSet<JvRearing_Header> JvRearing_Header { get; set; }
-        public DbSet<JvRearing_Detail> JvRearing_Detail { get; set; }
-
-        public DbSet<Genetic_Header> Genetic_Header { get; set; }
-        public DbSet<Genetic_Detail> Genetic_Detail { get; set; }
-
-        public DbSet<Benthic_Header> Benthic_Header { get; set; }
-        public DbSet<Benthic_Detail> Benthic_Detail { get; set; }
-
-        public DbSet<Drift_Header> Drift_Header { get; set; }
-        public DbSet<Drift_Detail> Drift_Detail { get; set; }
 
         //get the dbset by name rather than by type
         public DbSet GetDbSet(string entityName)
@@ -157,6 +115,28 @@ namespace services.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Debug.WriteLine("OnModelCreating");
+
+            //Load all "services.Models.Data" entities
+            IEnumerable typelist = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "services.Models.Data");
+            foreach (Type type in typelist)
+            {
+                Debug.WriteLine("Found something: " + type.Name);
+                if (type.IsSubclassOf(typeof(Data.DataDetail)) ||
+                    type.IsSubclassOf(typeof(Data.DataHeader)) ||
+                    type.IsSubclassOf(typeof(Data.DatasetStandalone)) )
+                {
+                    Debug.WriteLine(" It is a dataset... attaching entity: " + type.Name);
+
+                    //dynamic configurationInstance = Activator.CreateInstance(type);
+                    //modelBuilder.Configurations.Add(configurationInstance);
+
+                    MethodInfo method = modelBuilder.GetType().GetMethod("Entity");
+                    method = method.MakeGenericMethod(new Type[] { type });
+                    method.Invoke(modelBuilder, null);
+                }
+            }
+
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             //in EFF 5 this is the only way to specify decimal precision
@@ -165,19 +145,18 @@ namespace services.Models
             modelBuilder.Entity<Location>().Property(p => p.Latitude).HasPrecision(18, 13);
             modelBuilder.Entity<Location>().Property(p => p.Longitude).HasPrecision(18, 13);
             modelBuilder.Entity<Location>().Property(p => p.RiverMile).HasPrecision(5, 2);
-
         }
-
 
         public static ServicesContext Current
         {
-            get {
+            get
+            {
                 if (System.Web.HttpContext.Current != null) //hey because sometimes it is! TODO
                     return System.Web.HttpContext.Current.Items["_EntityContext"] as ServicesContext;
                 else
                     return new ServicesContext();
-                }
-                
+            }
+
         }
 
         public static ServicesContext RestartCurrent
@@ -191,9 +170,15 @@ namespace services.Models
 
                 //start a new one.
                 System.Web.HttpContext.Current.Items["_EntityContext"] = new ServicesContext(); //create a whole new one...
-                return System.Web.HttpContext.Current.Items["_EntityContext"] as ServicesContext; 
+                return System.Web.HttpContext.Current.Items["_EntityContext"] as ServicesContext;
             }
 
+        }
+
+        private IEnumerable GetTypesInNamespace(Assembly assembly, string nameSpace)
+        {
+            return assembly.GetTypes()
+                .Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal));
         }
 
     }

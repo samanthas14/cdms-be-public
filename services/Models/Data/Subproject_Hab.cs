@@ -3,12 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class Subproject_HabExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<Subproject_Hab> Subproject_Hab(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("Subproject_Hab").Cast<Subproject_Hab>();
+        }
+
+        public static DbSet<HabitatItem> HabitatItem(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("HabitatItem").Cast<HabitatItem>();
+        }
+        
+    }
+}
 
 namespace services.Models.Data
 {
-    public class Subproject_Hab
+    public class Subproject_Hab : DatasetStandalone
     {
-        public int Id { get; set; }
         public string ProjectName { get; set; }
         public string ProjectSummary { get; set; }
         public string ProjectDescription { get; set; }
@@ -24,8 +48,6 @@ namespace services.Models.Data
         public string Staff { get; set; }
         public string Collaborators { get; set; }
         public string Comments { get; set; }
-        public DateTime EffDt { get; set; }
-        public int ByUserId { get; set; }
         public int ProjectId { get; set; }
         public int? LocationId { get; set; }
         //public string OtherFundingAgency { get; set; }
@@ -37,17 +59,13 @@ namespace services.Models.Data
         public string FeatureImage { get; set; }
     }
 
-    public class HabitatItem
+    public class HabitatItem : DatasetStandalone
     {
-        public int Id { get; set; }
         public int SubprojectId { get; set; }
         public string ItemName { get; set; }
         public string ItemFiles { get; set; }
         public string ExternalLinks { get; set; }
-
         public string ItemType { get; set; }
-        public DateTime EffDt { get; set; }
-        public int ByUserId { get; set; }
 
         [JsonIgnore]
         public virtual Subproject_Hab Subproject { get; set; }

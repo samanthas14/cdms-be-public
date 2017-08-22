@@ -1,33 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class CrppContractsExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<CrppContracts_Header> CrppContracts_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("CrppContracts_Header").Cast<CrppContracts_Header>();
+        }
+
+        public static DbSet<CrppContracts_Detail> CrppContracts_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("CrppContracts_Detail").Cast<CrppContracts_Detail>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
-    public class Appraisal: DatasetData
+    public class CrppContracts: DatasetData
     {
         public Dataset Dataset { get; set; }
-        public Appraisal_Header Header { get; set; }
-        public List<Appraisal_Detail> Details { get; set; }
+        public CrppContracts_Header Header { get; set; }
+        public List<CrppContracts_Detail> Details { get; set; }
 
-        public Appraisal() {
-            Details = new List<Appraisal_Detail>();
+        public CrppContracts() {
+            Details = new List<CrppContracts_Detail>();
         }
 
         //load an existing one
-        public Appraisal(int ActivityId)
+        public CrppContracts(int ActivityId)
         { 
             
             var ndb = ServicesContext.Current;
-            Details = new List<Appraisal_Detail>();
+            Details = new List<CrppContracts_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.Appraisal_Header
+            var headers_q = from h in ndb.CrppContracts_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.Appraisal_Header
+                                  from hh in ndb.CrppContracts_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -42,12 +66,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.Appraisal_Detail
+            var details_q = from h in ndb.CrppContracts_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.Appraisal_Detail
+                                    from hh in ndb.CrppContracts_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

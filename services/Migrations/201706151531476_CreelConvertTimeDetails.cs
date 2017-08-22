@@ -8,9 +8,8 @@ namespace services.Migrations
     using services.Models.Data;
     using System.Data.Entity;
     using System.Data.SqlClient;
-    using System.Linq;
-    using System.IO;
-    
+    using services.ExtensionMethods;
+        
     public partial class CreelConvertTimeDetails : DbMigration
     {
         public class CsDateTimeInfo
@@ -86,7 +85,7 @@ namespace services.Migrations
                         strIntHour = strIntTime.Substring(0, 2);
                         strIntMin = strIntTime.Substring(3, 2);
 
-                        CreelSurvey_Detail csDetail = db.CreelSurvey_Detail.Find(item.intCreelSurvey_Detail_ID);
+                        CreelSurvey_Detail csDetail = db.CreelSurvey_Detail().Find(item.intCreelSurvey_Detail_ID);
 
                         csDetail.Id = csDetail.Id;
                         csDetail.InterviewComments = csDetail.InterviewComments;
