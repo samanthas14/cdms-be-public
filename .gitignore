@@ -28,9 +28,9 @@ _ReSharper*/
 *.vssscc
 $tf*/
 .vs/*
-/TestResults/*
-/TestingProject/obj/*
-/TestingProject/bin/*
+TestResults/*
+TestingProject/obj/*
+TestingProject/bin/*
 Web.config
 TestingProject/App.config
 Web.Debug.config
@@ -38,3 +38,4 @@ Web.Release.config
 Web.config*
 /ServicesTest/*
 /services/uploads/*
+services/Properties/PublishProfiles/*

@@ -196,6 +196,7 @@
     <Compile Include="Controllers\DatasetsController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\ScriptController.cs" />
+    <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201308052143115_InitialModels.cs" />
     <Compile Include="Migrations\201308052143115_InitialModels.Designer.cs">
       <DependentUpon>201308052143115_InitialModels.cs</DependentUpon>
@@ -1690,6 +1691,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
+    <Folder Include="Views\SubProject\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
