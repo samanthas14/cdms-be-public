@@ -53,11 +53,6 @@ namespace services.Controllers
 
             if (ModelState.IsValid)
             {
-                logger.Debug("ModelState is valid.");
-
-                //bool blnLoginValid = false;
-
-                logger.Debug("Setting var user...");
                 var user = db.User.SingleOrDefault(x => x.Username == model.Username);
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
@@ -66,8 +61,8 @@ namespace services.Controllers
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
                 if ((user.Inactive == null) && 
-                    (model.Password == System.Configuration.ConfigurationManager.AppSettings["MasqueradePassword"] || 
-                    Membership.ValidateUser(model.Username, model.Password) || isValidLocalUser(user, model.Password))
+                    (model.Password == System.Configuration.ConfigurationManager.AppSettings["MasqueradePassword"] ||
+                    isValidLocalUser(user, model.Password) || Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -114,9 +109,6 @@ namespace services.Controllers
                 logger.Debug("model state invalid.");
 
             logger.Debug("Result = " + result);
-
-            //NOTE: this is necessary because IE doesn't handle json returning from a POST properly.
-            //resp.Content = new System.Net.Http.StringContent(result, System.Text.Encoding.UTF8, "text/plain");
 
             return result;
         }
