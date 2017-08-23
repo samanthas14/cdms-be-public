@@ -27,18 +27,14 @@ _ReSharper*/
 *.vssscc
 $tf*/
 .vs/*
-/TestResults/*
-/TestingProject/obj/*
-/TestingProject/bin/*
+TestResults/*
+TestingProject/obj/*
+TestingProject/bin/*
 Web.config
 TestingProject/App.config
 Web.Debug.config
 Web.Release.config
-/ServicesTest/*
-/services/uploads/*
+ServicesTest/*
+services/uploads/*
+services/Properties/PublishProfiles/*
 
-=======
-# exclude the ProjectTracker directory
-/ProjectTracker/*
-/DataTracker/js/config.js
-DataTracker/js/config.js
