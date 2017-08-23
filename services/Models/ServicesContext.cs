@@ -53,7 +53,8 @@ namespace services.Models
              *     
              *  
          */
-
+        
+        //cdms system entities
         public DbSet<Project> Projects { get; set; }
         public DbSet<MetadataValue> MetadataValue { get; set; }
         public DbSet<AuditJournal> AuditJournal { get; set; }
@@ -92,19 +93,19 @@ namespace services.Models
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<Funding> Funding { get; set; }
 
-        //get the dbset by name rather than by type
+        //get the dbset by name
         public DbSet GetDbSet(string entityName)
         {
             return this.Set(GetTypeFor(entityName));
         }
 
+        //get the type for an entity by name
         public System.Type GetTypeFor(string entityName)
         {
-            var datasource = "services.Models.Data." + entityName;
-            var obj = System.Activator.CreateInstance("services", datasource).Unwrap();
-            return obj.GetType();
+            return GetObjectFor(entityName).GetType();
         }
 
+        //get an entity object by name
         public dynamic GetObjectFor(string entityName)
         {
             var datasource = "services.Models.Data." + entityName;
@@ -112,24 +113,19 @@ namespace services.Models
             return obj;
         }
 
-
+        //called during the startup phase
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            Debug.WriteLine("OnModelCreating");
-
-            //Load all "services.Models.Data" entities
+            //Load all "services.Models.Data.*" entities that are DataDetail, DataHeader or DatasetStandalone types.
             IEnumerable typelist = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "services.Models.Data");
             foreach (Type type in typelist)
             {
-                Debug.WriteLine("Found something: " + type.Name);
+                //Debug.WriteLine("Found something: " + type.Name);
                 if (type.IsSubclassOf(typeof(Data.DataDetail)) ||
                     type.IsSubclassOf(typeof(Data.DataHeader)) ||
                     type.IsSubclassOf(typeof(Data.DatasetStandalone)) )
                 {
-                    Debug.WriteLine(" It is a dataset... attaching entity: " + type.Name);
-
-                    //dynamic configurationInstance = Activator.CreateInstance(type);
-                    //modelBuilder.Configurations.Add(configurationInstance);
+                   //Debug.WriteLine(" It is a dataset... attaching entity: " + type.Name);
 
                     MethodInfo method = modelBuilder.GetType().GetMethod("Entity");
                     method = method.MakeGenericMethod(new Type[] { type });
@@ -175,6 +171,7 @@ namespace services.Models
 
         }
 
+        //get the types in this namespace of an assembly
         private IEnumerable GetTypesInNamespace(Assembly assembly, string nameSpace)
         {
             return assembly.GetTypes()
