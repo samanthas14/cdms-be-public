@@ -1658,6 +1658,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
@@ -1686,7 +1687,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
-    <Folder Include="Resources\Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

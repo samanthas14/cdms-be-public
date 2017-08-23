@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections;
 using NLog;
 using System.Diagnostics;
+using services.Resources.Attributes;
 
 namespace services.Models
 {
@@ -133,14 +134,17 @@ namespace services.Models
                 }
             }
 
+            modelBuilder.Conventions.Add(new DecimalPrecisionAttributeConvention());
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
+            /*
             //in EFF 5 this is the only way to specify decimal precision
             modelBuilder.Entity<Location>().Property(p => p.GPSEasting).HasPrecision(18, 8);
             modelBuilder.Entity<Location>().Property(p => p.GPSNorthing).HasPrecision(18, 8);
             modelBuilder.Entity<Location>().Property(p => p.Latitude).HasPrecision(18, 13);
             modelBuilder.Entity<Location>().Property(p => p.Longitude).HasPrecision(18, 13);
             modelBuilder.Entity<Location>().Property(p => p.RiverMile).HasPrecision(5, 2);
+            */
         }
 
         public static ServicesContext Current
