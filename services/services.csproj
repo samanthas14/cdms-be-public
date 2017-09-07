@@ -1663,7 +1663,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
-    <Folder Include="Views\SubProject\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
