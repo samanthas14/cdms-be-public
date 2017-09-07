@@ -195,6 +195,7 @@
     <Compile Include="Controllers\DataActionController.cs" />
     <Compile Include="Controllers\DatasetsController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
+    <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\ScriptController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201308052143115_InitialModels.cs" />
@@ -1586,7 +1587,7 @@
     <Compile Include="Models\Data\StreamNet_SAR_Header.cs" />
     <Compile Include="Models\Data\StreamNet_RperS_Header.cs" />
     <Compile Include="Models\Data\Private\Subproject_Crpp.cs" />
-    <Compile Include="Models\Data\Subproject_Hab.cs" />
+    <Compile Include="Models\Data\Private\Subproject_Hab.cs" />
     <Compile Include="Models\Data\WaterQuality.cs" />
     <Compile Include="Models\Data\SpawningGroundSurvey.cs" />
     <Compile Include="Models\Data\WaterQuality_Detail.cs" />
