@@ -444,15 +444,58 @@ namespace services.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<Activity> DatasetActivities(int Id)
+        public dynamic DatasetActivities(int Id)
         {
             var result = new List<Activity>();
 
             var ndb = ServicesContext.Current;
 
-            var activities = ndb.Activities.Where(o => o.DatasetId == Id);
+            var activities = ndb.Activities.Where(o => o.DatasetId == Id).ToList();
 
-            return activities;
+            //build up our json instead of sending back the whole blasted object graph
+            //return activities;
+
+            JArray datasetactivities =
+                new JArray(                     //array of activities
+                from a in activities
+                    select new JObject              //one for each activity
+                    (
+                        new JProperty("Id", a.Id),
+                        new JProperty("LocationId", a.LocationId),
+                        new JProperty("UserId", a.UserId),
+                        new JProperty("ActivityDate", a.ActivityDate),
+                        new JProperty("Location",
+                            new JObject(
+                                new JProperty("Id", a.Location.Id),
+                                new JProperty("Label", a.Location.Label),
+                                new JProperty("LocationTypeId", a.Location.LocationTypeId),
+                                new JProperty("SdeObjectId", a.Location.SdeObjectId),
+                                new JProperty("WaterBodyId", a.Location.WaterBodyId),
+                                new JProperty("GPSEasting", a.Location.GPSEasting),
+                                new JProperty("GPSNorthing", a.Location.GPSNorthing),
+                                new JProperty("Projection", a.Location.Projection),
+                                new JProperty("UTMZone", a.Location.UTMZone),
+                                new JProperty("Latitude", a.Location.Latitude),
+                                new JProperty("Longitude", a.Location.Longitude),
+                                new JProperty("WaterBody",
+                                    new JObject(
+                                        new JProperty("Id", a.Location.WaterBody.Id),
+                                        new JProperty("Name", a.Location.WaterBody.Name))) 
+                                )), //closes location
+                        new JProperty("User",
+                            new JObject(
+                                new JProperty("Id", a.User.Id),
+                                new JProperty("Fullname", a.User.Fullname))), 
+                        new JProperty("ActivityQAStatus",
+                            new JObject(
+                                new JProperty("QAStatusId", a.ActivityQAStatus.QAStatusId),
+                                new JProperty("UserId", a.ActivityQAStatus.UserId),
+                                new JProperty("QAStatusName", a.ActivityQAStatus.QAStatusName)
+                                ))
+                    )
+                  );
+
+            return datasetactivities;
         }
 
 
