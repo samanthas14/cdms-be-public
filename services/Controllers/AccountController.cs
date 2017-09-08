@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
@@ -27,7 +26,8 @@ namespace services.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public const String LOCAL_USER_AUTH = "LOCAL_AUTH";
-        
+        public const String MASQUERADE_KEY = "MasqueradePassword";
+
         [HttpGet]
         public AccountResult Logout()
         {
@@ -57,11 +57,8 @@ namespace services.Controllers
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
 
-               
-                //***************
-                // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
                 if ((user.Inactive == null) && 
-                    (model.Password == System.Configuration.ConfigurationManager.AppSettings["MasqueradePassword"] ||
+                    (model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY] ||
                     isValidLocalUser(user, model.Password) || Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
@@ -103,7 +100,6 @@ namespace services.Controllers
                     result.Success = false;
                     result.Message = "Username or password were invalid.";
                 }
-                //*****************
             }
             else
                 logger.Debug("model state invalid.");
@@ -117,7 +113,7 @@ namespace services.Controllers
         {
             if (user == null)
             {
-                logger.Debug("User not found");
+                logger.Debug("Local User not found");
                 return false;
             }
             else
@@ -137,7 +133,6 @@ namespace services.Controllers
 
         public HttpResponseMessage SaveUserInfo(JObject jsonData)
         {
-            logger.Debug("Inside SaveUserInfo");
             var db = ServicesContext.Current;
             dynamic json = jsonData;
             HttpResponseMessage resp;
@@ -150,9 +145,11 @@ namespace services.Controllers
             logger.Debug("userInfo.Description = " + userInfo.Description);
             logger.Debug("userInfo.Fullname = " + userInfo.Fullname);
 
+            //KB 9/8/17 - TODO: this should be rewritten (with a test!) to just fetch by id
+            // User usr = db.User.Find(userInfo.Id);
+
             // Check the databse table for the user.
             var queryUserCount = db.User.Where(u => u.Id == userInfo.Id).Count();
-            //logger.Debug("queryUserCount = " + queryUserCount);
 
             if (queryUserCount.Equals(0))
             {

@@ -36,10 +36,10 @@ namespace services.Controllers
             
             if(jsonData.GetValue("Type").ToString() == "AUDIT")
             {
-                logger.Info(jsonData.GetValue("Message")); 
+                logger.Info(jsonData.GetValue("Message").ToString().Substring(0,255)); 
             }
             else{
-                logger.Error(jsonData.GetValue("Message"));
+                logger.Error(jsonData.GetValue("Message").ToString().Substring(0, 255));
             }
 
             return "{Message: 'Success'}";
@@ -802,6 +802,8 @@ namespace services.Controllers
                                 logger.Debug("Desc = " + newFile.Description);
 
                                 newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
+
+                                //TODO: this should be from the config
                                 newFile.Link = rootUrl + "/services/uploads/" + ProjectId + "/" + info.Name; //file.LocalFileName;
                                 newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                                 newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
