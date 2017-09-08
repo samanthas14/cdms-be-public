@@ -168,7 +168,6 @@
     <Compile Include="Controllers\DatasetsController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
-    <Compile Include="Controllers\ScriptController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201308052143115_InitialModels.cs" />
     <Compile Include="Migrations\201308052143115_InitialModels.Designer.cs">

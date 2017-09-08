@@ -32,7 +32,7 @@ namespace services.Resources
         {
             if (CanViewAny && permission == 1)
                 return true;
-
+            logger.Debug("Checking authorization: " + user.Username + " - " + entity + " - " + targetId);
             bool isAuth = true; /*user.Permissions.Where(p => p.PermissionTypeId >= permission &&
                                                p.EntityTypeId == entity &&
                                                p.EntityRowId == targetId).Any();

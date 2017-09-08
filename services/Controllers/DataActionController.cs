@@ -39,7 +39,7 @@ namespace services.Controllers
             }
 
             string query = "SELECT h.* FROM " + dataset.Datastore.TablePrefix + "_Header_VW h JOIN Activities a on a.Id = h.ActivityId WHERE a.DatasetId = " + dataset.Id;
-            logger.Debug("query = " + query);
+            //logger.Debug("query = " + query);
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -67,7 +67,7 @@ namespace services.Controllers
             int EntityTypeId = json.EntityTypeId.ToObject<int>();
 
             if (project == null || me == null)
-                throw new Exception("Configuration error. Please try again.");
+                throw new Exception("GetMetadataFor: Configuration error. Please try again.");
 
             return MetadataHelper.getMetadata(project.Id, EntityTypeId).AsEnumerable();
 
@@ -85,7 +85,7 @@ namespace services.Controllers
             }
             catch (Exception e)
             {
-                logger.Debug("Couldn't get your datasets -- probably don't have any favorites.");
+                logger.Debug("GetMyDatasets: Couldn't get your datasets -- probably don't have any favorites.");
                 logger.Debug(e);
             }
 
@@ -106,7 +106,7 @@ namespace services.Controllers
             }
             catch (Exception e)
             {
-                logger.Debug("Couldn't get your projects -- probably don't have any favorites.");
+                logger.Debug("GetMyProjects: Couldn't get your projects -- probably don't have any favorites.");
                 logger.Debug(e);
             }
 
@@ -126,7 +126,7 @@ namespace services.Controllers
             Activity activity = db.Activities.Find(json.ActivityId.ToObject<int>());
 
             if (activity == null || me == null)
-                throw new Exception("Configuration error. Please try again.");
+                throw new Exception("SetQAStatus: Configuration error. Please try again.");
 
             logger.Debug("Userid = " + me.Id + " Activity = " + activity.Id);
 
@@ -158,15 +158,15 @@ namespace services.Controllers
 
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
             if (project == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetProjectEditors: Configuration error.");
 
             User me = AuthorizationManager.getCurrentUser(); 
             if (me == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetProjectEditors: Configuration error.");
 
             //verify that the sender is the project owner. 
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Authorization error.");
+                throw new Exception("SetProjectEditors: Authorization error.");
 
             //First -- remove all editors from this project.
             project.Editors.RemoveAll(o => o.Id > 0);
@@ -176,7 +176,7 @@ namespace services.Controllers
             {
                 User user = db.User.Find(item.Id.ToObject<int>());
                 if (user == null)
-                    logger.Debug("Wow -- user not found!: " + item.Id);
+                    logger.Debug("SetProjectEditors: Wow -- user not found! i guess we can't add them: " + item.Id);
                 else
                 {
                     logger.Debug("Adding: " + item.Id);
@@ -198,13 +198,13 @@ namespace services.Controllers
 
             Dataset dataset = db.Datasets.Find(json.DatasetId.ToObject<int>());
             if (dataset == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetDatasetMetadata: Configuration error.");
 
             Project project = db.Projects.Find(dataset.ProjectId);
             
             User me = AuthorizationManager.getCurrentUser();
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Configuration error.");
+                throw new Exception("SetDatasetMetadata: Configuration error.");
 
             //Now save metadata
             List<MetadataValue> metadata = new List<MetadataValue>();
@@ -238,17 +238,19 @@ namespace services.Controllers
             Project project = db.Projects.Find(dataset.ProjectId);
 
             if (project == null)
-                throw new Exception("Configuration error.  Please try again.");
+                throw new Exception("DeleteDatasetActivities: Configuration error.");
 
             User me = AuthorizationManager.getCurrentUser();
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Configuration error.");
+                throw new Exception("DeleteDatasetActivities: Configuration error.");
 
             var Activities = new List<string>();
 
             foreach (var item in json.Activities)
             {
-                Activities.Add(""+item.Id);
+                //make sure we can cast as an int otherwise it will throw an exception.
+                int test_int = item.Id.ToObject<int>();
+                Activities.Add("" + test_int);
             }
 
             var ActivityIds = string.Join(",", Activities);
@@ -421,6 +423,7 @@ namespace services.Controllers
 
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(the_file)); //will create if necessary.
 
+            //TODO: better is to get it from config
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             //rootUrl += "/services/exports/" + dataset.Id + "_" + me.Id + "/" + Filename;
             rootUrl += "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "exports/" + dataset.Id + "_" + me.Id + "/" + Filename;
@@ -1227,6 +1230,7 @@ namespace services.Controllers
                     activity.PostAccuracyCheckId = activity_json.PostAccuracyCheckId;
                     activity.Timezone = activity_json.Timezone;
 
+                    /*
                     string strActivity = "activity.DatasetId = " + activity.DatasetId + "\n" +
                         "activity.UserId = " + activity.UserId + "\n" +
                         "activity.SourceId = " + activity.SourceId + "\n" +
@@ -1238,8 +1242,9 @@ namespace services.Controllers
                         "activity.PostAccuracyCheckId = " + activity.PostAccuracyCheckId + "\n" +
                         "activity.Timezone = " + activity.Timezone;
 
-                    //logger.Debug("activity = " + activity);
-                    //logger.Debug(strActivity);
+                    logger.Debug("activity = " + activity);
+                    logger.Debug(strActivity);
+                    */
                     logger.Debug("and we have finished parameters (DataActionController).");
                     /*
                     //check for duplicates.  If it is a duplicate, add it to our list and bail out.
@@ -2259,7 +2264,7 @@ namespace services.Controllers
                         case "easting":
                         case "northing":
                             logger.Debug("A number, currency, time, northing, or easting");
-                            conditions.Add(field.DbColumnName + item.Value); //>100
+                            conditions.Add(field.DbColumnName + filterForSQL(item.Value)); //>100
                             break;
 
                         case "text":
@@ -2268,8 +2273,8 @@ namespace services.Controllers
                             var conditional = " = ";
                             if (item.Value.ToString().Contains("%"))
                                 conditional = " LIKE ";
-                            var replaced_value = item.Value.ToString().Replace("'", "''");
-                            conditions.Add(field.DbColumnName + conditional + "'" + replaced_value + "'");
+                            
+                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value) + "'");
                             break;
 
                         case "multiselect":
@@ -2283,8 +2288,7 @@ namespace services.Controllers
                             List<string> ms_condition = new List<string>();
                             foreach (var ms_item in mselect_val)
                             {
-                                var replaced_ms_item = ms_item.ToString().Replace("'", "''");
-                                ms_condition.Add(field.DbColumnName + " LIKE '%\"" + replaced_ms_item + "\"%'");
+                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); //changed from LIKE
                             }
 
                             conditions.Add("(" + string.Join(" OR ", ms_condition) + ")");
@@ -2304,7 +2308,7 @@ namespace services.Controllers
                             logger.Debug("A date!: ");
                             if (item.Value.ParamFieldDateType == "between") //otherwise, do nothing with this criteria
                             {
-                                conditions.Add(field.DbColumnName + " between '" + item.Value.BetweenFromFieldDate + "' and '" + item.Value.BetweenToFieldDate + "'");
+                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate) + "'");
                             }
 
 
@@ -2318,30 +2322,30 @@ namespace services.Controllers
             if (json.DateSearchType == "singleYear")
             {
                 if (json.TablePrefix == "ScrewTrap")
-                    conditions.Add("MigrationYear = " + json.MigrationYear);
+                    conditions.Add("MigrationYear = " + filterForSQL(json.MigrationYear));
                 else if (json.TablePrefix == "AdultWeir")
-                    conditions.Add("RunYear = " + json.RunYear);
+                    conditions.Add("RunYear = " + filterForSQL(json.RunYear));
                 else if (json.TablePrefix == "Metrics")
-                    conditions.Add("YearReported = " + json.ReportYear);
+                    conditions.Add("YearReported = " + filterForSQL(json.ReportYear));
                 else if (json.TablePrefix == "StreamNet_NOSA")
-                    conditions.Add("SpawningYear = " + json.SpawningYear);
+                    conditions.Add("SpawningYear = " + filterForSQL(json.SpawningYear));
                 else if (json.TablePrefix == "StreamNet_RperS")
-                    conditions.Add("BroodYear = '" + json.BroodYear + "'");
+                    conditions.Add("BroodYear = '" + filterForSQL(json.BroodYear) + "'");
                 else if (json.TablePrefix == "StreamNet_SAR")
-                    conditions.Add("OutmigrationYear = " + json.OutmigrationYear);
+                    conditions.Add("OutmigrationYear = " + filterForSQL(json.OutmigrationYear));
             }
             else if (json.DateSearchType == "between")
             {
                 if (json.TablePrefix == "WaterQuality")
-                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
                 else if (json.TablePrefix == "WaterTemp")
-                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
                 else if (json.TablePrefix == "FishScales")
-                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
                 //else if (json.TablePrefix == "StreamNet")
                 //    conditions.Add("SpawningYear BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
                 else
-                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
             }
 
             //LOCATION criteria
@@ -2352,7 +2356,7 @@ namespace services.Controllers
                 var locations_in = JArray.Parse(json.Locations.ToObject<string>());
                 foreach (var item in locations_in)
                 {
-                    locations.Add(item.ToObject<string>());
+                    locations.Add(filterForSQL(item));
                 }
                 conditions.Add("LocationId IN (" + string.Join(",", locations.ToArray()) + ")");
             }
@@ -2360,7 +2364,7 @@ namespace services.Controllers
             //QASTATUS
             if (json.QAStatusId != "all")
             {
-                conditions.Add("ActivityQAStatusId=" + json.QAStatusId);
+                conditions.Add("ActivityQAStatusId=" + filterForSQL(json.QAStatusId));
             }
 
             //ROWQASTATUS
@@ -2371,7 +2375,7 @@ namespace services.Controllers
                 var rowqas_in = JArray.Parse(json.RowQAStatusId.ToObject<string>());
                 foreach (var item in rowqas_in)
                 {
-                    rowqas.Add(item.ToObject<string>());
+                    rowqas.Add(filterForSQL(item));
                 }
                 conditions.Add("QAStatusId IN (" + string.Join(",", rowqas.ToArray()) + ")");
             }
@@ -2463,6 +2467,21 @@ namespace services.Controllers
 
             return dt;
          }
+
+        private string filterForSQL(dynamic value)
+        {
+            return value.ToString()
+                        .Replace("'", "''")
+                        .Replace(";", "")
+                        .Replace("--", "")
+                        .Replace(" ", "")
+                        .Replace("@", "")
+                        .Replace("\"","")
+                        .Replace("[","")
+                        .Replace("]","");
+
+
+        }
     }
 
 }
