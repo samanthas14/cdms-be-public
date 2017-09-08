@@ -13,6 +13,7 @@ Thumbs.db
 *.sln.docstates
 *.tlb
 *.tlh
+*.bak
 *.cache
 *.ilk
 *.log
@@ -26,10 +27,10 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.vssscc
 $tf*/
-.vs/*
 Web.config
 Web.Debug.config
 Web.Release.config
+Web.config*
 /ServicesTest/*
 /services/uploads/*
 
