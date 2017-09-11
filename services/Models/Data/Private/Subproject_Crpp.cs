@@ -30,7 +30,7 @@ namespace services.ExtensionMethods
 
 namespace services.Models.Data
 {
-    public class Subproject_Crpp : DatasetStandalone
+    public class Subproject_Crpp : Subproject
     {
         public string ProjectName { get; set; }
         public string Agency { get; set; }
@@ -54,7 +54,7 @@ namespace services.Models.Data
         public virtual List<CorrespondenceEvents> CorrespondenceEvents { get; set; }
     }
 
-    public class CorrespondenceEvents : DatasetStandalone
+    public class CorrespondenceEvents : Subproject
     {
         public int SubprojectId { get; set; }
         public DateTime CorrespondenceDate { get; set; }

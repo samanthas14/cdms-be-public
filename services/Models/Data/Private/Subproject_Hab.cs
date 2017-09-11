@@ -31,7 +31,7 @@ namespace services.ExtensionMethods
 
 namespace services.Models.Data
 {
-    public class Subproject_Hab : DatasetStandalone
+    public class Subproject_Hab : Subproject
     {
         public string ProjectName { get; set; }
         public string ProjectSummary { get; set; }
@@ -59,7 +59,7 @@ namespace services.Models.Data
         public string FeatureImage { get; set; }
     }
 
-    public class HabitatItem : DatasetStandalone
+    public class HabitatItem : Subproject
     {
         public int SubprojectId { get; set; }
         public string ItemName { get; set; }
