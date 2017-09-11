@@ -124,7 +124,7 @@ namespace services.Models
                 //Debug.WriteLine("Found something: " + type.Name);
                 if (type.IsSubclassOf(typeof(Data.DataDetail)) ||
                     type.IsSubclassOf(typeof(Data.DataHeader)) ||
-                    type.IsSubclassOf(typeof(Data.DatasetStandalone)) )
+                    type.IsSubclassOf(typeof(Data.Subproject)) )
                 {
                    //Debug.WriteLine(" It is a dataset... attaching entity: " + type.Name);
 
