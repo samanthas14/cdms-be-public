@@ -1497,7 +1497,7 @@
     <Compile Include="Models\Data\BSample.cs" />
     <Compile Include="Models\Data\BSample_Detail.cs" />
     <Compile Include="Models\Data\BSample_Header.cs" />
-    <Compile Include="Models\Data\DatasetStandalone.cs" />
+    <Compile Include="Models\Data\Subproject.cs" />
     <Compile Include="Models\Data\Private\CrppContracts.cs" />
     <Compile Include="Models\Data\Private\CrppContracts_Detail.cs" />
     <Compile Include="Models\Data\Private\CrppContracts_Header.cs" />
