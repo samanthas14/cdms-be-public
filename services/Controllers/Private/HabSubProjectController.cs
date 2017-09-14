@@ -428,13 +428,6 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        HttpResponseMessage error(string message)
-        {
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
-            return response;
-        }
-
 
         [HttpGet]
         public IEnumerable<Subproject_Hab> GetHabSubprojects()

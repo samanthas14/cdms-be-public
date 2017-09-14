@@ -2482,6 +2482,13 @@ namespace services.Controllers
 
 
         }
+
+        HttpResponseMessage error(string message)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
+            return response;
+        }
     }
 
 }
