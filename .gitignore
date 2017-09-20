@@ -33,6 +33,8 @@ Web.Release.config
 Web.config*
 /ServicesTest/*
 /services/uploads/*
+UpgradeLog*.htm
+*.pubxml
 
 =======
 # exclude the ProjectTracker directory
