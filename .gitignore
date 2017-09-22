@@ -36,3 +36,7 @@ Web.Debug.config
 Web.Release.config
 Web.config*
 services/Properties/PublishProfiles/*
+UpgradeLog*.htm
+*.pubxml
+
+

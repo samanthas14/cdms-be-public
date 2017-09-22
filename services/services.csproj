@@ -1670,10 +1670,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
-    <None Include="Properties\PublishProfiles\data.ctuir.org-services-STAGE.pubxml" />
-    <None Include="Properties\PublishProfiles\data.ctuir.org-services.pubxml" />
+    <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
-    <None Include="Properties\PublishProfiles\gisweb02-stage.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201308052143115_InitialModels.resx">
