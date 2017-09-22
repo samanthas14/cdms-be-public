@@ -13,6 +13,7 @@ Thumbs.db
 *.sln.docstates
 *.tlb
 *.tlh
+*.bak
 *.cache
 *.ilk
 *.log
@@ -30,11 +31,8 @@ $tf*/
 TestResults/*
 TestingProject/obj/*
 TestingProject/bin/*
-Web.config
 TestingProject/App.config
 Web.Debug.config
 Web.Release.config
-ServicesTest/*
-services/uploads/*
 services/Properties/PublishProfiles/*
-
+Web.config*
