@@ -2523,7 +2523,8 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    foreach (string filePath in filepaths)
+                    // Turning this off for now; it deletes ALL files in the folder with a date older than today.
+                    /*foreach (string filePath in filepaths)
                     {
                         try
                         {
@@ -2546,7 +2547,7 @@ namespace services.Controllers
                             logger.Debug("Inner Exception Message:  " + ioException.InnerException.Message);
                         }
                     }
-                    
+                    */
 
                     // Now let's continue with our save process.
                     //string strSubprojectsPath = root + "\\" + spId;
