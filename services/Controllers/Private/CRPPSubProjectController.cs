@@ -972,7 +972,7 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    // Turning this off for now; it is delete ALL files in the folder with a date older than today.
+                    // Turning this off for now; it deletes ALL files in the folder with a date older than today.
                     /*foreach (string filePath in filepaths)
                     {
                         try
