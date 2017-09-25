@@ -36,3 +36,10 @@ Web.Debug.config
 Web.Release.config
 services/Properties/PublishProfiles/*
 Web.config*
+Web.config*
+/ServicesTest/*
+/services/uploads/*
+UpgradeLog*.htm
+*.pubxml
+/TestingProject/*
+/.vs/*
