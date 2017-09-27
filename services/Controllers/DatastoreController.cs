@@ -2891,7 +2891,9 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    foreach (string filePath in filepaths)
+                    // Turn this off for now; it deletes all files in the folder that are older than today.
+                    // We need this to delete the old bodypart files.
+                    /*foreach (string filePath in filepaths)
                     {
                         try
                         {
@@ -2914,7 +2916,7 @@ namespace services.Controllers
                             logger.Debug("Inner Exception Message:  " + ioException.InnerException.Message);
                         }
                     }
-
+                    */
                 }
                 catch (System.Exception dbSave)
                 {
