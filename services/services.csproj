@@ -169,9 +169,9 @@
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
-    <Compile Include="Migrations\201709230021129_Initial.cs" />
-    <Compile Include="Migrations\201709230021129_Initial.Designer.cs">
-      <DependentUpon>201709230021129_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201709292329224_Initial.cs" />
+    <Compile Include="Migrations\201709292329224_Initial.Designer.cs">
+      <DependentUpon>201709292329224_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -356,8 +356,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709230021129_Initial.resx">
-      <DependentUpon>201709230021129_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201709292329224_Initial.resx">
+      <DependentUpon>201709292329224_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

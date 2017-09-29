@@ -2345,11 +2345,13 @@ namespace services.Migrations
                 .Index(t => t.Dataset_Id)
                 .Index(t => t.QAStatus_Id);
             */
+            
         }
         
         public override void Down()
         {
-            /*DropForeignKey("dbo.WaterTemp_Header", "ByUserId", "dbo.Users");
+            /*
+            DropForeignKey("dbo.WaterTemp_Header", "ByUserId", "dbo.Users");
             DropForeignKey("dbo.WaterTemp_Header", "ActivityId", "dbo.Activities");
             DropForeignKey("dbo.WaterTemp_Detail", "QAStatusId", "dbo.QAStatus");
             DropForeignKey("dbo.WaterTemp_Detail", "ByUserId", "dbo.Users");
