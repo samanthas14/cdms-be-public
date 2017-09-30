@@ -1639,7 +1639,7 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    foreach (string filePath in filepaths)
+                    /*foreach (string filePath in filepaths)
                     {
                         try
                         {
@@ -1662,7 +1662,7 @@ namespace services.Controllers
                             logger.Debug("Inner Exception Message:  " + ioException.InnerException.Message);
                         }
                     }
-
+                    */
                 }
                 catch (System.Exception dbSave)
                 {
