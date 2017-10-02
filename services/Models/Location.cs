@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using services.Resources.Attributes;
 
 namespace services.Models
 {
@@ -23,13 +24,19 @@ namespace services.Models
 
         public int Status { get; set; }
 
-        //note: all decimal precision is set in the ServicesContext onmodelbuilding for EFF 5
+        [DecimalPrecision(18,8)]
         public decimal? GPSEasting { get; set; }
+
+        [DecimalPrecision(18, 8)]
         public decimal? GPSNorthing { get; set; }
+
         public string Projection { get; set; }
         public string UTMZone { get; set; }
 
+        [DecimalPrecision(18, 13)]
         public decimal? Latitude { get; set; }
+
+        [DecimalPrecision(18, 13)]
         public decimal? Longitude { get; set; }
 
         public string OtherAgencyId { get; set; }
@@ -38,6 +45,8 @@ namespace services.Models
         //these are very specific to water locations... is there a better way to abstract this?
         public float? WettedWidth { get; set; }
         public float? WettedDepth { get; set; }
+
+        [DecimalPrecision(5, 2)]
         public decimal? RiverMile { get; set; }
         public string StudyDesign { get; set; }
 

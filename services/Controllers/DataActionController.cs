@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,7 +20,7 @@ using NLog;
 using services.Models;
 using services.Models.Data;
 using services.Resources;
-using FieldType = Microsoft.Ajax.Utilities.FieldType;
+using services.ExtensionMethods;
 
 namespace services.Controllers
 {
@@ -40,7 +39,7 @@ namespace services.Controllers
             }
 
             string query = "SELECT h.* FROM " + dataset.Datastore.TablePrefix + "_Header_VW h JOIN Activities a on a.Id = h.ActivityId WHERE a.DatasetId = " + dataset.Id;
-            logger.Debug("query = " + query);
+            //logger.Debug("query = " + query);
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -68,73 +67,11 @@ namespace services.Controllers
             int EntityTypeId = json.EntityTypeId.ToObject<int>();
 
             if (project == null || me == null)
-                throw new Exception("Configuration error. Please try again.");
+                throw new Exception("GetMetadataFor: Configuration error. Please try again.");
 
             return MetadataHelper.getMetadata(project.Id, EntityTypeId).AsEnumerable();
 
         }
-
-        // Note:  This is a POST, instead of a GET, because we are pulling lots of data.
-        [HttpPost]
-        public IEnumerable<Subproject_Hab> ProjectSubprojects(JObject jsonData)
-        {
-            logger.Debug("Inside ProjectSubprojects...");
-            //logger.Debug("Fetching Subprojects for Project " + Id);
-            var db = ServicesContext.Current;
-
-            dynamic json = jsonData;
-            logger.Debug("json = " + json);
-
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
-            logger.Debug("project.Id = " + project.Id);
-
-            var s = (from item in db.Subproject_Hab
-                     //where item.Id > 1
-                     where item.Id > 1 && item.ProjectId == project.Id
-                     orderby item.EffDt descending
-                     select item).ToList();
-
-            foreach (var sp in s)
-            {
-                logger.Debug("sp = " + sp.ProjectName);
-
-                // First, convert the results to a list, so that we can sort them easily.
-                sp.HabitatItems = sp.HabitatItems.ToList();
-
-                //foreach (var hi in sp.HabitatItems)
-                //{
-                //    logger.Debug("hi = " + hi.ItemName);
-                //}
-
-                // Next, do the sort.
-                sp.HabitatItems = sp.HabitatItems.OrderByDescending(x => x.EffDt).ToList();
-            }
-
-            return s.AsEnumerable();
-        }
-
-        /*[HttpPost]
-        public IEnumerable<services.Models.File> SubprojectFiles(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-
-            User me = AuthorizationManager.getCurrentUser();
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
-            logger.Debug("ProjectId = " + project.Id);
-            if (project == null || me == null)
-                throw new Exception("Configuration error. Please try again.");
-
-            Subproject_Hab subproject = db.Subproject_Hab.Find(json.SubprojectId.ToObject<int>());
-            logger.Debug("SubprojectId = " + subproject.Id);
-
-            var result = (from item in db.Files
-                     where item.ProjectId == project.Id
-                     where item.Subproject_CrppId == subproject.Id
-                     select item).ToList();
-
-            return result.AsEnumerable();
-        }*/
 
         [HttpGet]
         public IEnumerable<Dataset> GetMyDatasets()
@@ -148,7 +85,7 @@ namespace services.Controllers
             }
             catch (Exception e)
             {
-                logger.Debug("Couldn't get your datasets -- probably don't have any favorites.");
+                logger.Debug("GetMyDatasets: Couldn't get your datasets -- probably don't have any favorites.");
                 logger.Debug(e);
             }
 
@@ -169,7 +106,7 @@ namespace services.Controllers
             }
             catch (Exception e)
             {
-                logger.Debug("Couldn't get your projects -- probably don't have any favorites.");
+                logger.Debug("GetMyProjects: Couldn't get your projects -- probably don't have any favorites.");
                 logger.Debug(e);
             }
 
@@ -189,7 +126,7 @@ namespace services.Controllers
             Activity activity = db.Activities.Find(json.ActivityId.ToObject<int>());
 
             if (activity == null || me == null)
-                throw new Exception("Configuration error. Please try again.");
+                throw new Exception("SetQAStatus: Configuration error. Please try again.");
 
             logger.Debug("Userid = " + me.Id + " Activity = " + activity.Id);
 
@@ -221,15 +158,15 @@ namespace services.Controllers
 
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
             if (project == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetProjectEditors: Configuration error.");
 
             User me = AuthorizationManager.getCurrentUser(); 
             if (me == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetProjectEditors: Configuration error.");
 
             //verify that the sender is the project owner. 
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Authorization error.");
+                throw new Exception("SetProjectEditors: Authorization error.");
 
             //First -- remove all editors from this project.
             project.Editors.RemoveAll(o => o.Id > 0);
@@ -239,7 +176,7 @@ namespace services.Controllers
             {
                 User user = db.User.Find(item.Id.ToObject<int>());
                 if (user == null)
-                    logger.Debug("Wow -- user not found!: " + item.Id);
+                    logger.Debug("SetProjectEditors: Wow -- user not found! i guess we can't add them: " + item.Id);
                 else
                 {
                     logger.Debug("Adding: " + item.Id);
@@ -261,13 +198,13 @@ namespace services.Controllers
 
             Dataset dataset = db.Datasets.Find(json.DatasetId.ToObject<int>());
             if (dataset == null)
-                throw new Exception("Configuration error.");
+                throw new Exception("SetDatasetMetadata: Configuration error.");
 
             Project project = db.Projects.Find(dataset.ProjectId);
             
             User me = AuthorizationManager.getCurrentUser();
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Configuration error.");
+                throw new Exception("SetDatasetMetadata: Configuration error.");
 
             //Now save metadata
             List<MetadataValue> metadata = new List<MetadataValue>();
@@ -301,17 +238,19 @@ namespace services.Controllers
             Project project = db.Projects.Find(dataset.ProjectId);
 
             if (project == null)
-                throw new Exception("Configuration error.  Please try again.");
+                throw new Exception("DeleteDatasetActivities: Configuration error.");
 
             User me = AuthorizationManager.getCurrentUser();
             if (!project.isOwnerOrEditor(me))
-                throw new Exception("Configuration error.");
+                throw new Exception("DeleteDatasetActivities: Configuration error.");
 
             var Activities = new List<string>();
 
             foreach (var item in json.Activities)
             {
-                Activities.Add(""+item.Id);
+                //make sure we can cast as an int otherwise it will throw an exception.
+                int test_int = item.Id.ToObject<int>();
+                Activities.Add("" + test_int);
             }
 
             var ActivityIds = string.Join(",", Activities);
@@ -484,6 +423,7 @@ namespace services.Controllers
 
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(the_file)); //will create if necessary.
 
+            //TODO: better is to get it from config
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             //rootUrl += "/services/exports/" + dataset.Id + "_" + me.Id + "/" + Filename;
             rootUrl += "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "exports/" + dataset.Id + "_" + me.Id + "/" + Filename;
@@ -1290,6 +1230,7 @@ namespace services.Controllers
                     activity.PostAccuracyCheckId = activity_json.PostAccuracyCheckId;
                     activity.Timezone = activity_json.Timezone;
 
+                    /*
                     string strActivity = "activity.DatasetId = " + activity.DatasetId + "\n" +
                         "activity.UserId = " + activity.UserId + "\n" +
                         "activity.SourceId = " + activity.SourceId + "\n" +
@@ -1301,8 +1242,9 @@ namespace services.Controllers
                         "activity.PostAccuracyCheckId = " + activity.PostAccuracyCheckId + "\n" +
                         "activity.Timezone = " + activity.Timezone;
 
-                    //logger.Debug("activity = " + activity);
-                    //logger.Debug(strActivity);
+                    logger.Debug("activity = " + activity);
+                    logger.Debug(strActivity);
+                    */
                     logger.Debug("and we have finished parameters (DataActionController).");
                     /*
                     //check for duplicates.  If it is a duplicate, add it to our list and bail out.
@@ -2094,559 +2036,6 @@ namespace services.Controllers
             return task;
         }
 
-        public Task<HttpResponseMessage> UploadSubprojectFile()
-        {
-            logger.Debug("Inside UploadSubprojectFile...");
-            logger.Debug("starting to process incoming subproject files.");
-
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-
-            //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
-            //string prefix = @"";
-            //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
-            //string root = System.IO.Path.Combine(prefix, strPath);
-            logger.Debug("root = " + root);
-            string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
-            logger.Debug("rootUrl = " + rootUrl);
-
-
-            // Make sure our folder exists
-            DirectoryInfo dirInfo = new DirectoryInfo(@root);
-            if (!dirInfo.Exists)
-            {
-                logger.Debug("Dir does not exist; will create it...");
-                try
-                {
-                    System.IO.Directory.CreateDirectory(root);
-                    logger.Debug("Created the dir...");
-                }
-                catch (IOException ioe)
-                {
-                    logger.Debug("Exception:  " + ioe.Message + ", " + ioe.InnerException);
-                }
-            }
-            else
-                logger.Debug("P dir already exists...");
-
-            logger.Debug("saving files to location: " + root);
-            logger.Debug(" and the root url = " + rootUrl);
-
-            var provider = new MultipartFormDataStreamProvider(root);
-            logger.Debug("provider = " + provider.ToString());
-
-            User me = AuthorizationManager.getCurrentUser();
-
-            var db = ServicesContext.Current;
-
-            // provider below gets set to the root path, a few lines up above.
-            var task = Request.Content.ReadAsMultipartAsync(provider).ContinueWith(o =>
-            {
-                if (o.IsFaulted || o.IsCanceled)
-                {
-                    logger.Debug("Error: " + o.Exception.Message);
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, o.Exception));
-                }
-
-                //Look up our project
-                Int32 ProjectId = Convert.ToInt32(provider.FormData.Get("ProjectId"));
-                logger.Debug("And we think the ProjectId === " + ProjectId);
-
-                Int32 SubprojectId = Convert.ToInt32(provider.FormData.Get("SubprojectId"));
-                logger.Debug("And we think the Subprojectid === " + SubprojectId);
-
-                string strDatastoreTablePrefix = provider.FormData.Get("DatastoreTablePrefix");
-                logger.Debug("And we think the DatastoreTablePrefix = " + strDatastoreTablePrefix);
-
-                Project project = db.Projects.Find(ProjectId);
-
-                Subproject_Crpp subproject = db.Subproject_Crpp.Find(SubprojectId);
-
-                if (project == null)
-                    throw new Exception("Project ID not found: " + ProjectId);
-
-                if (!project.isOwnerOrEditor(me))
-                    throw new Exception("Authorization error.");
-
-                if (subproject == null)
-                    throw new Exception("Subproject ID not found: " + SubprojectId);
-
-                if (strDatastoreTablePrefix == null)
-                    throw new Exception("DatastoreTablePrefix not found: " + strDatastoreTablePrefix);
-
-                //If the project/dataset folder does not exist, create it.
-                string subprojectPath = root + project.Id + "\\S\\" + subproject.Id;
-                //DirectoryInfo datasetDirInfo = new DirectoryInfo(@root);
-                DirectoryInfo subprojectDirInfo = new DirectoryInfo(subprojectPath);
-                if (!subprojectDirInfo.Exists)
-                {
-                    logger.Debug("Dir does not exist; will create it...");
-                    try
-                    {
-                        System.IO.Directory.CreateDirectory(root);
-                        logger.Debug("Created the dir...");
-                    }
-                    catch (IOException ioe)
-                    {
-                        logger.Debug("Exception:  " + ioe.Message + ", " + ioe.InnerException);
-                    }
-                }
-
-                //Now iterate through the files that just came in
-                List<services.Models.File> files = new List<services.Models.File>();
-
-                foreach (MultipartFileData file in provider.FileData)
-                {
-
-                    logger.Debug("Filename = " + file.LocalFileName);
-                    logger.Debug("Orig = " + file.Headers.ContentDisposition.FileName);
-                    logger.Debug("Name? = " + file.Headers.ContentDisposition.Name);
-
-                    //var fileIndex = getFileIndex(file.Headers.ContentDisposition.Name); //"uploadedfile0" -> 0
-                    var fileIndex = "0";
-                    logger.Debug("Fileindex = " + fileIndex);
-                    var filename = file.Headers.ContentDisposition.FileName;
-                    filename = filename.Replace("\"", string.Empty);
-                    logger.Debug("filename = " + filename);
-
-                    if (!String.IsNullOrEmpty(filename))
-                    {
-                        try
-                        {
-                            //var newFileName = ActionController.relocateSubprojectFile(
-                            //                file.LocalFileName,
-                            //                SubprojectId,
-                            //                filename,
-                            //                false);
-
-                            var newFileName = ActionController.relocateSubprojectFile(
-                                            file.LocalFileName,
-                                            ProjectId,
-                                            SubprojectId,
-                                            filename,
-                                            false);
-
-                            var info = new System.IO.FileInfo(newFileName);
-
-                            services.Models.File newFile = new services.Models.File();
-                            newFile.Title = provider.FormData.Get("Title"); //"Title_1, etc.
-                            logger.Debug("Title = " + newFile.Title);
-
-                            newFile.Description = provider.FormData.Get("Description"); //"Description_1, etc.
-                            logger.Debug("Desc = " + newFile.Description);
-
-                            newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
-                            //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
-                            //if (strDatastoreTablePrefix == "CrppContracts")
-                            //{
-                                //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\uploads\\" + SubprojectId + "\\" + info.Name;
-                            //    newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
-                            //}
-                            //else
-                            //    newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/" + ProjectId + "/" + info.Name;
-
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
-                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
-
-
-
-                            newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
-                            newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
-                            newFile.UserId = me.Id;
-                            newFile.ProjectId = ProjectId;
-                            newFile.DatasetId = null; // No datasetId for subproject files.
-                            newFile.Subproject_CrppId = SubprojectId;
-                            logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
-
-                            files.Add(newFile);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Debug("Error: " + e.ToString());
-                        }
-                    }
-                }
-
-                // We will return thefiles to the calling program.
-                List<services.Models.File> thefiles = new List<services.Models.File>();
-
-                //Add files to database for this project.
-                if (files.Count() > 0)
-                {
-                    logger.Debug("woot -- we have file objects to save");
-                    foreach (var file in files)
-                    {
-                        project.Files.Add(file);
-                        thefiles.Add(file);
-                    }
-                    db.Entry(project).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                }
-
-                logger.Debug("Done saving subproject files.");
-                var result = JsonConvert.SerializeObject(thefiles);
-                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
-                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
-
-                return resp;
-            });
-
-            return task;
-        }
-
-        public Task<HttpResponseMessage> UploadHabitatFile()
-        //public IEnumerable<services.Models.File> UploadHabitatFile()
-        {
-            logger.Debug("Inside UploadHabitatFile...");
-            logger.Debug("starting to process incoming Habitat files.");
-
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-
-            //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
-
-            logger.Debug("root = " + root);
-            string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
-            logger.Debug("rootUrl = " + rootUrl);
-
-
-            // Make sure our folder exists
-            DirectoryInfo dirInfo = new DirectoryInfo(@root);
-            if (!dirInfo.Exists)
-            {
-                logger.Debug("Dir does not exist; will create it...");
-                //dirInfo.Create();
-                try
-                {
-                    System.IO.Directory.CreateDirectory(root);
-                    logger.Debug("Created the dir...");
-                }
-                catch (IOException ioe)
-                {
-                    logger.Debug("Exception:  " + ioe.Message + ", " + ioe.InnerException);
-                }
-            }
-            else
-                logger.Debug("Dir already exists...");
-
-            logger.Debug("saving files to location: " + root);
-            logger.Debug(" and the root url = " + rootUrl);
-
-            var provider = new MultipartFormDataStreamProvider(root);
-            logger.Debug("provider = " + provider.ToString());
-
-            User me = AuthorizationManager.getCurrentUser();
-
-            var db = ServicesContext.Current;
-
-            // provider below gets set to the root path, a few lines up above.
-            var task = Request.Content.ReadAsMultipartAsync(provider).ContinueWith(o =>
-            {
-                if (o.IsFaulted || o.IsCanceled)
-                {
-                    logger.Debug("Error: " + o.Exception.Message);
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, o.Exception));
-                }
-
-                //Look up our project
-                Int32 ProjectId = Convert.ToInt32(provider.FormData.Get("ProjectId"));
-                logger.Debug("And we think the ProjectId = " + ProjectId);
-
-                Int32 SubprojectId = Convert.ToInt32(provider.FormData.Get("SubprojectId"));
-                logger.Debug("And we think the Subprojectid = " + SubprojectId);
-
-                string SubprojectType = provider.FormData.Get("SubprojectType");
-                logger.Debug("And we think the SubprojectType = " + SubprojectType);
-
-                int SubprojectFeatureImage = 0;
-                SubprojectFeatureImage = Convert.ToInt32(provider.FormData.Get("FeatureImage"));
-                logger.Debug("And we think FeatureImage = " + SubprojectFeatureImage);
-
-                //string strDatastoreTablePrefix = provider.FormData.Get("DatastoreTablePrefix");
-                //logger.Debug("And we think the DatastoreTablePrefix = " + strDatastoreTablePrefix);
-
-                Project project = db.Projects.Find(ProjectId);
-                logger.Debug("project.Id = " + project.Id);
-
-                Subproject_Hab subproject = db.Subproject_Hab.Find(SubprojectId);
-                logger.Debug("subproject.Id = " + subproject.Id);
-
-                if (project == null)
-                    throw new Exception("Project ID not found: " + ProjectId);
-
-                if (!project.isOwnerOrEditor(me))
-                    throw new Exception("Authorization error.");
-
-                if (subproject == null)
-                    throw new Exception("Subproject ID not found: " + SubprojectId);
-
-                //if (strDatastoreTablePrefix == null)
-                //    throw new Exception("DatastoreTablePrefix not found: " + strDatastoreTablePrefix);
-
-                //Now iterate through the files that just came in
-                List<services.Models.File> files = new List<services.Models.File>();
-
-                foreach (MultipartFileData file in provider.FileData)
-                {
-
-                    logger.Debug("Filename = " + file.LocalFileName);
-                    logger.Debug("Orig = " + file.Headers.ContentDisposition.FileName);
-                    logger.Debug("Name? = " + file.Headers.ContentDisposition.Name);
-
-                    //var fileIndex = getFileIndex(file.Headers.ContentDisposition.Name); //"uploadedfile0" -> 0
-                    var fileIndex = "0";
-                    logger.Debug("Fileindex = " + fileIndex);
-                    var filename = file.Headers.ContentDisposition.FileName;
-                    filename = filename.Replace("\"", string.Empty);
-                    logger.Debug("filename = " + filename);
-
-                    if (!String.IsNullOrEmpty(filename))
-                    {
-                        try
-                        {
-                            //var newFileName = ActionController.relocateSubprojectFile(
-                            //                file.LocalFileName,
-                            //                SubprojectId,
-                            //                filename,
-                            //                false);
-
-                            var newFileName = ActionController.relocateSubprojectFile(
-                                            file.LocalFileName,
-                                            ProjectId,
-                                            SubprojectId,
-                                            filename,
-                                            false);
-
-                            var info = new System.IO.FileInfo(newFileName);
-
-                            services.Models.File newFile = new services.Models.File();
-                            newFile.Title = provider.FormData.Get("Title"); //"Title_1, etc.
-                            logger.Debug("Title = " + newFile.Title);
-
-                            newFile.Description = provider.FormData.Get("Description"); //"Description_1, etc.
-                            logger.Debug("Desc = " + newFile.Description);
-
-                            newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
-                            logger.Debug("newFile.Name = " + newFile.Name);
-
-                            //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
-                            //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
-                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
-                            logger.Debug("newFile.Link = " + newFile.Link);
-
-                            newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
-                            logger.Debug("newFile.Size = " + newFile.Size);
-
-                            newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
-                            logger.Debug("newFile.FileTypeId = " + newFile.FileTypeId);
-
-                            newFile.UserId = me.Id;
-                            logger.Debug("newFile.UserId = " + newFile.UserId);
-
-                            newFile.ProjectId = project.Id;
-                            logger.Debug("newFile.ProjectId = " + newFile.ProjectId);
-
-                            // I used this for CRPP, but changed to the SubprojectFiles table later, with the advent of Habitat.
-                            // So, CRPP will also need to be changed over to the SubprojectFiles also.
-                            // For now, the HabSubproject SubprojectId cannot be stored here, because it causes a problem with the foreign key.
-                            /*
-                            newFile.Subproject_CrppId = SubprojectId;
-                            logger.Debug("newFile.Subproject_CrppId = " + newFile.Subproject_CrppId);
-                            
-                            newFile.SubprojectType = SubprojectType;
-                            logger.Debug("newFile.SubprojectType = " + newFile.SubprojectType);
-                            */
-                            newFile.UploadDate = DateTime.Now;
-                            logger.Debug("newFile.UploadDate = " + newFile.UploadDate);
-
-                            logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
-
-                            files.Add(newFile);
-                            logger.Debug("Added file " + newFile.Name);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Debug("Error: " + e.ToString());
-                        }
-                    }
-                }
-
-                //List<services.Models.File> thefiles = new List<services.Models.File>();
-                //List<int> fileIds = new List<int>();
-
-                logger.Debug("files.Count() = " + files.Count());
-                //Add files to database for this project.
-                if (files.Count() > 0)
-                {
-                    logger.Debug("woot -- we have file objects to save");
-
-                    if (SubprojectFeatureImage > 0)
-                    {
-                        // First, make a list of the SubprojectFiles for this subproject and set the FeatureImage to 0.
-                        // Note:  If we are creating a new subproject, there won't be any records.
-                        logger.Debug("ProjectId: " + project.Id + ", SubprojectId: " + subproject.Id);
-                        //List<services.Models.SubprojectFiles> spFileList = (from item in db.SubprojectFiles
-                        //                                                    where item.ProjectId == project.Id
-                        //                                                    where item.SubprojectId == subproject.Id
-                        //                                                    orderby item.Id
-                        //                                                    select item).ToList();
-
-                        List<services.Models.File> spFileList = (from item in db.Files
-                                                                            where item.ProjectId == project.Id
-                                                                            where item.Subproject_CrppId == subproject.Id
-                                                                            orderby item.Id
-                                                                            select item).ToList();
-
-                        logger.Debug("spFileList size = " + spFileList.Count);
-                        foreach (var spFile in spFileList)
-                        {
-                            //logger.Debug("Updating FeatureImage for " + spFile.FileName);
-                            logger.Debug("Updating FeatureImage for " + spFile.Name);
-                            spFile.FeatureImage = 0;
-                            db.Entry(spFile).State = EntityState.Modified;
-                        }
-
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (System.Exception e)
-                        {
-                            logger.Debug("Error = " + e.InnerException);
-
-                        }
-                    }
-
-                    // Next save the file in the Files table.
-                    foreach (var file in files)
-                    {
-                        logger.Debug("file.name = " + file.Name);
-                        //if (SubprojectFeatureImage > 0)
-                            file.FeatureImage = SubprojectFeatureImage;
-
-                        file.Subproject_CrppId = subproject.Id;
-                        
-                        project.Files.Add(file);
-                        logger.Debug("Added file to project.Files...");
-                        logger.Debug("file.id = " + file.Id);
-                        //fileIds.Add(file.Id);
-
-                        //thefiles.Add(file);
-                        //logger.Debug("Added file to thefiles");
-                    }
-                    db.Entry(project).State = EntityState.Modified;
-                    logger.Debug("Set State...");
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (System.Exception e)
-                    {
-                        logger.Debug("Error = " + e.InnerException);
-
-                    }
-                    logger.Debug("Saved changes to db...");
-                }
-
-
-                // Now get the ID of the file we just saved.
-                /*foreach (var file in files)
-                {
-                    List<services.Models.File> fileList = (from item in db.Files
-                                                           where item.Name == file.Name
-                                                           where item.ProjectId == project.Id
-                                                           where item.FileTypeId == file.FileTypeId
-                                                           orderby item.Id
-                                                           select item).ToList();
-
-                    // Add the record to the subbproject files
-                    // There should be only one.
-                    string strAFile = "";
-                    foreach (var fileRecord in fileList)
-                    {
-                        logger.Debug("Saving fileId " + fileRecord.Id + ", fileName = " + fileRecord.Name);
-                        SubprojectFiles aFile = new SubprojectFiles();
-                        aFile.ProjectId = project.Id;
-                        aFile.SubprojectId = subproject.Id;
-                        aFile.FileId = fileRecord.Id;
-                        aFile.FileName = fileRecord.Name;
-                        aFile.FeatureImage = SubprojectFeatureImage;
-
-                        strAFile += " aFile.ProjectId = " + aFile.ProjectId + "\n";
-                        strAFile += " aFile.SubprojectId = " + aFile.SubprojectId + "\n";
-                        strAFile += " aFile.FileId = " + aFile.FileId + "\n";
-                        strAFile += " aFile.FileName = " + aFile.FileName + "\n";
-                        strAFile += " aFile.FeatureImage = " + aFile.FeatureImage + "\n";
-                        logger.Debug("strAFile = " + strAFile);
-
-                        db.SubprojectFiles.Add(aFile);
-                    }
-                    db.SaveChanges();
-                }
-                */
-
-                logger.Debug("Done saving files.");
-                //var result = JsonConvert.SerializeObject(thefiles);
-                var result = JsonConvert.SerializeObject(files);
-                //var result2 = JsonConvert.SerializeObject(fileIds);
-                logger.Debug("result = " + result);
-
-                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
-                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
-
-                return resp;
-            });
-
-            return task;
-        }
-
-        [HttpPost]
-        public HttpResponseMessage UploadHabitatLink(JObject jsonData)
-        {
-            logger.Debug("Inside UploadHabitatLink...");
-            logger.Debug("starting to process incoming Habitat links.");
-
-            var db = ServicesContext.RestartCurrent;
-            User me = AuthorizationManager.getCurrentUser();
-
-            dynamic json = jsonData;
-
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
-            if (project == null)
-                throw new Exception("Configuration Error:  Could not find the ProjectId in the database.");
-
-            if (!project.isOwnerOrEditor(me))
-                throw new Exception("Authorization Error:  The user attempting to make changes is not an Owner or Editor.");
-
-            Subproject_Hab subproject = db.Subproject_Hab.Find(json.SubprojectId.ToObject<int>());
-            if (subproject == null)
-                throw new Exception("Configuration Error:  Could not find the SubprojectId in the database.");
-
-            string SubprojectType = json.SubprojectType.ToObject<string>();
-            logger.Debug("And we think the SubprojectType = " + SubprojectType);
-
-            //foreach (var item in linkList)
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        HttpResponseMessage error(string message)
-        {
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
-            return response;
-        }
-
-
         // Users can upload waypoints; the data will be extracted, converted to json, then sent back to the browser in the response.
         // The uploaded files will NOT be saved.
         [HttpPost]
@@ -2875,7 +2264,7 @@ namespace services.Controllers
                         case "easting":
                         case "northing":
                             logger.Debug("A number, currency, time, northing, or easting");
-                            conditions.Add(field.DbColumnName + item.Value); //>100
+                            conditions.Add(field.DbColumnName + filterForSQL(item.Value)); //>100
                             break;
 
                         case "text":
@@ -2884,8 +2273,8 @@ namespace services.Controllers
                             var conditional = " = ";
                             if (item.Value.ToString().Contains("%"))
                                 conditional = " LIKE ";
-                            var replaced_value = item.Value.ToString().Replace("'", "''");
-                            conditions.Add(field.DbColumnName + conditional + "'" + replaced_value + "'");
+                            
+                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value) + "'");
                             break;
 
                         case "multiselect":
@@ -2899,8 +2288,7 @@ namespace services.Controllers
                             List<string> ms_condition = new List<string>();
                             foreach (var ms_item in mselect_val)
                             {
-                                var replaced_ms_item = ms_item.ToString().Replace("'", "''");
-                                ms_condition.Add(field.DbColumnName + " LIKE '%\"" + replaced_ms_item + "\"%'");
+                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); //changed from LIKE
                             }
 
                             conditions.Add("(" + string.Join(" OR ", ms_condition) + ")");
@@ -2920,7 +2308,7 @@ namespace services.Controllers
                             logger.Debug("A date!: ");
                             if (item.Value.ParamFieldDateType == "between") //otherwise, do nothing with this criteria
                             {
-                                conditions.Add(field.DbColumnName + " between '" + item.Value.BetweenFromFieldDate + "' and '" + item.Value.BetweenToFieldDate + "'");
+                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate,true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate,true) + "'");
                             }
 
 
@@ -2934,30 +2322,30 @@ namespace services.Controllers
             if (json.DateSearchType == "singleYear")
             {
                 if (json.TablePrefix == "ScrewTrap")
-                    conditions.Add("MigrationYear = " + json.MigrationYear);
+                    conditions.Add("MigrationYear = " + filterForSQL(json.MigrationYear));
                 else if (json.TablePrefix == "AdultWeir")
-                    conditions.Add("RunYear = " + json.RunYear);
+                    conditions.Add("RunYear = " + filterForSQL(json.RunYear));
                 else if (json.TablePrefix == "Metrics")
-                    conditions.Add("YearReported = " + json.ReportYear);
+                    conditions.Add("YearReported = " + filterForSQL(json.ReportYear));
                 else if (json.TablePrefix == "StreamNet_NOSA")
-                    conditions.Add("SpawningYear = " + json.SpawningYear);
+                    conditions.Add("SpawningYear = " + filterForSQL(json.SpawningYear));
                 else if (json.TablePrefix == "StreamNet_RperS")
-                    conditions.Add("BroodYear = '" + json.BroodYear + "'");
+                    conditions.Add("BroodYear = '" + filterForSQL(json.BroodYear) + "'");
                 else if (json.TablePrefix == "StreamNet_SAR")
-                    conditions.Add("OutmigrationYear = " + json.OutmigrationYear);
+                    conditions.Add("OutmigrationYear = " + filterForSQL(json.OutmigrationYear));
             }
             else if (json.DateSearchType == "between")
             {
                 if (json.TablePrefix == "WaterQuality")
-                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 else if (json.TablePrefix == "WaterTemp")
-                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 else if (json.TablePrefix == "FishScales")
-                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 //else if (json.TablePrefix == "StreamNet")
                 //    conditions.Add("SpawningYear BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
                 else
-                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
+                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate, true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
             }
 
             //LOCATION criteria
@@ -2968,7 +2356,7 @@ namespace services.Controllers
                 var locations_in = JArray.Parse(json.Locations.ToObject<string>());
                 foreach (var item in locations_in)
                 {
-                    locations.Add(item.ToObject<string>());
+                    locations.Add(filterForSQL(item));
                 }
                 conditions.Add("LocationId IN (" + string.Join(",", locations.ToArray()) + ")");
             }
@@ -2976,7 +2364,7 @@ namespace services.Controllers
             //QASTATUS
             if (json.QAStatusId != "all")
             {
-                conditions.Add("ActivityQAStatusId=" + json.QAStatusId);
+                conditions.Add("ActivityQAStatusId=" + filterForSQL(json.QAStatusId));
             }
 
             //ROWQASTATUS
@@ -2987,7 +2375,7 @@ namespace services.Controllers
                 var rowqas_in = JArray.Parse(json.RowQAStatusId.ToObject<string>());
                 foreach (var item in rowqas_in)
                 {
-                    rowqas.Add(item.ToObject<string>());
+                    rowqas.Add(filterForSQL(item));
                 }
                 conditions.Add("QAStatusId IN (" + string.Join(",", rowqas.ToArray()) + ")");
             }
@@ -3079,6 +2467,42 @@ namespace services.Controllers
 
             return dt;
          }
+
+        //filter an incoming parameter that will be appended to a SQL statement for
+        // any possible misbehaving sql characters.
+        private string filterForSQL(dynamic value)
+        {
+            return filterForSQL(value, false); //default to not allowing spaces
+        }
+
+        //optionally allow spaces since date parameters require them.
+        private string filterForSQL(dynamic value, bool allowspace)
+        {
+            value = value.ToString()
+                        .Replace("'", "''")
+                        .Replace(";", "")
+                        .Replace("--", "")
+                        .Replace("@", "")
+                        .Replace("\"", "")
+                        .Replace("[", "")
+                        .Replace("]", "");
+
+            //replace " " with "" unless allowspace=true
+            if (!allowspace)
+            {
+                value = value.Replace(" ", "");
+            }
+
+            return value;
+
+        }
+
+        HttpResponseMessage error(string message)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
+            return response;
+        }
     }
 
 }

@@ -27,13 +27,19 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.vssscc
 $tf*/
-Web.config
+.vs/*
+TestResults/*
+TestingProject/obj/*
+TestingProject/bin/*
+TestingProject/App.config
 Web.Debug.config
 Web.Release.config
 Web.config*
-/ServicesTest/*
-/services/uploads/*
+services/Properties/PublishProfiles/*
 UpgradeLog*.htm
+<<<<<<< HEAD
+*.pubxml
+=======
 *.pubxml
 
 =======
@@ -47,3 +53,4 @@ DataTracker/js/config.js
 
 # exclude the .vs directory
 /.vs/*
+>>>>>>> master

@@ -12,6 +12,7 @@ using services.Models;
 
 namespace services.Controllers
 {
+    [System.Web.Http.Authorize]
     public class MetadataPropertiesController : ApiController
     {
         // GET api/Metadata

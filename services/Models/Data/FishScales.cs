@@ -1,7 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
 
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class FishScalesExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<FishScales_Header> FishScales_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("FishScales_Header").Cast<FishScales_Header>();
+        }
+
+        public static DbSet<FishScales_Detail> FishScales_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("FishScales_Detail").Cast<FishScales_Detail>();
+        }
+    }
+}
 namespace services.Models.Data
 {
     public class FishScales : DatasetData
@@ -22,11 +45,11 @@ namespace services.Models.Data
             Details = new List<FishScales_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.FishScales_Header
+            var headers_q = from h in ndb.FishScales_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.FishScales_Header
+                                  from hh in ndb.FishScales_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -41,12 +64,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.FishScales_Detail
+            var details_q = from h in ndb.FishScales_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.FishScales_Detail
+                                    from hh in ndb.FishScales_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

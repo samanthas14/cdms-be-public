@@ -8,11 +8,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Spatial;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.WebPages;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using services.Models;
@@ -38,14 +36,28 @@ namespace services.Controllers
             
             if(jsonData.GetValue("Type").ToString() == "AUDIT")
             {
-                logger.Info(jsonData.GetValue("Message")); 
+                logger.Info(jsonData.GetValue("Message").ToString().Substring(0,255)); 
             }
             else{
-                logger.Error(jsonData.GetValue("Message"));
+                logger.Error(jsonData.GetValue("Message").ToString().Substring(0, 255));
             }
 
             return "{Message: 'Success'}";
         }
+
+        /*
+         * TODO: We'd like to refactor this and the following controller methods:
+         *   1 - move entity logic into the entity
+         *   2 - return just the list of ints
+         *   3 - maybe use linq instead of raw sql queries:
+               (from s in Screwtrap_vw
+                where s.DatasetId == 1215 
+                select s.MigrationYear).Distinct()
+
+             4 - And maybe best: explore making this soft so that you can ask for these kinds of things without
+                 special methods... or maybe the dataset entity class can define/expose possible lists of itself.
+         */
+
 
         //returns empty list if none found...
         [AllowAnonymous]
@@ -295,33 +307,6 @@ namespace services.Controllers
             return datasets;
         }
 
-        // Moved the following method over to DataAction Controller and changed it from a GET to a POST.
-        // We were pulling a lot of data and getting errors.  I suspected that we could be pulling too much data in a GET.
-        /*[AllowAnonymous]
-        [HttpGet]
-        public IEnumerable<Subproject_Hab> ProjectSubprojects(int Id)
-        {
-            logger.Debug("Inside ProjectSubprojects...");
-            logger.Debug("Fetching Subprojects for Project " + Id);
-            var result = new List<Subproject_Hab>();
-
-            var ndb = ServicesContext.Current;
-
-            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
-            var s = (from item in ndb.Subproject_Hab
-                     //where item.Id > 1
-                     where item.Id > 1 && item.ProjectId == Id
-                     orderby item.EffDt descending
-                     select item).ToList();
-
-            foreach (var item in s)
-            {
-                logger.Debug("item.Id = " + item.Id + ", item. = " + item.ProjectName);
-            }
-
-            //return datasets;
-            return s;
-        }*/
 
         [AllowAnonymous]
         [HttpGet]
@@ -425,37 +410,7 @@ namespace services.Controllers
             return result;
         }
 
-        /*[AllowAnonymous]
-        [HttpGet]
-        //public IEnumerable<SubprojectFiles> SubprojectFiles(int Id)
-        //public IEnumerable<File> SubprojectFiles(int Id, int spId)
-        public IEnumerable<File> SubprojectFiles(int Id)
-        {
-            logger.Debug("Inside SubprojectFiles...");
-            //logger.Debug("Fetching Files for Project " + Id);
-            logger.Debug("Fetching Files for Subproject " + Id);
-            //logger.Debug("spId = " + spId);
-
-            var ndb = ServicesContext.Current;
-
-            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
-            //var f = (from item in ndb.SubprojectFiles
-            //         //where item.Id > 1
-            //         where item.ProjectId == Id
-            //         orderby item.ProjectId, item.SubprojectId
-            //         select item).ToList();
-
-            var result = (from item in ndb.Files
-                     //where item.Id > 1
-                     where item.Subproject_CrppId == Id
-                     where item.ProjectId != Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["CrppProject"])
-                     orderby item.ProjectId, item.Subproject_CrppId 
-                     select item).ToList();
-
-            //return datasets;
-            //return f;
-            return result;
-        }*/
+        
 
         [AllowAnonymous]
         [HttpGet]
@@ -847,6 +802,8 @@ namespace services.Controllers
                                 logger.Debug("Desc = " + newFile.Description);
 
                                 newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
+
+                                //TODO: this should be from the config
                                 newFile.Link = rootUrl + "/services/uploads/" + ProjectId + "/" + info.Name; //file.LocalFileName;
                                 newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                                 newFile.FileTypeId = FileType.getFileTypeFromFilename(info);

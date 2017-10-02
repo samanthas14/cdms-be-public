@@ -12,6 +12,7 @@ using services.Models;
 
 namespace services.Controllers
 {
+    [System.Web.Http.Authorize]
     public class UsersController : ApiController
     {
         // GET api/Users

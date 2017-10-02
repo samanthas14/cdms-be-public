@@ -2,6 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog; // For the logger.Debug
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class BSampleExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<BSample_Header> BSample_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("BSample_Header").Cast<BSample_Header>();
+        }
+
+        public static DbSet<BSample_Detail> BSample_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("BSample_Detail").Cast<BSample_Detail>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
@@ -27,11 +51,11 @@ namespace services.Models.Data
             Details = new List<BSample_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.BSample_Header
+            var headers_q = from h in ndb.BSample_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in ndb.BSample_Header
+                                    from hh in ndb.BSample_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -50,13 +74,13 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
             if (debugMode) logger.Info("Dataset = " + Dataset);
 
-            //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.BSample_Detail
+            //select detail by activityid (taking effdt int()o account)
+            var details_q = from h in ndb.BSample_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.BSample_Detail
+                                    from hh in ndb.BSample_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

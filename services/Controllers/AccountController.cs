@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
@@ -35,7 +34,9 @@ namespace services.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public const String LOCAL_USER_AUTH = "LOCAL_AUTH";
+        public const String MASQUERADE_KEY = "MasqueradePassword";
         private List<originalText> pwPartsList;
+
 
         [HttpGet]
         public AccountResult Logout()
@@ -71,11 +72,6 @@ namespace services.Controllers
 
             if (ModelState.IsValid)
             {
-                logger.Debug("ModelState is valid.");
-
-                //bool blnLoginValid = false;
-
-                logger.Debug("Setting var user...");
                 var user = db.User.SingleOrDefault(x => x.Username == model.Username);
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
@@ -155,8 +151,8 @@ namespace services.Controllers
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
                 if ((user.Inactive == null) && 
-                    (model.Password == System.Configuration.ConfigurationManager.AppSettings["MasqueradePassword"] || 
-                    Membership.ValidateUser(model.Username, model.Password) || isValidLocalUser(user, model.Password))
+                    (model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY] ||
+                    isValidLocalUser(user, model.Password) || Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -197,15 +193,11 @@ namespace services.Controllers
                     result.Success = false;
                     result.Message = "Username or password were invalid.";
                 }
-                //*****************
             }
             else
                 logger.Debug("model state invalid.");
 
             logger.Debug("Result = " + result);
-
-            //NOTE: this is necessary because IE doesn't handle json returning from a POST properly.
-            //resp.Content = new System.Net.Http.StringContent(result, System.Text.Encoding.UTF8, "text/plain");
 
             return result;
         }
@@ -214,7 +206,7 @@ namespace services.Controllers
         {
             if (user == null)
             {
-                logger.Debug("User not found");
+                logger.Debug("Local User not found");
                 return false;
             }
             else
@@ -234,7 +226,6 @@ namespace services.Controllers
 
         public HttpResponseMessage SaveUserInfo(JObject jsonData)
         {
-            logger.Debug("Inside SaveUserInfo");
             var db = ServicesContext.Current;
             dynamic json = jsonData;
             HttpResponseMessage resp;
@@ -247,9 +238,11 @@ namespace services.Controllers
             logger.Debug("userInfo.Description = " + userInfo.Description);
             logger.Debug("userInfo.Fullname = " + userInfo.Fullname);
 
+            //KB 9/8/17 - TODO: this should be rewritten (with a test!) to just fetch by id
+            // User usr = db.User.Find(userInfo.Id);
+
             // Check the databse table for the user.
             var queryUserCount = db.User.Where(u => u.Id == userInfo.Id).Count();
-            //logger.Debug("queryUserCount = " + queryUserCount);
 
             if (queryUserCount.Equals(0))
             {

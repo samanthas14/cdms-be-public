@@ -9,6 +9,7 @@ using services.Resources;
 
 namespace services.Controllers
 {
+    [System.Web.Http.Authorize]
     public class FilesController : ApiController
     {
 

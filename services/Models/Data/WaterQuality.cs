@@ -1,6 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using services.Models;
+using System.Data.Entity;
+using services.Models.Data;
+using services.ExtensionMethods;
+
+/* 
+ * These extension methods make it possible to use linq with ctx.SomeEntity_Header(). See below for example use.
+ */
+namespace services.ExtensionMethods
+{
+    public static class WaterQualityExtensions
+    {
+        //Extension method to give ServicesContext this property.
+        public static DbSet<WaterQuality_Header> WaterQuality_Header(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("WaterQuality_Header").Cast<WaterQuality_Header>();
+        }
+
+        public static DbSet<WaterQuality_Detail> WaterQuality_Detail(this ServicesContext ctx)
+        {
+            return ctx.GetDbSet("WaterQuality_Detail").Cast<WaterQuality_Detail>();
+        }
+    }
+}
 
 namespace services.Models.Data
 {
@@ -21,11 +45,11 @@ namespace services.Models.Data
             Details = new List<WaterQuality_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.WaterQuality_Header
+            var headers_q = from h in ndb.WaterQuality_Header()
                             where h.ActivityId == ActivityId
                           join h2 in
                               (
-                                  from hh in ndb.WaterQuality_Header
+                                  from hh in ndb.WaterQuality_Header()
                                   where hh.EffDt <= DateTime.Now
                                   where hh.ActivityId == ActivityId
                                   group hh by hh.ActivityId into cig
@@ -40,12 +64,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.WaterQuality_Detail
+            var details_q = from h in ndb.WaterQuality_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.WaterQuality_Detail
+                                    from hh in ndb.WaterQuality_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig
