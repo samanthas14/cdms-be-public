@@ -37,4 +37,20 @@ Web.Release.config
 Web.config*
 services/Properties/PublishProfiles/*
 UpgradeLog*.htm
+<<<<<<< HEAD
 *.pubxml
+=======
+*.pubxml
+
+=======
+# exclude the ProjectTracker directory
+/ProjectTracker/*
+/DataTracker/js/config.js
+DataTracker/js/config.js
+
+# exclude the TestingProject directory
+/TestingProject/*
+
+# exclude the .vs directory
+/.vs/*
+>>>>>>> master

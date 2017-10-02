@@ -673,7 +673,6 @@ namespace services.Controllers
 
             //if there is an instrument id already set, then we'll just update the instrument and call it good.
             //  otherwise we'll create the new instrument and a relationship to the project.
-
             if (instrument.Id == 0)
             {
                 instrument.UserId = me.Id;
