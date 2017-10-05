@@ -78,24 +78,24 @@ namespace services.Controllers
 
                 // The password is coming in encrypted, so we must decript it.
                 strCyphered = model.Password;
-                logger.Debug("strCyphered (incoming) = " + strCyphered);
+                //logger.Debug("strCyphered (incoming) = " + strCyphered);
 
                 strLastDigit = strCyphered.Substring(strCyphered.Length - 1, 1);
-                logger.Debug("strLastDigit = " + strLastDigit);
+                //logger.Debug("strLastDigit = " + strLastDigit);
 
                 strCyphered = strCyphered.Substring(0, strCyphered.Length - 1);
-                logger.Debug("strCyphered (after rem last digit) = " + strCyphered);
+                //logger.Debug("strCyphered (after rem last digit) = " + strCyphered);
 
                 strDecript1 = divideProcess(strCyphered, strLastDigit);
-                logger.Debug("strDecript1 (after unwrap first step)= " + strDecript1);
+                //logger.Debug("strDecript1 (after unwrap first step)= " + strDecript1);
 
                 // Separate out the pwHash, the client number, and the server number.
                 strNumber1 = strDecript1.Substring((strDecript1.Length - 20), 10);
                 strNumber2 = strDecript1.Substring((strDecript1.Length - 10), 10);
                 strCyphered = strDecript1.Substring(0, (strDecript1.Length - 20));
-                logger.Debug("strCyphered = " + strCyphered);
-                logger.Debug("strNumber1 = " + strNumber1);
-                logger.Debug("strNumber2 = " + strNumber2);
+                //logger.Debug("strCyphered = " + strCyphered);
+                //logger.Debug("strNumber1 = " + strNumber1);
+                //logger.Debug("strNumber2 = " + strNumber2);
 
                 pwPartsList = new List<originalText>();
 
@@ -146,7 +146,7 @@ namespace services.Controllers
                     }
                 }
                 model.Password = assemblePw();
-                logger.Debug("model.Password = " + model.Password);
+                //logger.Debug("model.Password = " + model.Password);
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
