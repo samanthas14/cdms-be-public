@@ -7,17 +7,12 @@ namespace services
     {
         public static void Register(HttpConfiguration config)
         {
-            /* Note:  The services.js file in the front in has lots of calls that begin with mod.factory.
+            /* Note:  The services.js file in the frontend has lots of calls that begin with mod.factory.
              * Those calls are the ones that send/request information from this (services) service.
              * The "folder" paths specified in the calls cannot be found anywhere else, and sometimes
              * may not make sense.  However, the definitions (rationale) for those paths are list below. ~GC
             */
-            config.Routes.MapHttpRoute(
-                name: "Api",
-                routeTemplate: "api/v1/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-            /*
+
             config.Routes.MapHttpRoute(
                 name: "ControllerActionApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
@@ -27,6 +22,18 @@ namespace services
                 }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/v1/{action}/{id}",
+                defaults: new
+                {
+                    id = RouteParameter.Optional,
+                    action = "Get"
+                }
+            );
+
+
+            /*
             //these will go away...
             config.Routes.MapHttpRoute(
                 name: "RpcAction",
@@ -44,7 +51,7 @@ namespace services
                 defaults: new { id = RouteParameter.Optional, controller = "Account", action = "Get" }
             );
             */
-           
+
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
             // For more information, visit http://go.microsoft.com/fwlink/?LinkId=279712.
