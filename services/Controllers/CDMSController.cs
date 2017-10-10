@@ -8,8 +8,10 @@ using System.Web.Http;
 
 namespace services.Controllers
 {
-    //All other CDMS Controllers subclass CDMSController, so you can add other properties or methods for them 
-    //  to inherit into this class. You can also override ApiController behavior here.
+    /*
+     * All other CDMS Controllers subclass CDMSController, so you can add other properties or methods for them 
+     *  to inherit into this class. You can also override ApiController behavior here.
+     */
     public class CDMSController : ApiController
     {
         public static Logger logger = LogManager.GetCurrentClassLogger();

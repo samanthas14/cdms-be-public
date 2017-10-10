@@ -16,11 +16,14 @@ using services.Resources;
 
 namespace services.Controllers
 {
+    /* 
+     * Handles all dataset related api calls
+     */
     [System.Web.Http.Authorize]
     public class DatasetController : CDMSController
     {
 
-        // GET api/Datasets
+        // GET dataset/Datasets
         public IEnumerable<Dataset> GetDatasets()
         {
             var db = ServicesContext.Current;
@@ -29,7 +32,7 @@ namespace services.Controllers
             return datasets.AsEnumerable();
         }
 
-        // GET api/Datasets/5
+        // GET dataset/Datasets/5
         public Dataset GetDataset(int id)
         {
             var db = ServicesContext.Current;
@@ -43,7 +46,7 @@ namespace services.Controllers
             return dataset;
         }
 
-        // PUT api/Datasets/5
+        // PUT dataset/Datasets/5
         public HttpResponseMessage PutDataset(int id, Dataset dataset)
         {
             var db = ServicesContext.Current;
@@ -72,7 +75,7 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        // POST api/Datasets
+        // POST dataset/Datasets
         public HttpResponseMessage PostDataset(Dataset dataset)
         {
             var db = ServicesContext.Current;
@@ -92,7 +95,7 @@ namespace services.Controllers
             }
         }
 
-        // DELETE api/Datasets/5
+        // DELETE dataset/Datasets/5
         public HttpResponseMessage DeleteDataset(int id)
         {
             var db = ServicesContext.Current;

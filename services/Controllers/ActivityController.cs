@@ -14,8 +14,20 @@ using System.Web.Http;
 
 namespace services.Controllers
 {
+    /**
+     * ActivityController - Handles any api requests dealing with activities.
+     * 
+     * Any data in a dataset will have belong to an "activity".
+     * 
+     */ 
     public class ActivityController : CDMSController
     {
+        /*
+         * Sets the QA Status of an activity. Since we do audit tracking, this actually amounts to
+         * inserting a new row to indicate that the qa status has changed. Any queries/views must always fetch/join
+         * the most recent QA Status for the activity to know its latest state. In this way you can always see all of the
+         * states that an activity has gone through as it has changed.
+         */ 
         [HttpPost]
         public HttpResponseMessage SetQaStatus(JObject jsonData)
         {
@@ -30,9 +42,6 @@ namespace services.Controllers
                 throw new Exception("SetQAStatus: Configuration error. Please try again.");
 
             logger.Debug("Userid = " + me.Id + " Activity = " + activity.Id);
-
-            //TODO: verify that the user is authorized to modify this activity?  -- yes, that would be nice. (or add Authorized annotation) TODO!
-
 
             var aq = new ActivityQA();
             aq.ActivityId = activity.Id;
@@ -50,6 +59,11 @@ namespace services.Controllers
 
         }
 
+        /*
+         * Deletes activities (by id) for a given dataset. Must be owner or editor of the dataset.
+         * This action does not do audit tracking, but is administrative - it actually removes the 
+         * records and this cannot be undone.
+         */ 
         [HttpPost]
         public HttpResponseMessage DeleteDatasetActivities(JObject jsonData)
         {
@@ -466,7 +480,9 @@ namespace services.Controllers
         }
 
         
-
+        /*
+         * Saves activities for a dataset 
+         */ 
         public HttpResponseMessage SaveDatasetActivities(JObject jsonData)
         {
             return SaveDatasetActivitiesEFF(jsonData);
