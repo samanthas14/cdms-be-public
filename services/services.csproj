@@ -164,8 +164,18 @@
     <Compile Include="App_Start\SecurityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DataActionController.cs" />
-    <Compile Include="Controllers\DatasetsController.cs" />
+    <Compile Include="Controllers\Connectors\StreamnetController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="Controllers\CDMSController.cs" />
+    <Compile Include="Controllers\SyslogController.cs" />
+    <Compile Include="Controllers\MappingController.cs" />
+    <Compile Include="Controllers\ExportController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
@@ -209,7 +219,6 @@
     <Compile Include="Models\Data\ScrewTrap_Header.cs" />
     <Compile Include="Models\DatasetField.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
-    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\MetadataPropertiesController.cs" />
     <Compile Include="Models\Datastore.cs" />
     <Compile Include="Models\Data\SnorkelFish.cs" />
@@ -255,10 +264,8 @@
     <Compile Include="Models\Data\WaterTemp_Header.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Dataset.cs" />
-    <Compile Include="Controllers\ProjectsController.cs" />
-    <Compile Include="Controllers\ProjectTypesController.cs" />
-    <Compile Include="Controllers\ActionController.cs" />
-    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -291,6 +298,8 @@
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
     <Compile Include="Resources\PitagisReader.cs" />
+    <Compile Include="Resources\QueryHelper.cs" />
+    <Compile Include="Resources\StringHelper.cs" />
     <Compile Include="Resources\TSVReader.cs" />
     <Compile Include="Resources\CSVReader.cs" />
     <Compile Include="Resources\EFFileRepository.cs" />
@@ -320,6 +329,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />

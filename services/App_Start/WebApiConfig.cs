@@ -13,11 +13,21 @@ namespace services
              * may not make sense.  However, the definitions (rationale) for those paths are list below. ~GC
             */
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                name: "Api",
+                routeTemplate: "api/v1/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            /*
+            config.Routes.MapHttpRoute(
+                name: "ControllerActionApi",
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new {
+                    id = RouteParameter.Optional,
+                    action = "Get"
+                }
+            );
 
+            //these will go away...
             config.Routes.MapHttpRoute(
                 name: "RpcAction",
                 routeTemplate: "action/{action}/{id}",
@@ -33,6 +43,7 @@ namespace services
                 routeTemplate: "account/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional, controller = "Account", action = "Get" }
             );
+            */
            
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.

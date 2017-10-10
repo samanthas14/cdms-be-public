@@ -13,6 +13,7 @@ using services.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Net;
 
 namespace services.Controllers
 {
@@ -30,12 +31,42 @@ namespace services.Controllers
         public int intSize; // Used for decrypting
     }
 
-    public class AccountController : ApiController
+    public class AccountController : CDMSController
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
         public const String LOCAL_USER_AUTH = "LOCAL_AUTH";
         public const String MASQUERADE_KEY = "MasqueradePassword";
         private List<originalText> pwPartsList;
+
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        [System.Web.Mvc.OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        public User WhoAmI()
+        {
+            logger.Debug("whoami?");
+
+            logger.Debug("might be --> " + System.Web.HttpContext.Current.Request.LogonUserIdentity.Name);
+            if (User.Identity.IsAuthenticated)
+                logger.Debug("  it says we are authenticated.");
+
+            logger.Debug("Can we get our user?");
+
+            User me = AuthorizationManager.getCurrentUser();
+
+            if (me == null)
+            {
+                logger.Debug("nope");
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.Forbidden));
+            }
+
+            logger.Debug("yep! you are " + me.Username);
+
+            var ndb = ServicesContext.Current;
+            me = ndb.User.Find(me.Id);
+
+            return me;
+        }
 
 
         [HttpGet]

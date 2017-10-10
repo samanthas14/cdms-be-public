@@ -42,5 +42,19 @@ namespace services.Resources
 
             return JsonConvert.SerializeObject(values); // "[\"ABC\",\"123\"]";
         }
+
+        //returns the first item in a list no matter what kind of thing it is
+        public static dynamic getFirstItem(dynamic list)
+        {
+            dynamic first = null;
+            foreach (var item in list)
+            {
+                first = item;
+                break;
+            }
+            return first;
+        }
+
+        
     }
 }

@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="services.Controllers.ProjectController">
+    <Position X="12.25" Y="2.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAIQYAgBABAAgIAhACAgAAAQwAAQAAAgAEgAQIgAI=</HashCode>
+      <FileName>Controllers\ProjectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.AccountController">
+    <Position X="0.5" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAQAAAAAAAAAAAAIgABAAAAACAoARAAAQACA=</HashCode>
+      <FileName>Controllers\AccountController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.ActivityController">
+    <Position X="0.5" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAABAAAAAAAAAAAABAAAAiAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Controllers\ActivityController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.CDMSController">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\CDMSController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.HabSubProjectController">
+    <Position X="9.5" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAABAHAACAAAAAAAAAQAAAACABAAAAAAAQQA=</HashCode>
+      <FileName>Controllers\Private\HabSubProjectController.cs</FileName>
+      <NewMemberFileName>Controllers\Private\CRPPSubProjectController.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.CRPPSubProjectController">
+    <Position X="12.5" Y="8.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAIAAEAAAAAAEAAQAAAACAAAAAAACAAIAAAAEAAA=</HashCode>
+      <FileName>Controllers\Private\CRPPSubProjectController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.StreamnetController">
+    <Position X="8.75" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Connectors\StreamnetController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.DatasetController">
+    <Position X="2.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAACAABgAAAAAMAAAAAAAQAAAEAEEAAAAAAAA=</HashCode>
+      <FileName>Controllers\DatasetController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.DatastoreController">
+    <Position X="5.25" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAQAAAAAAAAAEAAAAAAAEEAAQEQAQ=</HashCode>
+      <FileName>Controllers\DatastoreController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.DepartmentController">
+    <Position X="7.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEACAAAAAAACAAAAAAAAIAAAAAAAAAIAAAAAE=</HashCode>
+      <FileName>Controllers\DepartmentController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.ExportController">
+    <Position X="2.75" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ExportController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.FileController">
+    <Position X="7.5" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAAABIgABAAAAAQAAAAAAEAgAAAAAAAAAAEAGEAAAAA=</HashCode>
+      <FileName>Controllers\FileController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.ImportController">
+    <Position X="5.25" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ImportController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.ListController">
+    <Position X="9.75" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAgAAAAABAQAEAAAAAAAAQAAAAAAAAAAAAAAEAAAQAA=</HashCode>
+      <FileName>Controllers\ListController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.LocationController">
+    <Position X="7.5" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIACAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Controllers\LocationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.MetadataPropertiesController">
+    <Position X="0.5" Y="9" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAABAAAAAAEAAAAAAAAAIAAAAAAAAAIAAAAAAAAhA=</HashCode>
+      <FileName>Controllers\MetadataPropertiesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.QueryController">
+    <Position X="5.25" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\QueryController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.SyslogController">
+    <Position X="3.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SyslogController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="services.Controllers.UserController">
+    <Position X="3.25" Y="9" Width="2" />
+    <InheritanceLine Type="services.Controllers.CDMSController" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="2.184" />
+        <Point X="6.75" Y="2.346" />
+        <Point X="5.148" Y="2.346" />
+        <Point X="5.148" Y="8.846" />
+        <Point X="4.417" Y="8.846" />
+        <Point X="4.417" Y="9" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>IgBAQAAAAAAAAAAEAAAAAAAAAAAAAAAAMAAAAAAQAAA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

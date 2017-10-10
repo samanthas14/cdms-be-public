@@ -13,7 +13,7 @@ using services.Models;
 namespace services.Controllers
 {
     [System.Web.Http.Authorize]
-    public class DepartmentController : ApiController
+    public class DepartmentController : CDMSController
     {
         // GET api/Department
         public IEnumerable<Department> GetDepartments()

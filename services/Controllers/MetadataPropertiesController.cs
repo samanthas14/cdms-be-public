@@ -9,11 +9,13 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using services.Models;
+using Newtonsoft.Json.Linq;
+using services.Resources;
 
 namespace services.Controllers
 {
     [System.Web.Http.Authorize]
-    public class MetadataPropertiesController : ApiController
+    public class MetadataPropertiesController : CDMSController
     {
         // GET api/Metadata
         public IEnumerable<MetadataProperty> GetMetadataProperties()
@@ -107,9 +109,57 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, metadataproperty);
         }
 
-        protected override void Dispose(bool disposing)
+        [HttpPost]
+        public IEnumerable<MetadataValue> GetMetadataFor(JObject jsonData)
         {
-            base.Dispose(disposing);
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+
+            User me = AuthorizationManager.getCurrentUser();
+            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
+            int EntityTypeId = json.EntityTypeId.ToObject<int>();
+
+            if (project == null || me == null)
+                throw new Exception("GetMetadataFor: Configuration error. Please try again.");
+
+            return MetadataHelper.getMetadata(project.Id, EntityTypeId).AsEnumerable();
+
+        }
+
+        [HttpPost]
+        public HttpResponseMessage SetDatasetMetadata(JObject jsonData)
+        {
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+
+            Dataset dataset = db.Datasets.Find(json.DatasetId.ToObject<int>());
+            if (dataset == null)
+                throw new Exception("SetDatasetMetadata: Configuration error.");
+
+            Project project = db.Projects.Find(dataset.ProjectId);
+
+            User me = AuthorizationManager.getCurrentUser();
+            if (!project.isOwnerOrEditor(me))
+                throw new Exception("SetDatasetMetadata: Configuration error.");
+
+            //Now save metadata
+            List<MetadataValue> metadata = new List<MetadataValue>();
+
+            foreach (var jmv in json.Metadata)
+            {
+                var mv = jmv.ToObject<MetadataValue>();
+                mv.UserId = me.Id;
+                metadata.Add(mv);
+                //logger.Debug("Found new metadata: " + mv.MetadataPropertyId + " + + " + mv.Values);
+            }
+
+            //fire setMetdata which will handle persisting the metadata
+            dataset.Metadata = metadata;
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+
         }
     }
 }

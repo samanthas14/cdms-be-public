@@ -24,7 +24,7 @@ namespace services.Controllers
     //  it should be excluded from the main CTUIR release of cdms
 
     [Authorize]
-    public partial class DataActionController : ApiController
+    public class HabSubProjectController : CDMSController
     {
         // Note:  This is a POST, instead of a GET, because we are pulling lots of data.
         [HttpPost]
@@ -207,7 +207,7 @@ namespace services.Controllers
                             //                filename,
                             //                false);
 
-                            var newFileName = ActionController.relocateSubprojectFile(
+                            var newFileName = FileController.relocateSubprojectFile(
                                             file.LocalFileName,
                                             ProjectId,
                                             SubprojectId,
@@ -858,12 +858,12 @@ namespace services.Controllers
 
             string strSubprojectsPath = root + p.Id + "\\S\\" + habSubproject.Id;
             //string strSubprojectsPath = root + habSubproject.Id;
-            if (debugMode) logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
+            logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
 
             if (Directory.Exists(strSubprojectsPath))
             {
                 System.IO.Directory.Delete(strSubprojectsPath, true);
-                if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + habSubproject.Id);
+                logger.Debug("Just deleted documents folder and contents for this subproject:  " + habSubproject.Id);
             }
             else
             {
@@ -871,10 +871,10 @@ namespace services.Controllers
             }
 
             db.Subproject_Hab().Remove(habSubproject);
-            if (debugMode) logger.Debug("Just removed this subproject from table Subproject_Hab:  " + habSubproject.Id);
+            logger.Debug("Just removed this subproject from table Subproject_Hab:  " + habSubproject.Id);
 
             db.SaveChanges();
-            if (debugMode) logger.Debug("Changes saved...");
+            logger.Debug("Changes saved...");
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
@@ -1016,18 +1016,18 @@ namespace services.Controllers
                 logger.Debug("root = " + root);
 
                 string strSubprojectsPath = root + "\\" + crppCorrespondenceEvent.Id;
-                if (debugMode) logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
+                logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
 
                 System.IO.Directory.Delete(strSubprojectsPath, true);
-                if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
+                logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
                 */
 
                 db.HabitatItem().Remove(habitatItem);
-                if (debugMode) logger.Debug("Just removed this event from table HabitatItems:  " + habitatItem.Id);
+                logger.Debug("Just removed this event from table HabitatItems:  " + habitatItem.Id);
 
                 //db.CrppSubprojects.State = EntityState.Modified;
                 db.SaveChanges();
-                if (debugMode) logger.Debug("Changes saved...");
+                logger.Debug("Changes saved...");
             }
             else
                 logger.Debug("The Habitat Item does not exist...");
@@ -1041,33 +1041,33 @@ namespace services.Controllers
         public HttpResponseMessage SaveHabSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
         {
-            if (debugMode) logger.Debug("Inside SaveHabSubproject...");
+            logger.Debug("Inside SaveHabSubproject...");
             var db = ServicesContext.Current;
-            if (debugMode) logger.Debug("db = " + db);
+            logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            if (debugMode) logger.Debug("json = " + json);
+            logger.Debug("json = " + json);
 
             //string strJson = "[" + json + "]";
 
             User me = AuthorizationManager.getCurrentUser();
-            if (debugMode) logger.Debug("me = " + me);
+            logger.Debug("me = " + me);
 
             int pId = json.ProjectId.ToObject<int>();
-            if (debugMode) logger.Debug("pId = " + pId);
+            logger.Debug("pId = " + pId);
 
             Project p = db.Projects.Find(pId);
-            if (debugMode) logger.Debug("p = " + p);
+            logger.Debug("p = " + p);
             if (p == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
-            if (debugMode) logger.Debug("p.isOwnerOrEditor(me) = " + p.isOwnerOrEditor(me));
+            logger.Debug("p.isOwnerOrEditor(me) = " + p.isOwnerOrEditor(me));
             if (!p.isOwnerOrEditor(me))
                 throw new System.Exception("Authorization error.");
 
-            if (debugMode) logger.Debug("About to check incoming data for Subproject...");
+            logger.Debug("About to check incoming data for Subproject...");
             Subproject_Hab s = new Subproject_Hab();
-            if (debugMode) logger.Debug("Found Subproject in incoming data...");
+            logger.Debug("Found Subproject in incoming data...");
 
 
             // Spin through the fields passed in; as we find the fields, we will capture the data.
@@ -1111,42 +1111,42 @@ namespace services.Controllers
                 {
                     //logger.Debug("Found FirstFoods...");
                     s.FirstFoods = subproject_json.ToString();
-                    s.FirstFoods = removeFormattingChars(s.FirstFoods);
+                    s.FirstFoods = StringHelper.removeFormattingChars(s.FirstFoods);
                     //logger.Debug("FirstFoods = " + s.FirstFoods);
                 }
                 else if (prop.Name == "RiverVisionTouchstone")
                 {
                     //logger.Debug("Found RiverVisionTouchstone...");
                     s.RiverVisionTouchstone = subproject_json.ToString();
-                    s.RiverVisionTouchstone = removeFormattingChars(s.RiverVisionTouchstone);
+                    s.RiverVisionTouchstone = StringHelper.removeFormattingChars(s.RiverVisionTouchstone);
                     //logger.Debug("RiverVisionTouchstone = " + s.RiverVisionTouchstone);
                 }
                 else if (prop.Name == "HabitatObjectives")
                 {
                     //logger.Debug("Found HabitatObjectives...");
                     s.HabitatObjectives = subproject_json.ToString();
-                    s.HabitatObjectives = removeFormattingChars(s.HabitatObjectives);
+                    s.HabitatObjectives = StringHelper.removeFormattingChars(s.HabitatObjectives);
                     //logger.Debug("HabitatObjectives = " + s.HabitatObjectives);
                 }
                 else if (prop.Name == "NoaaEcologicalConcerns")
                 {
                     //logger.Debug("Found NoaaEcologicalConcerns...");
                     s.NoaaEcologicalConcerns = subproject_json.ToString();
-                    s.NoaaEcologicalConcerns = removeFormattingChars(s.NoaaEcologicalConcerns);
+                    s.NoaaEcologicalConcerns = StringHelper.removeFormattingChars(s.NoaaEcologicalConcerns);
                     //logger.Debug("NoaaEcologicalConcerns = " + s.NoaaEcologicalConcerns);
                 }
                 else if (prop.Name == "NoaaEcologicalConcernsSubcategories")
                 {
                     //logger.Debug("Found NoaaEcologicalConcernsSubcategories...");
                     s.NoaaEcologicalConcernsSubcategories = subproject_json.ToString();
-                    s.NoaaEcologicalConcernsSubcategories = removeFormattingChars(s.NoaaEcologicalConcernsSubcategories);
+                    s.NoaaEcologicalConcernsSubcategories = StringHelper.removeFormattingChars(s.NoaaEcologicalConcernsSubcategories);
                     //logger.Debug("NoaaEcologicalConcernsSubcategories = " + s.NoaaEcologicalConcernsSubcategories);
                 }
                 else if (prop.Name == "LimitingFactors")
                 {
                     //logger.Debug("Found LimitingFactors...");
                     s.LimitingFactors = subproject_json.ToString();
-                    s.LimitingFactors = removeFormattingChars(s.LimitingFactors);
+                    s.LimitingFactors = StringHelper.removeFormattingChars(s.LimitingFactors);
                     //logger.Debug("LimitingFactors = " + s.LimitingFactors);
                 }
                 else if (prop.Name == "Staff")
@@ -1173,7 +1173,7 @@ namespace services.Controllers
             s.ByUserId = me.Id;
             logger.Debug("s.ByUserId = " + s.ByUserId);
 
-            if (debugMode) logger.Debug(
+            logger.Debug(
                 "s.Id = " + s.Id + "\n" +
                 "s.ProjectId = " + s.ProjectId + "\n" +
                 "s.ProjectName = " + s.ProjectName + "\n" +
@@ -1211,7 +1211,7 @@ namespace services.Controllers
             }
 
             db.SaveChanges();
-            if (debugMode) logger.Debug("Just saved the DB changes.");
+            logger.Debug("Just saved the DB changes.");
 
             int newId = s.Id;
             logger.Debug("newId = " + s.Id);
@@ -1387,10 +1387,10 @@ namespace services.Controllers
 
             //string strSubprojectsPath = root + "\\" + s.Id;
             string strSubprojectsPath = root + "\\P\\" + p.Id + "\\S\\" + s.Id;
-            if (debugMode) logger.Debug("The path for the new subproject will be:  " + strSubprojectsPath);
+            logger.Debug("The path for the new subproject will be:  " + strSubprojectsPath);
 
             System.IO.Directory.CreateDirectory(strSubprojectsPath);
-            if (debugMode) logger.Debug("Just created folder for the new habSubproject:  " + s.Id);
+            logger.Debug("Just created folder for the new habSubproject:  " + s.Id);
 
             //return new HttpResponseMessage(HttpStatusCode.OK);
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, s);
@@ -1401,22 +1401,22 @@ namespace services.Controllers
         [HttpPost]
         public HttpResponseMessage SaveHabitatItem(JObject jsonData)
         {
-            if (debugMode) logger.Debug("Inside SaveHabitatItem...");
+            logger.Debug("Inside SaveHabitatItem...");
             //string strId = null;  // Delare this up here, so that all if/try blocks can see it.
             var db = ServicesContext.Current;
-            if (debugMode) logger.Debug("db = " + db);
+            logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            if (debugMode) logger.Debug("json = " + json);
+            logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
-            //if (debugMode) logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
+            //logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
 
             int pId = json.ProjectId.ToObject<int>();
-            if (debugMode) logger.Debug("pId = " + pId);
+            logger.Debug("pId = " + pId);
 
             Project p = db.Projects.Find(pId);
-            if (debugMode) logger.Debug("p = " + p);
+            logger.Debug("p = " + p);
             if (p == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
@@ -1425,7 +1425,7 @@ namespace services.Controllers
                 throw new System.Exception("Authorization error.");
 
             int spId = json.SubprojectId.ToObject<int>();
-            if (debugMode) logger.Debug("spId = " + spId);
+            logger.Debug("spId = " + spId);
 
             // Locate the associated subproject.
             Subproject_Hab spH1 = db.Subproject_Hab().Find(spId);
@@ -1445,7 +1445,7 @@ namespace services.Controllers
             // CorrespondenceDate is required.
             // First get the date as a string, so that we can easily check if it blank (null or empty).
             //string strCorrespondenceDate = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceDate").Value<string>();
-            //if (debugMode) logger.Debug("strCorrespondenceDate = " + strCorrespondenceDate);
+            //logger.Debug("strCorrespondenceDate = " + strCorrespondenceDate);
             /*string strCorrespondenceDate = null;
             try
             {
@@ -1553,7 +1553,7 @@ namespace services.Controllers
             spH2.FeatureImage = spH1.FeatureImage;
             spH2.EffDt = DateTime.Now;
 
-            if (debugMode) logger.Debug(//"hi.ItemName = " + hi.ItemName);
+            logger.Debug(//"hi.ItemName = " + hi.ItemName);
 
                 "hi.Id = " + hi.Id + "\n" +
                 "hi.SubprojectId = " + hi.SubprojectId + "\n" +
@@ -1607,7 +1607,7 @@ namespace services.Controllers
                 {
                     logger.Debug("Trying to save db again.");
                     db.SaveChanges();
-                    if (debugMode) logger.Debug("Just saved the DB changes.");
+                    logger.Debug("Just saved the DB changes.");
 
                     // Now let's save the documents.
 
@@ -1629,7 +1629,7 @@ namespace services.Controllers
 
                     // Create the folder path, if neceesary; if any folders are missing, they will be created.
                     System.IO.Directory.CreateDirectory(strSubprojectsFolder);
-                    if (debugMode) logger.Debug("Just created folder for the new subproject:  " + strSubprojectsFolder);
+                    logger.Debug("Just created folder for the new subproject:  " + strSubprojectsFolder);
 
                     //string[] filepaths = Directory.GetFiles(strSubprojectsFolder);
                     string[] filepaths = Directory.GetFiles(strCleanupFolder);

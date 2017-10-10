@@ -9,11 +9,13 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using services.Models;
+using Newtonsoft.Json.Linq;
+using services.Resources;
 
 namespace services.Controllers
 {
     [System.Web.Http.Authorize]
-    public class UsersController : ApiController
+    public class UserController : CDMSController
     {
         // GET api/Users
         public IEnumerable<User> GetUsers()
@@ -114,9 +116,99 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
-        protected override void Dispose(bool disposing)
+
+
+        //we will overwrite any of the keys that exist in the request
+        [HttpPost]
+        public HttpResponseMessage SaveUserPreference(JObject jsonData)
         {
-            base.Dispose(disposing);
+            //string result = "{message: 'Success'}"; //TODO!
+            //var resp = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            //resp.Content = new System.Net.Http.StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+
+            var ndb = ServicesContext.Current;
+
+            dynamic json = jsonData;
+            JObject jpref = json.UserPreference;
+            var pref = jpref.ToObject<UserPreference>();
+
+            logger.Debug("Hey we have a user preference save!" + pref.Name + " = " + pref.Value);
+
+            User me = AuthorizationManager.getCurrentUser();
+
+            logger.Debug("Userid = " + me.Id);
+
+            pref.UserId = me.Id; // you can only save preferences that are your own.
+
+            //fetch user with preferences from the database -- really want a round-trip here.
+            me = ndb.User.Find(me.Id);
+
+            logger.Debug("Number of existing prefs for user = " + me.UserPreferences.Count());
+
+            UserPreference match = me.UserPreferences.Where(x => x.Name == pref.Name).SingleOrDefault();
+
+            if (match != null)
+            {
+                match.Value = pref.Value;
+                ndb.Entry(match).State = EntityState.Modified;
+            }
+            else
+            {
+                me.UserPreferences.Add(pref);
+            }
+
+            try
+            {
+                ndb.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                logger.Debug("Something went wrong saving the preference: " + e.Message);
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        [HttpGet]
+        public IEnumerable<Dataset> GetMyDatasets()
+        {
+            var db = ServicesContext.Current;
+            User me = AuthorizationManager.getCurrentUser();
+            var mydatasets = "";
+            try
+            {
+                mydatasets = me.UserPreferences.Where(o => o.Name == UserPreference.DATASETS).FirstOrDefault().Value;
+            }
+            catch (Exception e)
+            {
+                logger.Debug("GetMyDatasets: Couldn't get your datasets -- probably don't have any favorites.");
+                logger.Debug(e);
+            }
+
+            var datasets = db.Datasets.SqlQuery("SELECT * FROM Datasets WHERE Id in (" + mydatasets + ") ORDER BY Name");
+
+            return datasets;
+        }
+
+        [HttpGet]
+        public IEnumerable<Project> GetMyProjects()
+        {
+            var db = ServicesContext.Current;
+            User me = AuthorizationManager.getCurrentUser();
+            var my_projects = "";
+            try
+            {
+                my_projects = me.UserPreferences.Where(o => o.Name == UserPreference.PROJECTS).FirstOrDefault().Value;
+            }
+            catch (Exception e)
+            {
+                logger.Debug("GetMyProjects: Couldn't get your projects -- probably don't have any favorites.");
+                logger.Debug(e);
+            }
+
+            var myprojects = db.Projects.SqlQuery("SELECT * FROM Projects WHERE Id in (" + my_projects + ") ORDER BY Name");
+
+            return myprojects;
         }
     }
 }

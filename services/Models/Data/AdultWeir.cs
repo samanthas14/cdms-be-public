@@ -33,7 +33,6 @@ namespace services.Models.Data
 {
     public class AdultWeir : DatasetData
     {
-        private Boolean debugMode = true;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public Dataset Dataset { get; set; }
