@@ -36,12 +36,9 @@ namespace services.Controllers
         public const String LOCAL_USER_AUTH = "LOCAL_AUTH";
         public const String MASQUERADE_KEY = "MasqueradePassword";
         private List<originalText> pwPartsList;
-
-
+    
 
         [HttpGet]
-        [AllowAnonymous]
-        [System.Web.Mvc.OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public User WhoAmI()
         {
             logger.Debug("whoami?");
@@ -82,6 +79,8 @@ namespace services.Controllers
         [HttpPost]
         public AccountResult Login(LoginModel model)
         {
+            logger.Debug("in Login");
+
             string strCyphered = "";
             string strLastDigit = "";
             string strPartSize = "";

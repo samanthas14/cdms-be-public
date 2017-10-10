@@ -18,8 +18,6 @@ namespace services.Controllers
 {
     public class FileController : CDMSController
     {
-
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<Models.File> DatasetFiles(int Id)
         {

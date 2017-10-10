@@ -28,7 +28,6 @@ namespace services.Controllers
 
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<ScrewTrap_Detail> MigrationYears(int Id)
         {
@@ -72,7 +71,6 @@ namespace services.Controllers
         }
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<AdultWeir_Detail> RunYears(int Id)
         {
@@ -110,7 +108,6 @@ namespace services.Controllers
         }
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<Metrics_Header> ReportYears(int Id)
         {
@@ -148,7 +145,6 @@ namespace services.Controllers
         }
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<StreamNet_NOSA_Detail> SpawningYears(int Id)
         {
@@ -186,7 +182,6 @@ namespace services.Controllers
         }
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<StreamNet_RperS_Detail> BroodYears(int Id)
         {
@@ -224,7 +219,6 @@ namespace services.Controllers
         }
 
         //returns empty list if none found...
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<StreamNet_SAR_Detail> OutmigrationYears(int Id)
         {
@@ -266,10 +260,6 @@ namespace services.Controllers
         {
             return TimeZoneInfo.GetSystemTimeZones();
         }
-
-        
-
-        
 
         [HttpGet]
         public IEnumerable<WaterBody> GetWaterBodies()

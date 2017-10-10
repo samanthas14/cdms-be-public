@@ -12,9 +12,6 @@ namespace services.Controllers
 {
     public class StreamnetController : CDMSController
     {
-
-
-        [AllowAnonymous]
         [HttpGet]
         public List<string> SyncToStreamNet()
         {

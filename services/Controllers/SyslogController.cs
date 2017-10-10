@@ -5,7 +5,6 @@ namespace services.Controllers
 {
     public class SyslogController : CDMSController
     {
-        [AllowAnonymous]
         [HttpPost]
         public string SystemLog(JObject jsonData)
         {

@@ -128,9 +128,6 @@ namespace services.Controllers
             base.Dispose(disposing);
         }
 
-
-
-        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<Activity> DatasetActivities(int Id)
         {
@@ -143,8 +140,6 @@ namespace services.Controllers
             return activities;
         }
 
-
-        [AllowAnonymous]
         [HttpGet]
         public dynamic DatasetData(int Id)
         {

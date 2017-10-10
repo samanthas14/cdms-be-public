@@ -15,7 +15,7 @@ using services.Resources.Filters;
 using Newtonsoft.Json.Linq;
 
 /**
- * Project - and fishermen, instruments
+ * Project Controller
  */ 
 
 namespace services.Controllers
@@ -23,9 +23,9 @@ namespace services.Controllers
     [System.Web.Http.Authorize]
     public class ProjectController : CDMSController
     {
-        // GET api/Projects
+        // GET api/v1/project/projects
         //[ProjectAuth]
-        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.HttpGet]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public IEnumerable<Project> GetProjects()
         {
@@ -52,7 +52,6 @@ namespace services.Controllers
         }
 
         // GET api/Projects/5
-        [System.Web.Http.AllowAnonymous]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public Project GetProject(int id)
         {
@@ -163,7 +162,6 @@ namespace services.Controllers
 
 
         //returns empty list if none found...
-        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         public IEnumerable<Dataset> ProjectDatasets(int Id)
         {
@@ -177,7 +175,6 @@ namespace services.Controllers
         }
 
 
-        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         public IEnumerable<Funding> ProjectFunders(int Id)
         {
@@ -198,7 +195,6 @@ namespace services.Controllers
             return f;
         }
 
-        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         public IEnumerable<Collaborator> ProjectCollaborators(int Id)
         {
@@ -221,7 +217,6 @@ namespace services.Controllers
 
         //returns empty list if none found...
         [System.Web.Http.HttpGet]
-        //public List<File> ProjectFiles(int ProjectId)
         public List<File> ProjectFiles(int Id)
         {
             //var result = new List<File>();
@@ -233,17 +228,13 @@ namespace services.Controllers
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
-            //result = project.Files; 
+
             List<File> result = (from item in db.Files
                                  where item.ProjectId == Id
                                  where item.DatasetId == null
                                  orderby item.Id
                                  select item).ToList();
 
-            //foreach (var item in result)
-            //{
-            //    logger.Debug("project file Id:  " + item.Id + ", Name:  " + item.Name);
-            //}
 
             if (result.Count == 0)
             {
@@ -255,7 +246,6 @@ namespace services.Controllers
 
         //TODO: Refactor the system to have nested/children projects instead of static "subprojects"
 
-        [System.Web.Http.AllowAnonymous]
         [System.Web.Http.HttpGet]
         public IEnumerable<File> SubprojectFiles(int Id)
         //public IEnumerable<File> SubprojectFiles(JObject jsonData)
@@ -365,18 +355,6 @@ namespace services.Controllers
             return resp;
         }
 
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Fisherman> GetProjectFishermen(int Id)
-        {
-            var db = ServicesContext.Current;
-            User me = AuthorizationManager.getCurrentUser();
-
-            var project = db.Projects.Find(Id);
-            if (project == null)
-                throw new System.Exception("Configuration error: Project not recognized");
-
-            return project.Fishermen;
-        }
 
         [System.Web.Http.HttpPost]
         public Project SaveProjectDetails(JObject jsonData)
@@ -525,267 +503,6 @@ namespace services.Controllers
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
-        }
-
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Instrument> GetAllInstruments()
-        {
-            var db = ServicesContext.Current;
-            return db.Instruments.OrderBy(o => o.Name).ThenBy(o => o.SerialNumber).AsEnumerable();
-        }
-
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Instrument> GetInstruments()
-        {
-            var db = ServicesContext.Current;
-            //return db.Instruments.AsEnumerable();
-            //return db.Instruments.OrderBy(o => o.Name).ThenBy(o => o.SerialNumber).AsEnumerable();
-
-            List<Instrument> i = (from item in db.Instruments
-                                  orderby item.Name
-                                  select item).ToList();
-            return i.AsEnumerable();
-        }
-
-        [System.Web.Http.HttpGet]
-        public IEnumerable<InstrumentType> GetInstrumentTypes()
-        {
-            var db = ServicesContext.Current;
-            return db.InstrumentType.AsEnumerable();
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage SaveInstrumentAccuracyCheck(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-
-            Instrument instrument = db.Instruments.Find(json.InstrumentId.ToObject<int>());
-
-            if (instrument == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            InstrumentAccuracyCheck ac = json.AccuracyCheck.ToObject<InstrumentAccuracyCheck>();
-
-            ac.UserId = me.Id;
-
-            if (ac.Id == 0)
-            {
-                instrument.AccuracyChecks.Add(ac);
-                db.SaveChanges();
-            }
-            else
-            {
-                db.Entry(ac).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Fisherman> GetFishermen()
-        {
-            var db = ServicesContext.Current;
-            logger.Info("Inside DatastoreController, getting fishermen...");
-
-            List<Fisherman> f = (from item in db.Fishermen
-                                 orderby item.LastName, item.FirstName, item.Aka
-                                 select item).ToList();
-            //logger.Debug(db.Fishermen);
-            //return db.Fishermen.OrderBy(o => o.FullName).AsEnumerable();
-            //return db.Fishermen.AsEnumerable();
-            return f.AsEnumerable();
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage SaveProjectFisherman(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
-
-            if (!project.isOwnerOrEditor(me))
-            {
-                logger.Debug("User is not authorized to make this update.");
-                throw new System.Exception("Authorization error.");
-            }
-
-            Fisherman fisherman = db.Fishermen.Find(json.Fisherman.Id.ToObject<int>());
-
-            if (project == null || fisherman == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            project.Fishermen.Add(fisherman);
-            db.SaveChanges();
-            logger.Debug("success adding NEW project fisherman!");
-
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage SaveProjectInstrument(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
-
-            if (!project.isOwnerOrEditor(me))
-                throw new System.Exception("Authorization error:  The user attempting the change is neither an Owner nor an Editor.");
-
-            Instrument instrument = db.Instruments.Find(json.Instrument.Id.ToObject<int>());
-
-            if (project == null || instrument == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            project.Instruments.Add(instrument);
-            db.SaveChanges();
-            logger.Debug("success adding NEW proejct instrument!");
-
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage RemoveProjectInstrument(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-            Project p = db.Projects.Find(json.ProjectId.ToObject<int>());
-
-            if (!p.isOwnerOrEditor(me))
-                throw new System.Exception("Authorization error:  The user attempting the change is neither an Owner nor an Editor.");
-
-            Instrument instrument = db.Instruments.Find(json.InstrumentId.ToObject<int>());
-            if (p == null || instrument == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            p.Instruments.Remove(instrument);
-            db.Entry(p).State = EntityState.Modified;
-            db.SaveChanges();
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage RemoveProjectFisherman(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-            Project p = db.Projects.Find(json.ProjectId.ToObject<int>());
-
-            if (!p.isOwnerOrEditor(me))
-                throw new System.Exception("Authorization error.");
-
-            Fisherman fisherman = db.Fishermen.Find(json.FishermanId.ToObject<int>());
-            if (p == null || fisherman == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            p.Fishermen.Remove(fisherman);
-            db.Entry(p).State = EntityState.Modified;
-            db.SaveChanges();
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage SaveInstrument(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            User me = AuthorizationManager.getCurrentUser();
-            Project p = db.Projects.Find(json.ProjectId.ToObject<int>());
-            if (p == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            if (!p.isOwnerOrEditor(me))
-                throw new System.Exception("Authorization error:  The user attempting the change is neither an Owner nor an Editor.");
-
-            Instrument instrument = json.Instrument.ToObject<Instrument>();
-            instrument.OwningDepartmentId = json.Instrument.OwningDepartmentId.ToObject<int>();
-
-            logger.Debug("The id == " + instrument.OwningDepartmentId);
-
-            //if there is an instrument id already set, then we'll just update the instrument and call it good.
-            //  otherwise we'll create the new instrument and a relationship to the project.
-            if (instrument.Id == 0)
-            {
-                instrument.UserId = me.Id;
-                p.Instruments.Add(instrument);
-                logger.Debug("created new instrument");
-            }
-            else
-            {
-                db.Entry(instrument).State = EntityState.Modified;
-                logger.Debug("updated existing instrument");
-            }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-
-        [System.Web.Http.HttpPost]
-        public HttpResponseMessage SaveFisherman(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-
-            dynamic json = jsonData;
-
-            User me = AuthorizationManager.getCurrentUser();
-
-            int pId = json.ProjectId.ToObject<int>(); // Getting stuck on this line.
-
-            Project p = db.Projects.Find(pId);
-
-            if (p == null)
-                throw new System.Exception("Configuration error.  Please try again.");
-
-            if (!p.isOwnerOrEditor(me))
-                throw new System.Exception("Authorization error.");
-
-            Fisherman f = json.Fisherman.ToObject<Fisherman>();
-
-            DateTime? theDateInactive = null;
-
-            f.DateInactive = theDateInactive;
-
-            logger.Debug(
-                "f.FirstName = " + f.FirstName + "\n" +
-                "f.Aka = " + f.Aka + "\n" +
-                "f.LastName = " + f.LastName + "\n" +
-                "f.FullName = " + f.LastName + "\n" +
-                "f.PhoneNumber = " + f.PhoneNumber + "\n" +
-                "f.Comments = " + f.FishermanComments + "\n" +
-                "f.StatusId = " + f.StatusId + "\n" +
-                "f.DateAdded = " + f.DateAdded + "\n" +
-                "f.DateInactive = " + f.DateInactive + "\n" +
-                "f.OkToCallId = " + f.OkToCallId + "\n"
-                );
-
-            if (f.Id == 0)
-            {
-                p.Fishermen.Add(f);
-                logger.Debug("created new fisherman");
-            }
-            else
-            {
-                db.Entry(f).State = EntityState.Modified;
-                logger.Debug("updated existing fisherman");
-            }
-
-            db.SaveChanges();
-            logger.Debug("Just saved the DB changes.");
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
