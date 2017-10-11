@@ -14,7 +14,8 @@ namespace services.Controllers
 
 
         /*
-        * TODO: We'd like to refactor this and the following controller methods:
+        * TODO: this is ripe for refactoring
+        * We'd like to redesign this and the following controller methods:
         *   1 - move entity logic into the entity
         *   2 - return just the list of ints
         *   3 - maybe use linq instead of raw sql queries:
@@ -28,8 +29,9 @@ namespace services.Controllers
 
 
         //returns empty list if none found...
+        // GET /api/v1/list/getmigrationyears/5
         [HttpGet]
-        public IEnumerable<ScrewTrap_Detail> MigrationYears(int Id)
+        public IEnumerable<ScrewTrap_Detail> GetMigrationYears(int Id)
         {
             var db = ServicesContext.Current;
 
@@ -70,9 +72,10 @@ namespace services.Controllers
             return stDetailList.AsEnumerable();
         }
 
+        // GET /api/v1/list/getrunyears/5
         //returns empty list if none found...
         [HttpGet]
-        public IEnumerable<AdultWeir_Detail> RunYears(int Id)
+        public IEnumerable<AdultWeir_Detail> GetRunYears(int Id)
         {
             List<AdultWeir_Detail> awDetailList = new List<AdultWeir_Detail>();
 
@@ -107,9 +110,10 @@ namespace services.Controllers
             return awDetailList.AsEnumerable();
         }
 
+        // GET /api/v1/list/getreportyears/5
         //returns empty list if none found...
         [HttpGet]
-        public IEnumerable<Metrics_Header> ReportYears(int Id)
+        public IEnumerable<Metrics_Header> GetReportYears(int Id)
         {
             List<Metrics_Header> ryHeaderList = new List<Metrics_Header>();
 
@@ -144,9 +148,10 @@ namespace services.Controllers
             return ryHeaderList.AsEnumerable();
         }
 
+        // GET /api/v1/list/getspawningyears/5
         //returns empty list if none found...
         [HttpGet]
-        public IEnumerable<StreamNet_NOSA_Detail> SpawningYears(int Id)
+        public IEnumerable<StreamNet_NOSA_Detail> GetSpawningYears(int Id)
         {
             List<StreamNet_NOSA_Detail> syDetailList = new List<StreamNet_NOSA_Detail>();
 
@@ -181,9 +186,10 @@ namespace services.Controllers
             return syDetailList.AsEnumerable();
         }
 
+        // GET /api/v1/list/getbroodyears/5
         //returns empty list if none found...
         [HttpGet]
-        public IEnumerable<StreamNet_RperS_Detail> BroodYears(int Id)
+        public IEnumerable<StreamNet_RperS_Detail> GetBroodYears(int Id)
         {
             List<StreamNet_RperS_Detail> byDetailList = new List<StreamNet_RperS_Detail>();
 
@@ -218,9 +224,10 @@ namespace services.Controllers
             return byDetailList.AsEnumerable();
         }
 
+        // GET /api/v1/list/getoutmigrationyears/5
         //returns empty list if none found...
         [HttpGet]
-        public IEnumerable<StreamNet_SAR_Detail> OutmigrationYears(int Id)
+        public IEnumerable<StreamNet_SAR_Detail> GetOutmigrationYears(int Id)
         {
             List<StreamNet_SAR_Detail> syDetailList = new List<StreamNet_SAR_Detail>();
 
@@ -255,12 +262,14 @@ namespace services.Controllers
             return syDetailList.AsEnumerable();
         }
 
+        // GET /api/v1/list/gettimezones
         [HttpGet]
         public IEnumerable<TimeZoneInfo> GetTimeZones()
         {
             return TimeZoneInfo.GetSystemTimeZones();
         }
 
+        // GET /api/v1/list/getwaterbodies
         [HttpGet]
         public IEnumerable<WaterBody> GetWaterBodies()
         {
@@ -268,6 +277,7 @@ namespace services.Controllers
             return db.WaterBodies.OrderBy(o => o.Name).AsEnumerable();
         }
 
+        // GET /api/v1/list/getsources
         [HttpGet]
         public IEnumerable<Source> GetSources()
         {

@@ -13,6 +13,7 @@ namespace services.Controllers
 {
     public class FishermenController : CDMSController
     {
+        // GET /api/v1/fishermen/getprojectfishermen
         [System.Web.Http.HttpGet]
         public IEnumerable<Fisherman> GetProjectFishermen(int Id)
         {
@@ -26,6 +27,7 @@ namespace services.Controllers
             return project.Fishermen;
         }
 
+        // GET /api/v1/fishermen/getfishermen
         [System.Web.Http.HttpGet]
         public IEnumerable<Fisherman> GetFishermen()
         {
@@ -41,6 +43,7 @@ namespace services.Controllers
             return f.AsEnumerable();
         }
 
+        // POST /api/v1/fishermen/saveprojectfishermen
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveProjectFisherman(JObject jsonData)
         {
@@ -68,6 +71,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/fishermen/removeprojectfishermen
         [System.Web.Http.HttpPost]
         public HttpResponseMessage RemoveProjectFisherman(JObject jsonData)
         {
@@ -91,6 +95,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/fishermen/savefishermen
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveFisherman(JObject jsonData)
         {

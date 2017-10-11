@@ -13,13 +13,7 @@ namespace services.Controllers
 {
     public class InstrumentController : CDMSController
     {
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Instrument> GetAllInstruments()
-        {
-            var db = ServicesContext.Current;
-            return db.Instruments.OrderBy(o => o.Name).ThenBy(o => o.SerialNumber).AsEnumerable();
-        }
-
+        // GET /api/v1/instrument/getinstruments
         [System.Web.Http.HttpGet]
         public IEnumerable<Instrument> GetInstruments()
         {
@@ -33,6 +27,7 @@ namespace services.Controllers
             return i.AsEnumerable();
         }
 
+        // GET /api/v1/instrument/getinstrumenttypes
         [System.Web.Http.HttpGet]
         public IEnumerable<InstrumentType> GetInstrumentTypes()
         {
@@ -40,6 +35,7 @@ namespace services.Controllers
             return db.InstrumentType.AsEnumerable();
         }
 
+        // POST /api/v1/instrument/saveinstrumentaccuracycheck
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveInstrumentAccuracyCheck(JObject jsonData)
         {
@@ -70,6 +66,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/instrument/saveprojectinstrument
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveProjectInstrument(JObject jsonData)
         {
@@ -94,6 +91,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/instrument/removeprojectinstrument
         [System.Web.Http.HttpPost]
         public HttpResponseMessage RemoveProjectInstrument(JObject jsonData)
         {
@@ -117,6 +115,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/instrument/saveinstrument
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveInstrument(JObject jsonData)
         {

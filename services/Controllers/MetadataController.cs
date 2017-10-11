@@ -14,10 +14,9 @@ using services.Resources;
 
 namespace services.Controllers
 {
-    [System.Web.Http.Authorize]
-    public class MetadataPropertiesController : CDMSController
+    public class MetadataController : CDMSController
     {
-        // GET api/Metadata
+        // GET api/v1/metadata/getmetadataproperties
         public IEnumerable<MetadataProperty> GetMetadataProperties()
         {
             var db = ServicesContext.Current;
@@ -109,6 +108,9 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, metadataproperty);
         }
 
+        //TODO: not sure why this is a POST?
+
+        // POST /api/v1/metadata/getmetadatafor
         [HttpPost]
         public IEnumerable<MetadataValue> GetMetadataFor(JObject jsonData)
         {
@@ -126,6 +128,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/metadata/setdatasetmetadata
         [HttpPost]
         public HttpResponseMessage SetDatasetMetadata(JObject jsonData)
         {

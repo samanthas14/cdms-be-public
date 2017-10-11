@@ -22,22 +22,22 @@ using services.Resources;
 
 namespace services.Controllers
 {
-    [System.Web.Http.Authorize]
     public class DatastoreController : CDMSController
     {
-     
+        // GET /api/v1/datastore/getdatastores
         [HttpGet]
-        public IEnumerable<Datastore> GetAllDatastores()
+        public IEnumerable<Datastore> GetDatastores()
         {
             var db = ServicesContext.Current;
             return db.Datastores.AsEnumerable();
         }
 
         /*
-         * Get all fields for a field category
+         * Get list of all fields in a field category
          */
+         //GET /api/v1/datastore/getfieldcategoryfields/5
         [HttpGet]
-        public IEnumerable<Field> GetAllFields(int Id)
+        public IEnumerable<Field> GetFieldCategoryFields(int Id)
         {
             var db = ServicesContext.Current;
             logger.Info("Getting all fields...where FieldCategoryId = " + Id);
@@ -48,6 +48,7 @@ namespace services.Controllers
         /*
          * Get a datastore by id
          */ 
+         // GET /api/v1/datastore/getdatastore/5
         [HttpGet]
         public Datastore GetDatastore(int Id)
         {
@@ -64,10 +65,10 @@ namespace services.Controllers
         /*
          * Get a datastore's locations
          */ 
+         // GET /api/v1/datastore/getdatastorelocations/5
         [HttpGet]
-        public IEnumerable<Location> GetAllPossibleDatastoreLocations(int Id)
+        public IEnumerable<Location> GetDatastoreLocations(int Id)
         {
-            logger.Debug("Inside GetAllPossibleDatastoreLocations...");
             logger.Debug("Id = " + Id);
 
             var db = ServicesContext.Current;
@@ -87,26 +88,26 @@ namespace services.Controllers
         }
 
         /*
-         * Returns a datastore's fields 
+         * Returns list of a datastore's fields 
          * Think of this as the list of master fields for the master dataset
          */ 
+         // GET /api/v1/datastore/getdatastorefields/5
         [HttpGet]
-        public IEnumerable<Field> GetAllDatastoreFields(int Id)
+        public IEnumerable<Field> GetDatastoreFields(int Id)
         {
             var db = ServicesContext.Current;
-            User me = AuthorizationManager.getCurrentUser();
-
+            
             var datastore = db.Datastores.Find(Id);
             if (datastore == null)
                 throw new System.Exception("Configuration error: Datastore not recognized");
 
             return datastore.Fields;
-
         }
 
         /*
-         * Returns the projects associated with a datastore 
+         * Returns list of projects associated with a datastore id
          */ 
+         // GET /api/v1/datastore/getdatastoreprojects/5
         [HttpGet]
         public IEnumerable<Project> GetDatastoreProjects(int Id)
         {
@@ -121,8 +122,9 @@ namespace services.Controllers
         }
 
         /*
-         * Returns the children datasets of a datastore
+         * Returns list of datasets associated with a datastore id
          */ 
+         //GET /api/v1/datastore/getdatastoredatasets/5
         [HttpGet]
         public IEnumerable<Dataset> GetDatastoreDatasets(int Id)
         {
@@ -139,6 +141,7 @@ namespace services.Controllers
         /*
          * Add a field (from the list of master fields) to a project's dataset
          */ 
+         // POST /api/v1/datastore/addmasterfieldtodataset
         [HttpPost]
         public HttpResponseMessage AddMasterFieldToDataset(JObject jsonData)
         {
@@ -172,72 +175,12 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        /*
-         * Remove a field from a project's version of the dataset
-         * (does not remove the master field).
-         */ 
-        [HttpPost]
-        public HttpResponseMessage DeleteDatasetField(JObject jsonData)
-        {
-            logger.Debug("Inside DatastoreController.cs, DeleteDatasetField...");
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            //logger.Debug("json = " + json);
-
-            int DatasetId = json.DatasetId.ToObject<int>();
-            logger.Debug("DatasetId = " + DatasetId);
-            var dataset = db.Datasets.Find(DatasetId);
-            if (dataset == null)
-                throw new System.Exception("Dataset could not be found: " + DatasetId);
-
-            int FieldId = json.FieldId.ToObject<int>();
-            logger.Debug("FieldId = " + FieldId);
-
-            //var field = db.DatasetFields.Find(FieldId); // Original line
-            List<DatasetField> datasetFieldRecords = (from item in db.DatasetFields
-                                        where item.DatasetId == DatasetId && item.FieldId == FieldId
-                                        select item).ToList();
-
-            if (datasetFieldRecords.Count == 0)
-                throw new System.Exception("Field could not be retrieved for dataset: " + DatasetId);
-            else if (datasetFieldRecords.Count > 1)
-                logger.Debug("Found " + datasetFieldRecords.Count + " records (fields).");
-            else
-                logger.Debug("Found field.");
-
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
-            {
-                con.Open();
-
-                //var query = "DELETE FROM DatasetFields where DatasetId = " + dataset.Id + " and FieldId = " + field.Id; // Original line
-                var query = "";
-                foreach (var item in datasetFieldRecords)
-                {
-                    query = "DELETE FROM DatasetFields where Id = " + item.Id;
-                    logger.Debug("SQL command = " + query);
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        //logger.Debug(query);
-                        //cmd.ExecuteNonQuery(); // Original line
-                        try
-                        {
-                            cmd.ExecuteNonQuery();
-                            logger.Debug("Delete action done...");
-                        }
-                        catch (System.Exception e)
-                        {
-                            logger.Debug("Delete action failed:  " + e.Message);
-                        }
-                    }
-                }
-            }            
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
+        
 
         /*
          * update a master field's information (a field on a datastore)
          */ 
+         // POST /api/v1/datastore/savemasterfield
         [HttpPost]
         public HttpResponseMessage SaveMasterField(JObject jsonData)
         {

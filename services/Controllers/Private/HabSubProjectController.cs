@@ -20,15 +20,16 @@ using System.DirectoryServices.AccountManagement;
 
 namespace services.Controllers
 {
-    // this class is a PRIVATE extension of DataActionController. 
+    // this class is a PRIVATE Controller 
     //  it should be excluded from the main CTUIR release of cdms
 
     [Authorize]
     public class HabSubProjectController : CDMSController
     {
+        //api/v1/habsubproject/gethabsubprojects
         // Note:  This is a POST, instead of a GET, because we are pulling lots of data.
         [HttpPost]
-        public IEnumerable<Subproject_Hab> ProjectSubprojects(JObject jsonData)
+        public IEnumerable<Subproject_Hab> GetHabSubprojects(JObject jsonData)
         {
             logger.Debug("Inside ProjectSubprojects...");
             //logger.Debug("Fetching Subprojects for Project " + Id);
@@ -88,6 +89,7 @@ namespace services.Controllers
             return result.AsEnumerable();
         }*/
 
+        // POST /api/v1/habsubproject/uploadhabitatfile
         public Task<HttpResponseMessage> UploadHabitatFile()
         //public IEnumerable<services.Models.File> UploadHabitatFile()
         {
@@ -428,7 +430,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-
+        //GET /api/v1/habsubproject/gethabsubprojects
         [HttpGet]
         public IEnumerable<Subproject_Hab> GetHabSubprojects()
         //public IEnumerable<Subproject_Hab> GetHabSubprojects(int Id)
@@ -498,6 +500,7 @@ namespace services.Controllers
             /******************************************/
         }
 
+        // GET /api/v1/habsubproject/gethabsubproject/5
         [HttpGet]
         public IEnumerable<Subproject_Hab> GetHabSubproject(int Id)
         {
@@ -512,6 +515,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/habsubproject/deletehabitatitemfile
         [HttpPost]
         public HttpResponseMessage DeleteHabitatItemFile(JObject jsonData)
         {
@@ -618,6 +622,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/habsubproject/deletehabsubprojectfile
         [HttpPost]
         public HttpResponseMessage DeleteHabSubprojectFile(JObject jsonData)
         {
@@ -728,7 +733,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-
+        // POST /api/v1/habsubproject/removehabsubproject
         [HttpPost]
         public HttpResponseMessage RemoveHabSubproject(JObject jsonData)
         {
@@ -880,7 +885,7 @@ namespace services.Controllers
 
         }
 
-
+        // POST /api/v1/habsubproject/removehabitatitem
         [HttpPost]
         public HttpResponseMessage RemoveHabitatItem(JObject jsonData)
         {
@@ -1036,7 +1041,7 @@ namespace services.Controllers
         }
 
 
-
+        // POST /api/v1/habsubproject/savehabsubproject
         [HttpPost]
         public HttpResponseMessage SaveHabSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
@@ -1397,7 +1402,7 @@ namespace services.Controllers
             return response;
         }
 
-
+        //POST /api/v1/habsubproject/savehabitatitem
         [HttpPost]
         public HttpResponseMessage SaveHabitatItem(JObject jsonData)
         {

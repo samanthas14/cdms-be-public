@@ -26,7 +26,8 @@ namespace services.Controllers
     [Authorize]
     public class CRPPSubProjectController : CDMSController
     {
-        public Task<HttpResponseMessage> UploadSubprojectFile()
+        // POST /api/v1/crppsubproject/uploadcrppsubprojectfile
+        public Task<HttpResponseMessage> UploadCrppSubprojectFile()
         {
             logger.Debug("Inside UploadSubprojectFile...");
             logger.Debug("starting to process incoming subproject files.");
@@ -231,8 +232,28 @@ namespace services.Controllers
             return task;
         }
 
+        // GET /api/v1/crppsubproject/getcrppsubprojectfiles/5
+        [System.Web.Http.HttpGet]
+        public IEnumerable<Models.File> GetCRPPSubprojectFiles(int Id)
+        {
+            logger.Debug("Inside SubprojectFiles...");
+            logger.Debug("Fetching Files for Project " + Id);
+            var result = new List<Models.File>();
+
+            var ndb = ServicesContext.Current;
+
+            result = (from item in ndb.Files
+                      where item.ProjectId == Id
+                      where item.Subproject_CrppId != null
+                      orderby item.ProjectId, item.Subproject_CrppId
+                      select item).ToList();
+
+            return result;
+        }
+
+        // GET /api/v1/crppsubproject/getcrppsubprojects
         [HttpGet]
-        public IEnumerable<Subproject_Crpp> GetSubprojects()
+        public IEnumerable<Subproject_Crpp> GetCrppSubprojects()
         {
             var db = ServicesContext.Current;
             logger.Info("Inside DatastoreController, getting subprojects...");
@@ -287,6 +308,7 @@ namespace services.Controllers
             /******************************************/
         }
 
+        // POST /api/v1/crppsubproject/deletecorreseventfile
         [HttpPost]
         public HttpResponseMessage DeleteCorresEventFile(JObject jsonData)
         {
@@ -378,8 +400,9 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //POST /api/v1/crppsubproject/removecrppsubproject
         [HttpPost]
-        public HttpResponseMessage RemoveSubproject(JObject jsonData)
+        public HttpResponseMessage RemoveCrppSubproject(JObject jsonData)
         {
             var db = ServicesContext.Current;
             dynamic json = jsonData;
@@ -422,7 +445,7 @@ namespace services.Controllers
 
         }
 
-
+        // POST /api/v1/crppsubproject/removecorrespondenceevent
         [HttpPost]
         public HttpResponseMessage RemoveCorrespondenceEvent(JObject jsonData)
         {
@@ -543,6 +566,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/crppsubproject/savecrppsubproject
         [HttpPost]
         public HttpResponseMessage SaveSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
@@ -683,7 +707,7 @@ namespace services.Controllers
             return response;
         }
 
-
+        // POST /api/v1/crppsubproject/savecorrespondenceevent
         [HttpPost]
         public HttpResponseMessage SaveCorrespondenceEvent(JObject jsonData)
         {

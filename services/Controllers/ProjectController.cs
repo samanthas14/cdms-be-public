@@ -27,12 +27,13 @@ namespace services.Controllers
         //[ProjectAuth]
         [System.Web.Http.HttpGet]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-        public IEnumerable<Project> GetProjects()
+        public IEnumerable<dynamic> GetProjects()
         {
             var db = ServicesContext.Current;
             //logger.Info("GetProjects called!");
 
             //this is one way to neck down what gets returned... loading all the files is very time consuming for the big list...
+            
             /*
             var results = db.Projects.Select(p => new
             {
@@ -42,16 +43,16 @@ namespace services.Controllers
                 p.Description,
                 p.CreateDateTime,
                 p.OrganizationId,
-                p.OwnerId,
-                p.Metadata
+                p.OwnerId
             });
-            */
-            //return results.AsEnumerable();
+            
+            return results.OrderBy(o => o.Name).AsEnumerable();
+            */ 
 
             return db.Projects.OrderBy(o => o.Name).AsEnumerable();
         }
 
-        // GET api/Projects/5
+        // GET api/v1/project/getproject/5
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public Project GetProject(int id)
         {
@@ -162,8 +163,9 @@ namespace services.Controllers
 
 
         //returns empty list if none found...
+        // GET /api/v1/project/getprojectdatasets/5
         [System.Web.Http.HttpGet]
-        public IEnumerable<Dataset> ProjectDatasets(int Id)
+        public IEnumerable<Dataset> GetProjectDatasets(int Id)
         {
             var result = new List<Dataset>();
 
@@ -174,9 +176,9 @@ namespace services.Controllers
             return datasets;
         }
 
-
+        // GET /api/v1/project/getprojectfunders/5
         [System.Web.Http.HttpGet]
-        public IEnumerable<Funding> ProjectFunders(int Id)
+        public IEnumerable<Funding> GetProjectFunders(int Id)
         {
             logger.Debug("Inside ProjectFunders...");
             logger.Debug("Fetching Funders for Project " + Id);
@@ -195,8 +197,9 @@ namespace services.Controllers
             return f;
         }
 
+        // GET /api/v1/project/getprojectcollaborators/5
         [System.Web.Http.HttpGet]
-        public IEnumerable<Collaborator> ProjectCollaborators(int Id)
+        public IEnumerable<Collaborator> GetProjectCollaborators(int Id)
         {
             logger.Debug("Inside ProjectCollaborators...");
             logger.Debug("Fetching Collaborators for Project " + Id);
@@ -215,66 +218,7 @@ namespace services.Controllers
             return c;
         }
 
-        //returns empty list if none found...
-        [System.Web.Http.HttpGet]
-        public List<File> ProjectFiles(int Id)
-        {
-            //var result = new List<File>();
-
-            var db = ServicesContext.Current;
-
-            Project project = db.Projects.Find(Id);
-            if (project == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            List<File> result = (from item in db.Files
-                                 where item.ProjectId == Id
-                                 where item.DatasetId == null
-                                 orderby item.Id
-                                 select item).ToList();
-
-
-            if (result.Count == 0)
-            {
-                logger.Debug("No project files for project " + Id);
-            }
-            return result;
-        }
-
-
-        //TODO: Refactor the system to have nested/children projects instead of static "subprojects"
-
-        [System.Web.Http.HttpGet]
-        public IEnumerable<File> SubprojectFiles(int Id)
-        //public IEnumerable<File> SubprojectFiles(JObject jsonData)
-        {
-            logger.Debug("Inside SubprojectFiles...");
-            logger.Debug("Fetching Files for Project " + Id);
-            var result = new List<File>();
-
-            var ndb = ServicesContext.Current;
-
-            result = (from item in ndb.Files
-                          //where item.Id > 1
-                      where item.ProjectId == Id
-                      where item.Subproject_CrppId != null
-                      orderby item.ProjectId, item.Subproject_CrppId
-                      select item).ToList();
-
-            return result;
-
-            //var result = (from item in db.Files
-            //              //where item.Id > 1
-            //              where item.ProjectId == p.Id
-            //              where item.Subproject_CrppId == sp.Id
-            //              orderby item.ProjectId, item.Subproject_CrppId
-            //              select item).ToList();
-
-            //return result;
-        }
-
+        // POST /api/v1/project/saveproject
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveProject(JObject jsonData)
         {
@@ -464,6 +408,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/project/setprojecteditors
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SetProjectEditors(JObject jsonData)
         {

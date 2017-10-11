@@ -17,6 +17,7 @@ namespace services.Controllers
     {
         //QUERY
         //QueryDatasetActivities -- can call with a datasetId or a datastoreId
+        // POST /api/v1/query/querydatasetactivities
         [HttpPost]
         public DataTable QueryDatasetActivities(JObject jsonData)
         {

@@ -253,65 +253,7 @@ namespace services.Controllers
             return false;
 
         }
-
-        public HttpResponseMessage SaveUserInfo(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            HttpResponseMessage resp;
-
-            // Get the user info from that was passed in, and write it in the log file.
-            User userInfo = json.User.ToObject<User>();
-            logger.Debug("userInfo.Id = " + userInfo.Id);
-            logger.Debug("userInfo.Username = " + userInfo.Username);
-            logger.Debug("userInfo.DepartmentId = " + userInfo.DepartmentId);
-            logger.Debug("userInfo.Description = " + userInfo.Description);
-            logger.Debug("userInfo.Fullname = " + userInfo.Fullname);
-
-            //KB 9/8/17 - TODO: this should be rewritten (with a test!) to just fetch by id
-            // User usr = db.User.Find(userInfo.Id);
-
-            // Check the databse table for the user.
-            var queryUserCount = db.User.Where(u => u.Id == userInfo.Id).Count();
-
-            if (queryUserCount.Equals(0))
-            {
-                logger.Debug("Could not find a user with that Id.");
-                resp = new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
-            }
-            else
-            {
-                logger.Debug("Found the user.");
-
-                // Walk update the table recode with the passed in userInfo.
-                var query = db.User.Where(u => u.Id == userInfo.Id);
-                foreach (User usr in query)
-                {
-                    usr.DepartmentId = userInfo.DepartmentId;
-                    usr.Description = userInfo.Description;
-                    usr.Fullname = userInfo.Fullname;
-                }
-                resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-                logger.Debug("Set resp to OK.");
-
-                // This line is used in DatastoreController.cs, SaveProjectLocation, which I (GC) used for an example.
-                // However, here is causes a problem and stops exection, and I am not sure why.
-                // Taking the line out keeps things running OK.
-                //db.Entry(userInfo).State = EntityState.Modified;
-                //logger.Debug("Set db State to Modified.");
-                db.SaveChanges();
-                logger.Debug("Saved the changes.");
-            }
-
-            string result = JsonConvert.SerializeObject(userInfo);
-
-            //HttpResponseMessage resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-            resp.Content = new System.Net.Http.StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
-
-            logger.Debug("resp = " + resp.StatusCode.ToString());
-            return resp;
-        }
-
+        
         private string divideProcess(string strCypher, string strNumber)
         {
             string strPwHashWithNumbers = "";

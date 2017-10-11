@@ -16,11 +16,10 @@ namespace services.Controllers
     public class ExportController : CDMSController
     {
         //Writes csv export file out to a file and returns the url.
-        // was DownloadDatasetActivities
+        // POST /api/v1/export/exportdatasetactivities
         [HttpPost]
         public ExportResult ExportDatasetActivities(JObject jsonData)
         {
-            logger.Debug("Inside DownloadDatasetActivities...");
             var db = ServicesContext.Current;
 
             dynamic json = jsonData;

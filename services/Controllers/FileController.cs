@@ -18,8 +18,10 @@ namespace services.Controllers
 {
     public class FileController : CDMSController
     {
+        //returns list of the files associated with a datasetid (empty list if none)
+        // GET /api/v1/file/getdatasetfiles
         [HttpGet]
-        public IEnumerable<Models.File> DatasetFiles(int Id)
+        public IEnumerable<Models.File> GetDatasetFiles(int Id)
         {
             //var result = new List<File>();
 
@@ -31,11 +33,6 @@ namespace services.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            Project project = db.Projects.Find(dataset.ProjectId);
-            if (project == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
             List<Models.File> result = (from item in db.Files
                                  where item.DatasetId == Id
                                  orderby item.Id
@@ -338,11 +335,38 @@ namespace services.Controllers
             return new_filename;
         }
 
+        // GET /api/v1/file/getprojectfiles/5
+        //returns the files for this projectid (empty list if none found...)
+        //
+        [System.Web.Http.HttpGet]
+        public List<Models.File> GetProjectFiles(int Id)
+        {
+            //var result = new List<File>();
+
+            var db = ServicesContext.Current;
+
+            Project project = db.Projects.Find(Id);
+            if (project == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            List<Models.File> result = (from item in db.Files
+                                 where item.ProjectId == Id
+                                 where item.DatasetId == null
+                                 orderby item.Id
+                                 select item).ToList();
+
+
+            if (result.Count == 0)
+            {
+                logger.Debug("No project files for project " + Id);
+            }
+            return result;
+        }
+
         //UploadProjectFile - add a file to this project.
-        /**
-         * Handle uploaded files
-         * IEnumerable<File>
-         */
+        // POST /api/v1/file/uploadprojectfile
         public Task<HttpResponseMessage> UploadProjectFile()
         {
             logger.Debug("starting to process incoming project files.");
@@ -525,6 +549,7 @@ namespace services.Controllers
             return task;
         }
 
+        // POST /api/v1/file/uploaddatasetfile
         public Task<HttpResponseMessage> UploadDatasetFile()
         {
             logger.Debug("Inside UploadDatasetFile...");
@@ -755,6 +780,7 @@ namespace services.Controllers
 
         // Users can upload waypoints; the data will be extracted, converted to json, then sent back to the browser in the response.
         // The uploaded files will NOT be saved.
+        // POST /api/v1/file/handlewaypoints
         [HttpPost]
         public Task<HttpResponseMessage> HandleWaypoints()
         {
@@ -849,6 +875,7 @@ namespace services.Controllers
             return task;
         }
 
+        // POST /api/v1/file/updatefile
         [HttpPost]
         public HttpResponseMessage UpdateFile(JObject jsonData)
         {
@@ -877,6 +904,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/file/deletefile
         [HttpPost]
         public HttpResponseMessage DeleteFile(JObject jsonData)
         {
@@ -943,6 +971,7 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/file/deletedatasetfile
         [HttpPost]
         public HttpResponseMessage DeleteDatasetFile(JObject jsonData)
         {

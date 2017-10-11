@@ -173,7 +173,6 @@
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\CDMSController.cs" />
     <Compile Include="Controllers\SyslogController.cs" />
-    <Compile Include="Controllers\MappingController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
@@ -221,7 +220,7 @@
     <Compile Include="Models\Data\ScrewTrap_Header.cs" />
     <Compile Include="Models\DatasetField.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
-    <Compile Include="Controllers\MetadataPropertiesController.cs" />
+    <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Models\Datastore.cs" />
     <Compile Include="Models\Data\SnorkelFish.cs" />
     <Compile Include="Models\Data\Electrofishing.cs" />

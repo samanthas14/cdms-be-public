@@ -12,6 +12,7 @@ namespace services.Controllers
 {
     public class StreamnetController : CDMSController
     {
+        // GET /api/v1/streamnet/synctostreamnet
         [HttpGet]
         public List<string> SyncToStreamNet()
         {

@@ -23,7 +23,7 @@ namespace services.Controllers
             return departments.AsEnumerable();
         }
 
-        // GET api/Department/5
+        // GET /api/v1/department/getdepartment/5
         public Department GetDepartment(int id)
         {
             var db = ServicesContext.Current;

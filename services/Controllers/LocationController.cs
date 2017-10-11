@@ -14,6 +14,7 @@ namespace services.Controllers
 {
     public class LocationController : CDMSController
     {
+        // GET /api/v1/location/getlocationtypes
         [HttpGet]
         public IEnumerable<LocationType> GetLocationTypes()
         {
@@ -21,6 +22,7 @@ namespace services.Controllers
             return db.LocationType.AsEnumerable();
         }
 
+        // POST /api/v1/location/saveprojectlocation
         [HttpPost]
         public HttpResponseMessage SaveProjectLocation(JObject jsonData)
         {
@@ -81,6 +83,7 @@ namespace services.Controllers
 
         }
 
+        // POST /api/v1/location/deletelocation
         [HttpPost]
         public HttpResponseMessage DeleteLocation(JObject jsonData)
         {

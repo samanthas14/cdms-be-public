@@ -5,6 +5,7 @@ using services.Resources;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace services.Controllers
          * the most recent QA Status for the activity to know its latest state. In this way you can always see all of the
          * states that an activity has gone through as it has changed.
          */ 
+
+        // POST /api/v1/activity/setqastatus
         [HttpPost]
         public HttpResponseMessage SetQaStatus(JObject jsonData)
         {
@@ -60,10 +63,125 @@ namespace services.Controllers
         }
 
         /*
+         * get list of activities for this datasetid (returns an empty list if none)
+         */
+        //GET /api/v1/activity/getdatasetactivities/5
+        [HttpGet]
+        public IEnumerable<Activity> GetDatasetActivities(int Id)
+        {
+            var ndb = ServicesContext.Current;
+            return ndb.Activities.Where(o => o.DatasetId == Id).ToList();
+        }
+
+        /*
+         * This queries just the information we need for showing the Activities on the
+         * Data tab on CDMS front-end (for performance).
+         */
+        // GET /api/v1/activity/getdatasetactivitiesview/5
+        [HttpGet]
+        public dynamic GetDatasetActivitiesView(int Id)
+        {
+            var query = @"SELECT a.Id, a.LocationId, a.UserId, a.ActivityDate, a.Description, l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId,
+                l.OtherAgencyId, l.GPSEasting, l.GPSNorthing, l.Projection, l.UTMZone, l.Latitude, l.Longitude, w.Name as WaterBodyName,
+                u.Fullname, qa.QAStatusId, qa.UserId as QAStatusUserId, qa.QAStatusName
+                FROM dbo.Activities AS a
+                    JOIN dbo.ActivityQAs_VW AS qa ON a.Id = qa.ActivityId
+                    JOIN dbo.Locations AS l ON a.LocationId = l.Id
+                    JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
+                    JOIN dbo.Users AS u ON a.UserId = u.Id
+                WHERE a.DatasetId = " + Id;
+
+            DataTable activities = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(activities);
+                }
+            }
+
+            //build up our json instead of sending back the whole blasted object graph
+            //return activities;
+
+            JArray datasetactivities =
+                new JArray(                     //array of activities
+                from a in activities.AsEnumerable()
+                select new JObject              //one for each activity
+                (
+                    new JProperty("Id", a["Id"]),
+                    new JProperty("LocationId", a["LocationId"]),
+                    new JProperty("UserId", a["UserId"]),
+                    new JProperty("Description", a["Description"]),
+                    new JProperty("ActivityDate", a["ActivityDate"]),
+                    new JProperty("Location",
+                        new JObject(
+                            new JProperty("Id", a["LocationId"]),
+                            new JProperty("Label", a["Label"]),
+                            new JProperty("OtherAgencyId", a["OtherAgencyId"]),
+                            new JProperty("LocationTypeId", a["LocationTypeId"]),
+                            new JProperty("SdeObjectId", a["SdeObjectId"]),
+                            new JProperty("WaterBodyId", a["WaterBodyId"]),
+                            new JProperty("GPSEasting", a["GPSEasting"]),
+                            new JProperty("GPSNorthing", a["GPSNorthing"]),
+                            new JProperty("Projection", a["Projection"]),
+                            new JProperty("UTMZone", a["UTMZone"]),
+                            new JProperty("Latitude", a["Latitude"]),
+                            new JProperty("Longitude", a["Longitude"]),
+                            new JProperty("WaterBody",
+                                new JObject(
+                                    new JProperty("Id", a["WaterBodyId"]),
+                                    new JProperty("Name", a["WaterBodyName"])))
+                            )), //closes location
+                    new JProperty("User",
+                        new JObject(
+                            new JProperty("Id", a["UserId"]),
+                            new JProperty("Fullname", a["Fullname"]))),
+                    new JProperty("ActivityQAStatus",
+                        new JObject(
+                            new JProperty("QAStatusId", a["QAStatusId"]),
+                            new JProperty("UserId", a["QAStatusUserId"]),
+                            new JProperty("QAStatusName", a["QAStatusName"])
+                            ))
+                )
+                  );
+
+            return datasetactivities;
+        }
+
+        // GET /api/v1/activity/getdatasetactivitydata/5
+        /*
+         * returns a dataset model instance (like "AdultWeir") populated with the data related to an activity id
+         */ 
+        [HttpGet]
+        public dynamic GetDatasetActivityData(int Id)
+        {
+            logger.Debug("Inside DatasetData.  Need data for this activity:  " + Id);
+            var db = ServicesContext.Current;
+            Activity activity = db.Activities.Find(Id);
+            logger.Debug("Did we find anything...?  activity.Id = " + activity.Id);
+
+            if (activity == null)
+                throw new Exception("Configuration Error");
+
+            /* The next commands gets the name of the dataset from the Datastore table prefix.
+             * This is how we determine which dataset class we are working with.
+            */
+            logger.Debug("activity.Dataset.Datastore.TablePrefix = " + activity.Dataset.Datastore.TablePrefix);
+            System.Type type = db.GetTypeFor(activity.Dataset.Datastore.TablePrefix);
+
+            //instantiate by name: AdultWeir(activity.Id)
+            return Activator.CreateInstance(type, activity.Id);
+        }
+
+
+        /*
          * Deletes activities (by id) for a given dataset. Must be owner or editor of the dataset.
          * This action does not do audit tracking, but is administrative - it actually removes the 
          * records and this cannot be undone.
-         */ 
+         */
+        // POST /api/v1/activity/deletedatasetactivities
         [HttpPost]
         public HttpResponseMessage DeleteDatasetActivities(JObject jsonData)
         {
@@ -139,8 +257,8 @@ namespace services.Controllers
         /**
          * Updates activities for a dataset.
          * json with: DatasetId, ProjectId, activities
-         * 
          */
+        // POST /api/v1/activity/updatedatasetactivities
         [HttpPost]
         public HttpResponseMessage UpdateDatasetActivities(JObject jsonData)
         {
@@ -481,14 +599,17 @@ namespace services.Controllers
 
         
         /*
-         * Saves activities for a dataset 
+         * Saves activities for a dataset
          */ 
+
+        // POST /api/v1/activity/savedatasetactivities
+        [HttpPost]
         public HttpResponseMessage SaveDatasetActivities(JObject jsonData)
         {
             return SaveDatasetActivitiesEFF(jsonData);
         }
 
-        [HttpPost]
+        //entity framework version of saving - this is slow but effective.
         private HttpResponseMessage SaveDatasetActivitiesEFF(JObject jsonData)
         {
             logger.Debug("Saving dataset activities: ");
@@ -795,8 +916,7 @@ namespace services.Controllers
         }
 
 
-        //so we'll build one that generates sql directly since the EFF way has mediocre performance.
-        [HttpPost]
+        //sql version of saving - faster but doesn't currently actually work... :/
         private HttpResponseMessage SaveDatasetActivitiesSQL(JObject jsonData)
         {
             var db = ServicesContext.Current;

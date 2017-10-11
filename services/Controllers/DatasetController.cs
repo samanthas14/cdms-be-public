@@ -23,7 +23,6 @@ namespace services.Controllers
     public class DatasetController : CDMSController
     {
 
-        // GET dataset/Datasets
         public IEnumerable<Dataset> GetDatasets()
         {
             var db = ServicesContext.Current;
@@ -32,7 +31,7 @@ namespace services.Controllers
             return datasets.AsEnumerable();
         }
 
-        // GET dataset/Datasets/5
+        // GET /api/v1/dataset/getdataset/5
         public Dataset GetDataset(int id)
         {
             var db = ServicesContext.Current;
@@ -46,7 +45,6 @@ namespace services.Controllers
             return dataset;
         }
 
-        // PUT dataset/Datasets/5
         public HttpResponseMessage PutDataset(int id, Dataset dataset)
         {
             var db = ServicesContext.Current;
@@ -75,7 +73,6 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        // POST dataset/Datasets
         public HttpResponseMessage PostDataset(Dataset dataset)
         {
             var db = ServicesContext.Current;
@@ -95,7 +92,6 @@ namespace services.Controllers
             }
         }
 
-        // DELETE dataset/Datasets/5
         public HttpResponseMessage DeleteDataset(int id)
         {
             var db = ServicesContext.Current;
@@ -128,39 +124,8 @@ namespace services.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpGet]
-        public IEnumerable<Activity> DatasetActivities(int Id)
-        {
-            var result = new List<Activity>();
-
-            var ndb = ServicesContext.Current;
-
-            var activities = ndb.Activities.Where(o => o.DatasetId == Id);
-
-            return activities;
-        }
-
-        [HttpGet]
-        public dynamic DatasetData(int Id)
-        {
-            logger.Debug("Inside DatasetData.  Need data for this activity:  " + Id);
-            var db = ServicesContext.Current;
-            Activity activity = db.Activities.Find(Id);
-            logger.Debug("Did we find anything...?  activity.Id = " + activity.Id);
-
-            if (activity == null)
-                throw new Exception("Configuration Error");
-
-            /* The next commands gets the name of the dataset from the Datastore table prefix.
-             * This is how we determine which dataset class we are working with.
-            */
-            logger.Debug("activity.Dataset.Datastore.TablePrefix = " + activity.Dataset.Datastore.TablePrefix);
-            System.Type type = db.GetTypeFor(activity.Dataset.Datastore.TablePrefix);
-
-            //instantiate by name
-            return Activator.CreateInstance(type, activity.Id);
-        }
-
+        
+        // GET /api/v1/dataset/getheadersdatafordataset/5
         public DataTable GetHeadersDataForDataset(int id)
         {
             var db = ServicesContext.Current;
@@ -188,6 +153,7 @@ namespace services.Controllers
         }
 
         //TODO: this is a (currently) unused feature we will want to revisit to support NESTED DATASETS
+        // GET /api/v1/dataset/getrelationdata
         [HttpPost]
         public DataTable GetRelationData(JObject jsonData)
         {
@@ -234,6 +200,7 @@ namespace services.Controllers
             return dt;
         }
 
+        // POST /api/v1/dataset/savedatasetfield
         [HttpPost]
         public HttpResponseMessage SaveDatasetField(JObject jsonData)
         {
@@ -268,6 +235,70 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
 
 
+        }
+
+        /*
+         * Remove a field from a project's version of the dataset
+         * (does not remove the master field).
+         */
+         // POST /api/v1/dataset/deletedatasetfield
+        [HttpPost]
+        public HttpResponseMessage DeleteDatasetField(JObject jsonData)
+        {
+            logger.Debug("Inside DatastoreController.cs, DeleteDatasetField...");
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+            //logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            int FieldId = json.FieldId.ToObject<int>();
+            logger.Debug("FieldId = " + FieldId);
+
+            //var field = db.DatasetFields.Find(FieldId); // Original line
+            List<DatasetField> datasetFieldRecords = (from item in db.DatasetFields
+                                                      where item.DatasetId == DatasetId && item.FieldId == FieldId
+                                                      select item).ToList();
+
+            if (datasetFieldRecords.Count == 0)
+                throw new System.Exception("Field could not be retrieved for dataset: " + DatasetId);
+            else if (datasetFieldRecords.Count > 1)
+                logger.Debug("Found " + datasetFieldRecords.Count + " records (fields).");
+            else
+                logger.Debug("Found field.");
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                con.Open();
+
+                //var query = "DELETE FROM DatasetFields where DatasetId = " + dataset.Id + " and FieldId = " + field.Id; // Original line
+                var query = "";
+                foreach (var item in datasetFieldRecords)
+                {
+                    query = "DELETE FROM DatasetFields where Id = " + item.Id;
+                    logger.Debug("SQL command = " + query);
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        //logger.Debug(query);
+                        //cmd.ExecuteNonQuery(); // Original line
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            logger.Debug("Delete action done...");
+                        }
+                        catch (System.Exception e)
+                        {
+                            logger.Debug("Delete action failed:  " + e.Message);
+                        }
+                    }
+                }
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
     }
