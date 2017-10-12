@@ -515,6 +515,48 @@ namespace services.Controllers
 
         }
 
+        // GET /api/v1/habsubproject/getprojectcollaborators/5
+        [System.Web.Http.HttpGet]
+        public IEnumerable<Collaborator> GetProjectCollaborators(int Id)
+        {
+            logger.Debug("Inside ProjectCollaborators...");
+            logger.Debug("Fetching Collaborators for Project " + Id);
+            var result = new List<Collaborator>();
+
+            var ndb = ServicesContext.Current;
+
+            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
+            var c = (from item in ndb.Collaborators
+                         //where item.Id > 1
+                     where item.ProjectId == Id
+                     orderby item.ProjectId, item.SubprojectId
+                     select item).ToList();
+
+            //return datasets;
+            return c;
+        }
+
+        // GET /api/v1/habsubproject/getprojectfunders/5
+        [System.Web.Http.HttpGet]
+        public IEnumerable<Funding> GetProjectFunders(int Id)
+        {
+            logger.Debug("Inside ProjectFunders...");
+            logger.Debug("Fetching Funders for Project " + Id);
+            var result = new List<Funding>();
+
+            var ndb = ServicesContext.Current;
+
+            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
+            var f = (from item in ndb.Funding
+                         //where item.Id > 1
+                     where item.ProjectId == Id
+                     orderby item.ProjectId, item.SubprojectId
+                     select item).ToList();
+
+            //return datasets;
+            return f;
+        }
+
         // POST /api/v1/habsubproject/deletehabitatitemfile
         [HttpPost]
         public HttpResponseMessage DeleteHabitatItemFile(JObject jsonData)

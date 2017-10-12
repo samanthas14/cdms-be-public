@@ -176,48 +176,6 @@ namespace services.Controllers
             return datasets;
         }
 
-        // GET /api/v1/project/getprojectfunders/5
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Funding> GetProjectFunders(int Id)
-        {
-            logger.Debug("Inside ProjectFunders...");
-            logger.Debug("Fetching Funders for Project " + Id);
-            var result = new List<Funding>();
-
-            var ndb = ServicesContext.Current;
-
-            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
-            var f = (from item in ndb.Funding
-                         //where item.Id > 1
-                     where item.ProjectId == Id
-                     orderby item.ProjectId, item.SubprojectId
-                     select item).ToList();
-
-            //return datasets;
-            return f;
-        }
-
-        // GET /api/v1/project/getprojectcollaborators/5
-        [System.Web.Http.HttpGet]
-        public IEnumerable<Collaborator> GetProjectCollaborators(int Id)
-        {
-            logger.Debug("Inside ProjectCollaborators...");
-            logger.Debug("Fetching Collaborators for Project " + Id);
-            var result = new List<Collaborator>();
-
-            var ndb = ServicesContext.Current;
-
-            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
-            var c = (from item in ndb.Collaborators
-                         //where item.Id > 1
-                     where item.ProjectId == Id
-                     orderby item.ProjectId, item.SubprojectId
-                     select item).ToList();
-
-            //return datasets;
-            return c;
-        }
-
         // POST /api/v1/project/saveproject
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveProject(JObject jsonData)
