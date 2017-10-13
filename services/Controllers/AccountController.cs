@@ -37,7 +37,6 @@ namespace services.Controllers
         public const String MASQUERADE_KEY = "MasqueradePassword";
         private List<originalText> pwPartsList;
 
-
         [HttpGet]
         public AccountResult Logout()
         {

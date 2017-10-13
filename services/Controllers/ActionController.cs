@@ -456,6 +456,85 @@ namespace services.Controllers
         }
 
 
+        /*
+         * This queries just the information we need for showing the Activities on the
+         * Data tab on CDMS front-end (for performance).
+         * 
+         */
+        [AllowAnonymous]
+        [HttpGet]
+        public dynamic DatasetActivitiesView(int Id)
+        {
+            var query = @"SELECT a.Id, a.LocationId, a.UserId, a.ActivityDate, a.Description, l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId,
+                l.OtherAgencyId, l.GPSEasting, l.GPSNorthing, l.Projection, l.UTMZone, l.Latitude, l.Longitude, w.Name as WaterBodyName,
+                u.Fullname, qa.QAStatusId, qa.UserId as QAStatusUserId, qa.QAStatusName
+                FROM dbo.Activities AS a
+                    JOIN dbo.ActivityQAs_VW AS qa ON a.Id = qa.ActivityId
+                    JOIN dbo.Locations AS l ON a.LocationId = l.Id
+                    JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
+                    JOIN dbo.Users AS u ON a.UserId = u.Id
+                WHERE a.DatasetId = " + Id;
+
+            DataTable activities = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(activities);
+                }
+            }
+
+            //build up our json instead of sending back the whole blasted object graph
+            //return activities;
+
+            JArray datasetactivities =
+                new JArray(                     //array of activities
+                from a in activities.AsEnumerable()
+                    select new JObject              //one for each activity
+                    (
+                        new JProperty("Id", a["Id"]),
+                        new JProperty("LocationId", a["LocationId"]),
+                        new JProperty("UserId", a["UserId"]),
+                        new JProperty("Description", a["Description"]),
+                        new JProperty("ActivityDate", a["ActivityDate"]),
+                        new JProperty("Location",
+                            new JObject(
+                                new JProperty("Id", a["LocationId"]),
+                                new JProperty("Label", a["Label"]),
+                                new JProperty("OtherAgencyId", a["OtherAgencyId"]),
+                                new JProperty("LocationTypeId", a["LocationTypeId"]),
+                                new JProperty("SdeObjectId", a["SdeObjectId"]),
+                                new JProperty("WaterBodyId", a["WaterBodyId"]),
+                                new JProperty("GPSEasting", a["GPSEasting"]),
+                                new JProperty("GPSNorthing", a["GPSNorthing"]),
+                                new JProperty("Projection", a["Projection"]),
+                                new JProperty("UTMZone", a["UTMZone"]),
+                                new JProperty("Latitude", a["Latitude"]),
+                                new JProperty("Longitude", a["Longitude"]),
+                                new JProperty("WaterBody",
+                                    new JObject(
+                                        new JProperty("Id", a["WaterBodyId"]),
+                                        new JProperty("Name", a["WaterBodyName"]))) 
+                                )), //closes location
+                        new JProperty("User",
+                            new JObject(
+                                new JProperty("Id", a["UserId"]),
+                                new JProperty("Fullname", a["Fullname"]))), 
+                        new JProperty("ActivityQAStatus",
+                            new JObject(
+                                new JProperty("QAStatusId", a["QAStatusId"]),
+                                new JProperty("UserId", a["QAStatusUserId"]),
+                                new JProperty("QAStatusName", a["QAStatusName"])
+                                ))
+                    )
+                  );
+
+            return datasetactivities;
+        }
+
+
         [AllowAnonymous]
         [HttpGet]
         public dynamic DatasetData(int Id)
