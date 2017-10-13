@@ -428,13 +428,6 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        HttpResponseMessage error(string message)
-        {
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
-            return response;
-        }
-
 
         [HttpGet]
         public IEnumerable<Subproject_Hab> GetHabSubprojects()
@@ -1646,7 +1639,7 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    foreach (string filePath in filepaths)
+                    /*foreach (string filePath in filepaths)
                     {
                         try
                         {
@@ -1669,7 +1662,7 @@ namespace services.Controllers
                             logger.Debug("Inner Exception Message:  " + ioException.InnerException.Message);
                         }
                     }
-
+                    */
                 }
                 catch (System.Exception dbSave)
                 {

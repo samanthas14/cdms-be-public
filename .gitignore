@@ -34,12 +34,13 @@ TestingProject/bin/*
 TestingProject/App.config
 Web.Debug.config
 Web.Release.config
+
+Web.config*
 services/Properties/PublishProfiles/*
-Web.config*
-Web.config*
-/ServicesTest/*
-/services/uploads/*
 UpgradeLog*.htm
+<<<<<<< HEAD
+*.pubxml
+=======
 *.pubxml
 /TestingProject/*
 /.vs/*

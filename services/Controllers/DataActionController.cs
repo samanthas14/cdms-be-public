@@ -2308,7 +2308,7 @@ namespace services.Controllers
                             logger.Debug("A date!: ");
                             if (item.Value.ParamFieldDateType == "between") //otherwise, do nothing with this criteria
                             {
-                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate) + "'");
+                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate,true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate,true) + "'");
                             }
 
 
@@ -2337,15 +2337,15 @@ namespace services.Controllers
             else if (json.DateSearchType == "between")
             {
                 if (json.TablePrefix == "WaterQuality")
-                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
+                    conditions.Add("SampleDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 else if (json.TablePrefix == "WaterTemp")
-                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
+                    conditions.Add("ReadingDateTime BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 else if (json.TablePrefix == "FishScales")
-                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
+                    conditions.Add("ScaleCollectionDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate,true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
                 //else if (json.TablePrefix == "StreamNet")
                 //    conditions.Add("SpawningYear BETWEEN CONVERT(Date, '" + json.FromDate + "') AND DATEADD(DAY,1,CONVERT(Date, '" + json.ToDate + "'))");
                 else
-                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate) + "'))");
+                    conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate, true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate,true) + "'))");
             }
 
             //LOCATION criteria
@@ -2468,19 +2468,40 @@ namespace services.Controllers
             return dt;
          }
 
+        //filter an incoming parameter that will be appended to a SQL statement for
+        // any possible misbehaving sql characters.
         private string filterForSQL(dynamic value)
         {
-            return value.ToString()
+            return filterForSQL(value, false); //default to not allowing spaces
+        }
+
+        //optionally allow spaces since date parameters require them.
+        private string filterForSQL(dynamic value, bool allowspace)
+        {
+            value = value.ToString()
                         .Replace("'", "''")
                         .Replace(";", "")
                         .Replace("--", "")
-                        .Replace(" ", "")
                         .Replace("@", "")
-                        .Replace("\"","")
-                        .Replace("[","")
-                        .Replace("]","");
+                        .Replace("\"", "")
+                        .Replace("[", "")
+                        .Replace("]", "");
 
+            //replace " " with "" unless allowspace=true
+            if (!allowspace)
+            {
+                value = value.Replace(" ", "");
+            }
 
+            return value;
+
+        }
+
+        HttpResponseMessage error(string message)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            response.Content = new StringContent(message, System.Text.Encoding.UTF8, "text/plain");
+            return response;
         }
     }
 

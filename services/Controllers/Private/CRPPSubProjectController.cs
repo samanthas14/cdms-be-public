@@ -689,6 +689,8 @@ namespace services.Controllers
         {
             if (debugMode) logger.Debug("Inside SaveCorrespondenceEvent...");
             string strId = null;  // Delare this up here, so that all if/try blocks can see it.
+            string strTmp = "";
+
             var db = ServicesContext.Current;
             if (debugMode) logger.Debug("db = " + db);
 
@@ -729,251 +731,187 @@ namespace services.Controllers
             // First get the date as a string, so that we can easily check if it blank (null or empty).
             //string strCorrespondenceDate = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceDate").Value<string>();
             //if (debugMode) logger.Debug("strCorrespondenceDate = " + strCorrespondenceDate);
-            string strCorrespondenceDate = null;
-            try
-            {
-                strCorrespondenceDate = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceDate", true).Value<string>();
-                // We know we have a date, so we just process it.
-                try
-                {
-                    DateTime dtCorrespondenceDate = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceDate").Value<DateTime>();
-                    ce.CorrespondenceDate = dtCorrespondenceDate;
 
-                    logger.Debug("ce.CorrespondenceDate = " + ce.CorrespondenceDate);
+            ce.SubprojectId = spId;
+            logger.Debug("ce.SubprojectId = " + ce.SubprojectId);
+
+            ce.ByUserId = me.Id;
+            logger.Debug("ce.ByUserId = " + ce.ByUserId);
+
+            ce.EffDt = DateTime.Now;
+            logger.Debug("ce.EffDt = " + ce.EffDt);
+
+            foreach (var item in json.CorrespondenceEvent)
+            {
+                logger.Debug("----------");
+
+                if (!(item is JProperty))
+                {
+                    throw new System.Exception("There is a problem with your request. Format error.");
                 }
-                catch (System.Exception setdateException)
+
+                var prop = item as JProperty;
+                logger.Debug("Property name = " + prop.Name);
+
+                //int intPropNameLength = prop.Name.Length;
+                //logger.Debug("intPropNameLength = " + intPropNameLength);
+
+                strTmp = item.ToObject<string>(); // We will use to determine if the value is blank, regardless of what the ultimate value is.
+                logger.Debug("strTmp = " + strTmp);
+
+                if (prop.Name == "NumberOfDays") // Optional
                 {
-                    logger.Debug("Ooops had an error setting the CorrespondenceDate: " + strCorrespondenceDate);
-                    logger.Debug(setdateException.ToString());
+                    logger.Debug("Found NumberOfDays");
 
-                    throw setdateException;
-                }
-            }
-            catch (System.Exception tokenException)
-            {
-                logger.Debug("Could not find the CorrespondenceDate in the JSON data: " + strCorrespondenceDate);
-                logger.Debug(tokenException.ToString());
-
-                throw tokenException;
-            }
-
-            // CorrespondenceType is optional
-            try
-            {
-                string strCorrespondenceType = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceType").Value<string>();
-                if (debugMode) logger.Debug("strCorrespondenceType = " + strCorrespondenceType);
-
-                if (!String.IsNullOrEmpty(strCorrespondenceType))
-                {
-                    ce.CorrespondenceType = strCorrespondenceType;
-                    if (debugMode) logger.Debug("Processed ce.CorrespondenceType = " + ce.CorrespondenceType);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("CorrespondenceType is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate CorrespondenceType (optional field).  Skipping...");
-            }
-
-            // ResponseDate is optional.
-            string strResponseDate = null;
-            try
-            {
-                strResponseDate = jsonData.SelectToken(@"CorrespondenceEvent.ResponseDate").Value<string>();
-                if (!string.IsNullOrEmpty(strResponseDate))
-                {
-                    try
+                    if (!String.IsNullOrEmpty(strTmp))
                     {
-                        DateTime dtResponseDate = jsonData.SelectToken(@"CorrespondenceEvent.ResponseDate").Value<DateTime>();
-                        ce.ResponseDate = dtResponseDate;
-
-                        logger.Debug("ce.ResponseDate = " + ce.ResponseDate);
+                        ce.NumberOfDays = item.ToObject<int>();
+                        logger.Debug("ce.NumberOfDays = " + ce.NumberOfDays);
                     }
-                    catch (System.Exception setdateException)
+                    else
                     {
-                        logger.Debug("Ooops had an error setting the ResponseDate: " + strResponseDate);
-                        logger.Debug(setdateException.ToString());
-
-                        throw setdateException;
+                        logger.Debug("NumberOfDays null, blank, or empty; Optional -- skipping...");
                     }
                 }
-                else
+                else if (prop.Name == "CorrespondenceDate") // Required
                 {
-                    logger.Debug("ResponseDate is blank (null or empty) on optional.  Skipping...");
+                    logger.Debug("Found CorrespondenceDate");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        try
+                        {
+                            DateTime dtCorrespondenceDate = item.ToObject<DateTime>();
+                            ce.CorrespondenceDate = item.ToObject<DateTime>();
+                            logger.Debug("ce.CorrespondenceDate = " + ce.CorrespondenceDate);
+                        }
+                        catch (SystemException setdateException)
+                        {
+                            logger.Debug("Ooops had an error setting the CorrespondenceDate: " + strTmp);
+                            logger.Debug(setdateException.ToString());
+
+                            throw setdateException;
+                        }
+                    }
+                    else
+                    {
+                        logger.Debug("CorrespondenceDate null, blank, or empty; required -- error!");
+                    }
+                }
+                else if (prop.Name == "CorrespondenceType") // Optional
+                {
+                    logger.Debug("Found CorrespondenceType");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        ce.CorrespondenceType = item.ToObject<string>();
+                        logger.Debug("ce.CorrespondenceType = " + ce.CorrespondenceType);
+                    }
+                    else
+                    {
+                        logger.Debug("CorrespondenceType null, blank, or empty; Optional -- skipping...");
+                    }
+                }
+                else if (prop.Name == "ResponseDate") // Optional
+                {
+                    logger.Debug("Found ResponseDate");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        try
+                        {
+                            ce.ResponseDate = item.ToObject<DateTime>();
+                            logger.Debug("ce.ResponseDate = " + ce.ResponseDate);
+                        }
+                        catch (System.Exception setdateException)
+                        {
+                            logger.Debug("Ooops had an error setting the ResponseDate: " + strTmp);
+                            logger.Debug(setdateException.ToString());
+
+                            throw setdateException;
+                        }
+                    }
+                    else
+                    {
+                        logger.Debug("ResponseDate null, blank, or empty; Optional -- skipping...");
+                    }
+                }
+                else if (prop.Name == "ResponseType") // Optional
+                {
+                    logger.Debug("Found ResponseType");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        ce.ResponseType = item.ToObject<string>();
+                        logger.Debug("ce.ResponseType = " + ce.ResponseType);
+                    }
+                    else
+                    {
+                        logger.Debug("ResponseType null, blank, or empty; Optional -- skipping...");
+                    }
+                }
+                else if (prop.Name == "StaffMember") // Required
+                {
+                    logger.Debug("Found StaffMember");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        ce.StaffMember = item.ToObject<string>();
+                        logger.Debug("ce.StaffMember = " + ce.StaffMember);
+                    }
+                    else
+                    {
+                        logger.Debug("StaffMember null, blank, or empty; required -- error!");
+                    }
+                }
+                else if (prop.Name == "EventComments") // Optional
+                {
+                    logger.Debug("Found EventComments");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        ce.EventComments = item.ToObject<string>();
+                        logger.Debug("ce.EventComments = " + ce.EventComments);
+                    }
+                    else
+                    {
+                        logger.Debug("EventComments null, blank, or empty; Optional -- skipping...");
+                    }
+                }
+                else if (prop.Name == "EventFiles") // Optional
+                {
+                    logger.Debug("Found EventFiles");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        ce.EventFiles = item.ToObject<string>();
+                        logger.Debug("ce.EventFiles = " + ce.EventFiles);
+                    }
+                    else
+                    {
+                        logger.Debug("EventFiles null, blank, or empty; Optional -- skipping...");
+                    }
+                }
+                else if (prop.Name == "Id") // Optional
+                {
+                    logger.Debug("Found Id");
+
+                    if (!String.IsNullOrEmpty(strTmp))
+                    {
+                        strId = strTmp;
+                        ce.Id = item.ToObject<int>();
+                        logger.Debug("ce.Id = " + ce.Id);
+                    }
+                    else
+                    {
+                        logger.Debug("Id null, blank, or empty; Required -- error!");
+                    }
                 }
             }
-            catch
-            {
-                logger.Debug("ResponseDate is blank (null or empty) on optional.  Skipping...");
-            }
 
-            // Id is required and passed in programmatically.
+            // We have reviewed/collected the passed in fields, now let's try to save the Correspondence Event.
             try
             {
-                strId = jsonData.SelectToken(@"CorrespondenceEvent.Id").Value<string>();
-                if (debugMode) logger.Debug("strId = " + strId);
-
-                if ((!String.IsNullOrEmpty(strId)) && (Convert.ToInt32(strId) > 0))
-                {
-                    ce.Id = Convert.ToInt32(strId);
-                    if (debugMode) logger.Debug("Processed ce.Id = " + ce.Id);
-                }
-                else
-                {
-                    if (String.IsNullOrEmpty(strId))
-                        logger.Debug("Id cannot be blank (null or empty) = ");
-                    else if (Convert.ToInt32(strId) == 0)
-                        logger.Debug("Id = 0; excluding it from the new event record...");
-                }
-            }
-            catch
-            {
-                logger.Debug("CorrespondenceEvent.Id is required but could not locate it.");
-            }
-
-            // NumberOfDays is optional
-            try
-            {
-                string strNumberOfDays = jsonData.SelectToken(@"CorrespondenceEvent.NumberOfDays").Value<string>();
-                if (debugMode) logger.Debug("strNumberOfDays = " + strNumberOfDays);
-
-                if (!String.IsNullOrEmpty(strNumberOfDays))
-                {
-                    ce.NumberOfDays = Convert.ToInt32(strNumberOfDays);
-                    if (debugMode) logger.Debug("Processed ce.NumberOfDays = " + ce.NumberOfDays);
-                }
-                else
-                {
-                    logger.Debug("NumberOfDays is blank (null or empty) on optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate NumberOfDays (optional field).  Skipping...");
-            }
-
-            // ResponseType is optional
-            try
-            {
-                string strResponseType = jsonData.SelectToken(@"CorrespondenceEvent.ResponseType").Value<string>();
-                if (debugMode) logger.Debug("strResponseType = " + strResponseType);
-
-                if (!String.IsNullOrEmpty(strResponseType))
-                {
-                    ce.ResponseType = strResponseType;
-                    if (debugMode) logger.Debug("Processed ce.ResponseType = " + ce.ResponseType);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("ResponseType is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate ResponseType (optional field).  Skipping...");
-            }
-
-            // StaffMember is optional
-            try
-            {
-                string strStaffMember = jsonData.SelectToken(@"CorrespondenceEvent.StaffMember").Value<string>();
-                if (debugMode) logger.Debug("strStaffMember = " + strStaffMember);
-
-                if (!String.IsNullOrEmpty(strStaffMember))
-                {
-                    ce.StaffMember = strStaffMember;
-                    if (debugMode) logger.Debug("Processed ce.StaffMember = " + ce.StaffMember);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("StaffMember is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate StaffMember (optional field).  Skipping...");
-            }
-
-            // Comments is optional
-            try
-            {
-                string strComments = jsonData.SelectToken(@"CorrespondenceEvent.EventComments").Value<string>();
-                if (debugMode) logger.Debug("strComments = " + strComments);
-
-                if (!String.IsNullOrEmpty(strComments))
-                {
-                    ce.EventComments = strComments;
-                    if (debugMode) logger.Debug("Processed ce.EventComments = " + ce.EventComments);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("EventComments is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate Comments (optional field).  Skipping...");
-            }
-
-            // EventFiles is optional
-            try
-            {
-                string strEventFiles = jsonData.SelectToken(@"CorrespondenceEvent.EventFiles.").Value<string>();
-                //JObject joEventFiles = jsonData.SelectToken(@"CorrespondenceEvent.EventFiles.").Value<JObject>();
-                //logger.Debug("Created joEventFiles");
-                //dynamic jsonFiles = joEventFiles;
-                //logger.Debug("jsonFiles = " + jsonFiles);
-                //string strFile = null;
-
-                if (debugMode) logger.Debug("strEventFiles = " + strEventFiles);
-
-                if (!String.IsNullOrEmpty(strEventFiles))
-                {
-                    ce.EventFiles = strEventFiles;
-
-                    if (debugMode) logger.Debug("Processed ce.EventFiles = " + ce.EventFiles);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("EventFiles is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate EventFiles (optional field).  Skipping...");
-            }
-
-            /*try
-            {
-                // Comments is optional
-                string strActionNeeded = jsonData.SelectToken(@"CorrespondenceEvent.ActionNeeded").Value<string>();
-                if (debugMode) logger.Debug("strActionNeeded = " + strActionNeeded);
-
-                if (!String.IsNullOrEmpty(strActionNeeded))
-                {
-                    ce.ActionNeeded = strActionNeeded;
-                    if (debugMode) logger.Debug("Processed ce.ActionNeeded = " + ce.ActionNeeded);
-                }
-                else
-                {
-                    if (debugMode) logger.Debug("Comments is optional.  Skipping...");
-                }
-            }
-            catch
-            {
-                logger.Debug("Could not locate Comments (optional field).  Skipping...");
-            }
-            */
-
-            try
-            {
-                ce.SubprojectId = spId;
-                ce.ByUserId = me.Id;
-                ce.EffDt = DateTime.Now;
-                // Now let's try to save the Correspondence Event.
                 if ((String.IsNullOrEmpty(strId)) || (Convert.ToInt32(strId) == 0))
                 {
                     // The Id field auto-increments and will not accept a 0; therefore, let's just leave it blank.
@@ -1034,7 +972,8 @@ namespace services.Controllers
                     // Get yesterday's date.
                     DateTime dtYesterday = DateTime.Now.AddDays(-1);
 
-                    foreach (string filePath in filepaths)
+                    // Turning this off for now; it deletes ALL files in the folder with a date older than today.
+                    /*foreach (string filePath in filepaths)
                     {
                         try
                         {
@@ -1057,7 +996,7 @@ namespace services.Controllers
                             logger.Debug("Inner Exception Message:  " + ioException.InnerException.Message);
                         }
                     }
-
+                    */
 
                     // Now let's continue with our save process.
                     //string strSubprojectsPath = root + "\\" + spId;
@@ -1100,7 +1039,7 @@ namespace services.Controllers
 
                     logger.Debug("submittingUser.Id = " + submittingUser.Id + ", projLead.Id = " + projLead.Id);
                     /* Comment this block out for Dev. */
-                    if (submittingUser.Id != projLead.Id)
+                if (submittingUser.Id != projLead.Id)
                     {
                         //SendEmailToProjectLead(projLead.Username, projLead.Fullname, subProj.ProjectName, me.Fullname);
                         SendEmailToProjectLead(projLead.Username, projLead.Fullname, subProj.ProjectName, me.Fullname,
