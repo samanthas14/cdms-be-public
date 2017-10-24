@@ -87,7 +87,7 @@ namespace services.Controllers
                 FROM dbo.Activities AS a
                     JOIN dbo.ActivityQAs_VW AS qa ON a.Id = qa.ActivityId
                     JOIN dbo.Locations AS l ON a.LocationId = l.Id
-                    JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
+                    LEFT JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
                     JOIN dbo.Users AS u ON a.UserId = u.Id
                 WHERE a.DatasetId = " + Id;
 
