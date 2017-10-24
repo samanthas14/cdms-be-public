@@ -65,15 +65,14 @@ namespace services.Controllers
             return me;
         }
 
-
         [HttpGet]
         public AccountResult Logout()
         {
             FormsAuthentication.SignOut();
             AccountResult result = new AccountResult();
             result.Success = true;
-            result.Message ="Successfully logged out.";
-            return result ;
+            result.Message = "Successfully logged out.";
+            return result;
         }
 
         [HttpPost]
@@ -92,7 +91,7 @@ namespace services.Controllers
 
             //string result = "{\"message\": \"Failure'\"}";
             AccountResult result = new AccountResult();
-            
+
             //NOTE:  This is necessary because IE doesn't handle json returning from a POST properly.
             var resp = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK);
 
@@ -180,9 +179,8 @@ namespace services.Controllers
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
-                if ((user.Inactive == null) && 
-                    (model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY] ||
-                    isValidLocalUser(user, model.Password) || Membership.ValidateUser(model.Username, model.Password))
+                if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
+                    (isValidLocalUser(user, model.Password)) || (Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -191,6 +189,7 @@ namespace services.Controllers
 
                     if (user == null) //If user doesn't exist in our system, create it.
                     {
+                        logger.Debug("New user.  Adding...");
                         user = new User(model.Username);
                         user.BumpLastLoginDate();
                         db.User.Add(user);
@@ -198,9 +197,22 @@ namespace services.Controllers
                     }
                     else
                     {
-                        user.BumpLastLoginDate();
-                        db.Entry(user).State = EntityState.Modified;
-                        db.SaveChanges();
+                        logger.Debug("user.Inactive = " + user.Inactive);
+                        if (user.Inactive == null)
+                        {
+                            logger.Debug("User is active...");
+                            user.BumpLastLoginDate();
+                            db.Entry(user).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            logger.Debug("User is INACTIVE...");
+                            result.Success = false;
+                            result.Message = "Username is inactive.";
+
+                            return result;
+                        }
                     }
 
                     var identity = new GenericIdentity(user.Username, "Basic");
@@ -225,7 +237,9 @@ namespace services.Controllers
                 }
             }
             else
+            {
                 logger.Debug("model state invalid.");
+            }
 
             logger.Debug("Result = " + result);
 
