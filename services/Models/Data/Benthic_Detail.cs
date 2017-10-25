@@ -37,9 +37,12 @@ namespace services.Models.Data
         public int? MsPollutionSensitiveRichness { get; set; }
         public int? MsClingerRichness { get; set; }
         public int? MsSemivoltineRichness { get; set; }
-        public decimal? MsPollutionTolerantPercent { get; set; }
-        public decimal? MsPredatorPercent { get; set; }
-        public decimal? MsDominantTaxa3Percent { get; set; }
+        //public decimal? MsPollutionTolerantPercent { get; set; }
+        public decimal? MsPollutionTolerant { get; set; }
+        //public decimal? MsPredatorPercent { get; set; }
+        public decimal? MsPredator { get; set; }
+        //public decimal? MsDominantTaxa3Percent { get; set; }
+        public decimal? MsDominantTaxa3 { get; set; }
         public int? BIbiScore { get; set; }
     }
 }
