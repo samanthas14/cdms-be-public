@@ -184,6 +184,18 @@
     <Compile Include="Migrations\201709292329224_Initial.Designer.cs">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710252106026_BenChgFieldNames.cs" />
+    <Compile Include="Migrations\201710252106026_BenChgFieldNames.Designer.cs">
+      <DependentUpon>201710252106026_BenChgFieldNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252106537_BenUpdViews.cs" />
+    <Compile Include="Migrations\201710252106537_BenUpdViews.Designer.cs">
+      <DependentUpon>201710252106537_BenUpdViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252133436_BenUpdData.cs" />
+    <Compile Include="Migrations\201710252133436_BenUpdData.Designer.cs">
+      <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -296,6 +308,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
+    <Compile Include="Resources\Cyphering.cs" />
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
     <Compile Include="Resources\PitagisReader.cs" />
@@ -335,6 +348,7 @@
     <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
+    <None Include="Properties\PublishProfiles\local-services-dev.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -368,6 +382,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709292329224_Initial.resx">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252106026_BenChgFieldNames.resx">
+      <DependentUpon>201710252106026_BenChgFieldNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252106537_BenUpdViews.resx">
+      <DependentUpon>201710252106537_BenUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252133436_BenUpdData.resx">
+      <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
