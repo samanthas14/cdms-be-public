@@ -14,9 +14,6 @@ using services.Models;
 using services.Models.Data;
 using services.Resources;
 using services.ExtensionMethods;
-using System.Net.Mail;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
 
 namespace services.Controllers
 {
@@ -1248,16 +1245,37 @@ namespace services.Controllers
                 logger.Debug("About to add new habSubproject...");
                 db.Subproject_Hab().Add(s);
                 logger.Debug("created new habSubproject");
+
+                db.SaveChanges();
             }
             else
             {
                 logger.Debug("About to update habSubproject...");
                 db.Entry(s).State = EntityState.Modified;
                 //db.Entry(s).Property("UpdateTime").IsModified = true;
+
+                db.SaveChanges();
                 logger.Debug("updated existing habSubproject");
+
+                var spLocationId = from item in db.Location
+                                      where item.ProjectId == s.ProjectId
+                                      where item.SubprojectId == s.Id
+                                      select item.Id;
+
+                Location spLocation = db.Location.Find(spLocationId);
+
+                if (s.ProjectName != spLocation.Label)
+                {
+                    logger.Debug("Updating Location.Label also...");
+                    spLocation.Label = s.ProjectName;
+
+                    db.Entry(spLocation).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
             }
 
-            db.SaveChanges();
+            //db.SaveChanges();
             logger.Debug("Just saved the DB changes.");
 
             int newId = s.Id;
