@@ -1257,12 +1257,21 @@ namespace services.Controllers
                 db.SaveChanges();
                 logger.Debug("updated existing habSubproject");
 
-                var spLocationId = from item in db.Location
+                var locationList = (from item in db.Location
                                       where item.ProjectId == s.ProjectId
                                       where item.SubprojectId == s.Id
-                                      select item.Id;
+                                      select item.Id).ToList();
 
-                Location spLocation = db.Location.Find(spLocationId);
+                int spLocationId = 0;
+                // There should be only 1.
+                foreach (var n in locationList)
+                {
+                    spLocationId = n;
+                }
+                logger.Debug("Located the item...X" + spLocationId + "X");
+
+                Location spLocation = db.Location.Find(Convert.ToInt32(spLocationId.ToString()));
+                logger.Debug("spLocation Id = " + spLocation.Id);
 
                 if (s.ProjectName != spLocation.Label)
                 {
