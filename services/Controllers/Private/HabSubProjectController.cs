@@ -1268,7 +1268,7 @@ namespace services.Controllers
                 {
                     spLocationId = n;
                 }
-                logger.Debug("Located the item...X" + spLocationId + "X");
+                //logger.Debug("Located the item...X" + spLocationId + "X");
 
                 Location spLocation = db.Location.Find(Convert.ToInt32(spLocationId.ToString()));
                 logger.Debug("spLocation Id = " + spLocation.Id);
