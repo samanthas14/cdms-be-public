@@ -196,6 +196,10 @@
     <Compile Include="Migrations\201710252133436_BenUpdData.Designer.cs">
       <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710311848333_StreamNetAddPopId.cs" />
+    <Compile Include="Migrations\201710311848333_StreamNetAddPopId.Designer.cs">
+      <DependentUpon>201710311848333_StreamNetAddPopId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -372,6 +376,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710252133436_BenUpdData.resx">
       <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710311848333_StreamNetAddPopId.resx">
+      <DependentUpon>201710311848333_StreamNetAddPopId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
