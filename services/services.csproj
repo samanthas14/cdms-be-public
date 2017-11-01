@@ -164,14 +164,37 @@
     <Compile Include="App_Start\SecurityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DataActionController.cs" />
-    <Compile Include="Controllers\DatasetsController.cs" />
+    <Compile Include="Controllers\Connectors\StreamnetController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FishermenController.cs" />
+    <Compile Include="Controllers\ImportController.cs" />
+    <Compile Include="Controllers\InstrumentController.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="Controllers\CDMSController.cs" />
+    <Compile Include="Controllers\SyslogController.cs" />
+    <Compile Include="Controllers\ExportController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201709292329224_Initial.cs" />
     <Compile Include="Migrations\201709292329224_Initial.Designer.cs">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252106026_BenChgFieldNames.cs" />
+    <Compile Include="Migrations\201710252106026_BenChgFieldNames.Designer.cs">
+      <DependentUpon>201710252106026_BenChgFieldNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252106537_BenUpdViews.cs" />
+    <Compile Include="Migrations\201710252106537_BenUpdViews.Designer.cs">
+      <DependentUpon>201710252106537_BenUpdViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710252133436_BenUpdData.cs" />
+    <Compile Include="Migrations\201710252133436_BenUpdData.Designer.cs">
+      <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -209,8 +232,7 @@
     <Compile Include="Models\Data\ScrewTrap_Header.cs" />
     <Compile Include="Models\DatasetField.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
-    <Compile Include="Controllers\FilesController.cs" />
-    <Compile Include="Controllers\MetadataPropertiesController.cs" />
+    <Compile Include="Controllers\MetadataController.cs" />
     <Compile Include="Models\Datastore.cs" />
     <Compile Include="Models\Data\SnorkelFish.cs" />
     <Compile Include="Models\Data\Electrofishing.cs" />
@@ -255,10 +277,8 @@
     <Compile Include="Models\Data\WaterTemp_Header.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Dataset.cs" />
-    <Compile Include="Controllers\ProjectsController.cs" />
-    <Compile Include="Controllers\ProjectTypesController.cs" />
-    <Compile Include="Controllers\ActionController.cs" />
-    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -291,6 +311,8 @@
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
     <Compile Include="Resources\PitagisReader.cs" />
+    <Compile Include="Resources\QueryHelper.cs" />
+    <Compile Include="Resources\StringHelper.cs" />
     <Compile Include="Resources\TSVReader.cs" />
     <Compile Include="Resources\CSVReader.cs" />
     <Compile Include="Resources\EFFileRepository.cs" />
@@ -307,7 +329,6 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="index.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -321,30 +342,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ControllerClassDiagram.cd" />
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
+    <None Include="Properties\PublishProfiles\local-services-dev.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>5</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Outlook">
-      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>9</VersionMajor>
-      <VersionMinor>4</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -358,6 +363,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709292329224_Initial.resx">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252106026_BenChgFieldNames.resx">
+      <DependentUpon>201710252106026_BenChgFieldNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252106537_BenUpdViews.resx">
+      <DependentUpon>201710252106537_BenUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710252133436_BenUpdData.resx">
+      <DependentUpon>201710252133436_BenUpdData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

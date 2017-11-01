@@ -24,9 +24,10 @@ namespace services.Controllers
     //  it should be excluded from the main CTUIR release of cdms
 
     [Authorize]
-    public partial class DataActionController : ApiController
+    public class CRPPSubProjectController : CDMSController
     {
-        public Task<HttpResponseMessage> UploadSubprojectFile()
+        // POST /api/v1/crppsubproject/uploadcrppsubprojectfile
+        public Task<HttpResponseMessage> UploadCrppSubprojectFile()
         {
             logger.Debug("Inside UploadSubprojectFile...");
             logger.Debug("starting to process incoming subproject files.");
@@ -154,7 +155,7 @@ namespace services.Controllers
                             //                filename,
                             //                false);
 
-                            var newFileName = ActionController.relocateSubprojectFile(
+                            var newFileName = FileController.relocateSubprojectFile(
                                             file.LocalFileName,
                                             ProjectId,
                                             SubprojectId,
@@ -231,8 +232,28 @@ namespace services.Controllers
             return task;
         }
 
+        // GET /api/v1/crppsubproject/getcrppsubprojectfiles/5
+        [System.Web.Http.HttpGet]
+        public IEnumerable<Models.File> GetCRPPSubprojectFiles(int Id)
+        {
+            logger.Debug("Inside SubprojectFiles...");
+            logger.Debug("Fetching Files for Project " + Id);
+            var result = new List<Models.File>();
+
+            var ndb = ServicesContext.Current;
+
+            result = (from item in ndb.Files
+                      where item.ProjectId == Id
+                      where item.Subproject_CrppId != null
+                      orderby item.ProjectId, item.Subproject_CrppId
+                      select item).ToList();
+
+            return result;
+        }
+
+        // GET /api/v1/crppsubproject/getcrppsubprojects
         [HttpGet]
-        public IEnumerable<Subproject_Crpp> GetSubprojects()
+        public IEnumerable<Subproject_Crpp> GetCrppSubprojects()
         {
             var db = ServicesContext.Current;
             logger.Info("Inside DatastoreController, getting subprojects...");
@@ -287,6 +308,7 @@ namespace services.Controllers
             /******************************************/
         }
 
+        // POST /api/v1/crppsubproject/deletecorreseventfile
         [HttpPost]
         public HttpResponseMessage DeleteCorresEventFile(JObject jsonData)
         {
@@ -378,8 +400,9 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //POST /api/v1/crppsubproject/removecrppsubproject
         [HttpPost]
-        public HttpResponseMessage RemoveSubproject(JObject jsonData)
+        public HttpResponseMessage RemoveCrppSubproject(JObject jsonData)
         {
             var db = ServicesContext.Current;
             dynamic json = jsonData;
@@ -399,12 +422,12 @@ namespace services.Controllers
             logger.Debug("root = " + root);
 
             string strSubprojectsPath = root + p.Id + "\\S\\" + crppSubproject.Id;
-            if (debugMode) logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
+            logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
 
             if (Directory.Exists(strSubprojectsPath))
             {
                 System.IO.Directory.Delete(strSubprojectsPath, true);
-                if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppSubproject.Id);
+                logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppSubproject.Id);
             }
             else
             {
@@ -412,17 +435,17 @@ namespace services.Controllers
             }
 
             db.Subproject_Crpp().Remove(crppSubproject);
-            if (debugMode) logger.Debug("Just removed this subproject from table CrppSubprojects:  " + crppSubproject.Id);
+            logger.Debug("Just removed this subproject from table CrppSubprojects:  " + crppSubproject.Id);
 
             //db.CrppSubprojects.State = EntityState.Modified;
             db.SaveChanges();
-            if (debugMode) logger.Debug("Changes saved...");
+            logger.Debug("Changes saved...");
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
         }
 
-
+        // POST /api/v1/crppsubproject/removecorrespondenceevent
         [HttpPost]
         public HttpResponseMessage RemoveCorrespondenceEvent(JObject jsonData)
         {
@@ -527,51 +550,52 @@ namespace services.Controllers
             logger.Debug("root = " + root);
 
             string strSubprojectsPath = root + "\\" + crppCorrespondenceEvent.Id;
-            if (debugMode) logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
+            logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
 
             System.IO.Directory.Delete(strSubprojectsPath, true);
-            if (debugMode) logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
+            logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
             */
 
             db.CorrespondenceEvents().Remove(correspondenceEvent);
-            if (debugMode) logger.Debug("Just removed this event from table CorrespondenceEvents:  " + correspondenceEvent.Id);
+            logger.Debug("Just removed this event from table CorrespondenceEvents:  " + correspondenceEvent.Id);
 
             //db.CrppSubprojects.State = EntityState.Modified;
             db.SaveChanges();
-            if (debugMode) logger.Debug("Changes saved...");
+            logger.Debug("Changes saved...");
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/crppsubproject/savecrppsubproject
         [HttpPost]
         public HttpResponseMessage SaveSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
         {
-            if (debugMode) logger.Debug("Inside SaveSubproject...");
+            logger.Debug("Inside SaveSubproject...");
             var db = ServicesContext.Current;
-            if (debugMode) logger.Debug("db = " + db);
+            logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            if (debugMode) logger.Debug("json = " + json);
+            logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
-            if (debugMode) logger.Debug("me = " + me);
+            logger.Debug("me = " + me);
 
             int pId = json.ProjectId.ToObject<int>();
-            if (debugMode) logger.Debug("pId = " + pId);
+            logger.Debug("pId = " + pId);
 
             Project p = db.Projects.Find(pId);
-            if (debugMode) logger.Debug("p = " + p);
+            logger.Debug("p = " + p);
             if (p == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
-            if (debugMode) logger.Debug("p.isOwnerOrEditor(me) = " + p.isOwnerOrEditor(me));
+            logger.Debug("p.isOwnerOrEditor(me) = " + p.isOwnerOrEditor(me));
             if (!p.isOwnerOrEditor(me))
                 throw new System.Exception("Authorization error.");
 
             Subproject_Crpp s = json.Subproject.ToObject<Subproject_Crpp>();
 
-            if (debugMode) logger.Debug("Found Subproject in incoming data...");
+            logger.Debug("Found Subproject in incoming data...");
 
             if (s.OtherAgency == "undefined")
                 s.OtherAgency = null;
@@ -582,7 +606,7 @@ namespace services.Controllers
             if (s.OtherCounty == "undefined")
                 s.OtherCounty = null;
 
-            if (debugMode) logger.Debug(
+            logger.Debug(
                 "s.ProjectName = " + s.ProjectName + "\n" +
                 "s.Agency = " + s.Agency + "\n" +
                 "s.OtherAgency = " + s.OtherAgency + "\n" +
@@ -663,7 +687,7 @@ namespace services.Controllers
             }
 
             db.SaveChanges();
-            if (debugMode) logger.Debug("Just saved the DB changes.");
+            logger.Debug("Just saved the DB changes.");
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
@@ -673,38 +697,38 @@ namespace services.Controllers
 
             //string strSubprojectsPath = root + "\\" + s.Id;
             string strSubprojectsPath = root + s.Id;
-            if (debugMode) logger.Debug("The path for the new subproject will be:  " + strSubprojectsPath);
+            logger.Debug("The path for the new subproject will be:  " + strSubprojectsPath);
 
             System.IO.Directory.CreateDirectory(strSubprojectsPath);
-            if (debugMode) logger.Debug("Just created folder for the new subproject:  " + s.Id);
+            logger.Debug("Just created folder for the new subproject:  " + s.Id);
 
             //return new HttpResponseMessage(HttpStatusCode.OK);
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, s);
             return response;
         }
 
-
+        // POST /api/v1/crppsubproject/savecorrespondenceevent
         [HttpPost]
         public HttpResponseMessage SaveCorrespondenceEvent(JObject jsonData)
         {
-            if (debugMode) logger.Debug("Inside SaveCorrespondenceEvent...");
+            logger.Debug("Inside SaveCorrespondenceEvent...");
             string strId = null;  // Delare this up here, so that all if/try blocks can see it.
             string strTmp = "";
 
             var db = ServicesContext.Current;
-            if (debugMode) logger.Debug("db = " + db);
+            logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            if (debugMode) logger.Debug("json = " + json);
+            logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
-            //if (debugMode) logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
+            //logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
 
             int pId = json.ProjectId.ToObject<int>();
-            if (debugMode) logger.Debug("pId = " + pId);
+            logger.Debug("pId = " + pId);
 
             Project p = db.Projects.Find(pId);
-            if (debugMode) logger.Debug("p = " + p);
+            logger.Debug("p = " + p);
             if (p == null)
                 throw new System.Exception("Configuration error.  Please try again.");
 
@@ -713,7 +737,7 @@ namespace services.Controllers
                 throw new System.Exception("Authorization error.");
 
             int spId = json.SubprojectId.ToObject<int>();
-            if (debugMode) logger.Debug("spId = " + spId);
+            logger.Debug("spId = " + spId);
 
             CorrespondenceEvents ce = new CorrespondenceEvents();
             logger.Debug("Created ce...");
@@ -730,7 +754,7 @@ namespace services.Controllers
             // CorrespondenceDate is required.
             // First get the date as a string, so that we can easily check if it blank (null or empty).
             //string strCorrespondenceDate = jsonData.SelectToken(@"CorrespondenceEvent.CorrespondenceDate").Value<string>();
-            //if (debugMode) logger.Debug("strCorrespondenceDate = " + strCorrespondenceDate);
+            //logger.Debug("strCorrespondenceDate = " + strCorrespondenceDate);
 
             ce.SubprojectId = spId;
             logger.Debug("ce.SubprojectId = " + ce.SubprojectId);
@@ -947,7 +971,7 @@ namespace services.Controllers
                 try
                 {
                     db.SaveChanges();
-                    if (debugMode) logger.Debug("Just saved the DB changes.");
+                    logger.Debug("Just saved the DB changes.");
 
                     // Now let's save the documents.
 
@@ -1001,13 +1025,13 @@ namespace services.Controllers
                     // Now let's continue with our save process.
                     //string strSubprojectsPath = root + "\\" + spId;
                     //string strSubprojectsPath = strSubprojectsFolder + spId;
-                    //if (debugMode) logger.Debug("The path for the subproject folder is:  " + strSubprojectsPath);
+                    //logger.Debug("The path for the subproject folder is:  " + strSubprojectsPath);
 
 
                     //UploadSubprojectFile(pId, spId, ce.EventFiles);
 
                     //System.IO.Directory.CreateDirectory(strSubprojectsPath);
-                    //if (debugMode) logger.Debug("Just created folder for the new subproject:  " + strSubprojectsPath);
+                    //logger.Debug("Just created folder for the new subproject:  " + strSubprojectsPath);
 
                     // Check if the submitting person is the ProjectLead
                     // We have the CDMS UserId, but we need the UserName for the comparison.
@@ -1019,10 +1043,10 @@ namespace services.Controllers
                     logger.Debug("subProject = " + subProj.ProjectName);
                     logger.Debug("subProj.ProjectLead = " + subProj.ProjectLead);
                     subProj.EffDt = DateTime.Now;
-                    if (debugMode) logger.Debug("Set EffDt in Subprojects.");
+                    logger.Debug("Set EffDt in Subprojects.");
 
                     db.SaveChanges();
-                    if (debugMode) logger.Debug("Just saved the DB changes again.");
+                    logger.Debug("Just saved the DB changes again.");
 
                     // Get the Project Lead's First and Last Name from the Users table.
                     // The find checks the Id field (an Int) and we are passing it a string; this throws an error.

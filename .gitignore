@@ -38,9 +38,6 @@ Web.Release.config
 Web.config*
 services/Properties/PublishProfiles/*
 UpgradeLog*.htm
-<<<<<<< HEAD
-*.pubxml
-=======
 *.pubxml
 /TestingProject/*
 /.vs/*
