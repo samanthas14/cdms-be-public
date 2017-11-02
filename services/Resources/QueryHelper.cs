@@ -279,6 +279,8 @@ namespace services.Resources
         //optionally allow spaces since date parameters require them.
         public static string filterForSQL(dynamic value, bool allowspace)
         {
+            if (value == null) return "";
+
             value = value.ToString()
                         .Replace("'", "''")
                         .Replace(";", "")
