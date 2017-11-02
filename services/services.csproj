@@ -204,6 +204,10 @@
     <Compile Include="Migrations\201711011738345_StreamNetUpdViews.Designer.cs">
       <DependentUpon>201711011738345_StreamNetUpdViews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.cs" />
+    <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.Designer.cs">
+      <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -386,6 +390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711011738345_StreamNetUpdViews.resx">
       <DependentUpon>201711011738345_StreamNetUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711021653101_StreamNetUpdConfig.resx">
+      <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
