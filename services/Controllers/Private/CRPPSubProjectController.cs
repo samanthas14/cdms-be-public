@@ -568,7 +568,8 @@ namespace services.Controllers
 
         // POST /api/v1/crppsubproject/savecrppsubproject
         [HttpPost]
-        public HttpResponseMessage SaveSubproject(JObject jsonData)
+        //public HttpResponseMessage SaveSubproject(JObject jsonData)
+        public HttpResponseMessage SaveCrppSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
         {
             logger.Debug("Inside SaveSubproject...");
