@@ -80,7 +80,20 @@ namespace services.Models
             //logger.Debug("header_fields1 = " + header_fields);
             header_fields += (header_fields == "") ? "" : ","; //add on the ending comma if applicable
             //logger.Debug("header_fields2 = " + header_fields);
-            var detail_fields = string.Join(",",this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName)) + ",";
+            //var detail_fields = string.Join(",",this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName)) + ",";
+            var detail_fields = "";
+            if ((this.Datastore.TablePrefix == "StreamNet_NOSA") ||
+                (this.Datastore.TablePrefix == "StreamNet_RperS") ||
+                (this.Datastore.TablePrefix == "StreamNet_SAR"))
+            {
+                // Note no comma at the end.
+                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName));
+            }
+            else
+            {
+                // Note comma at the end.
+                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName)) + ",";
+            }
 
             // ReadingDate and ReadingTime are fields from old data.  We do not use these fields in CDMS; however, they are in the DatasetFields table.
             // Therefore, we will remove these fields from the query, if they got included; otherwise, the query will break.
@@ -119,22 +132,32 @@ namespace services.Models
             else if (this.Datastore.TablePrefix == "Metrics")
             {
                 logger.Debug("This dataset is Metrics-related...");
-                system_fields = "CreateDate,LocationId,QAStatusId,DatasetId,ActivityId";
+                //system_fields = "CreateDate,LocationId,QAStatusId,DatasetId,ActivityId";
+
+                logger.Debug("This dataset is Metrics-related...");
+                if (productTarget == "Query")
+                {
+                    system_fields = "LocationId";
+                }
+                else // productTarget == "Export"
+                {
+                    system_fields = "LocationLabel";
+                }
             }
             else if (this.Datastore.TablePrefix == "StreamNet_NOSA")
             {
                 logger.Debug("This dataset is StreamNet_NOSA-Related...");
-                system_fields = "QAStatusId,DatasetId,ActivityId";
+                //system_fields = "QAStatusId,DatasetId,ActivityId";
             }
             else if (this.Datastore.TablePrefix == "StreamNet_RperS")
             {
                 logger.Debug("This dataset is StreamNet_RperS-Related...");
-                system_fields = "DatasetId,ActivityId";
+                //system_fields = "DatasetId,ActivityId";
             }
             else if (this.Datastore.TablePrefix == "StreamNet_SAR")
             {
                 logger.Debug("This dataset is StreamNet_SAR-Related...");
-                system_fields = "DatasetId,ActivityId";
+                //system_fields = "DatasetId,ActivityId";
             }
             else if (this.Datastore.TablePrefix == "CreelSurvey")
             {
@@ -196,6 +219,12 @@ namespace services.Models
             //return activity_fields + header_fields + detail_fields + system_fields;
             // The following line gets set up above.
             //system_fields = "CreateDate,QAStatusId,QAStatusName, ActivityQAComments, LocationId,ActivityQAStatusId,DatasetId,ActivityId,RowId, RowStatusId";
+
+            //logger.Debug("activity_fields = " + activity_fields);
+            //logger.Debug("header_fields = " + header_fields);
+            //logger.Debug("detail_fields = " + detail_fields);
+            //logger.Debug("strFishermanFields = " + strFishermanFields);
+            //logger.Debug("system_fields = " + system_fields);
 
             //return activity_fields + header_fields + detail_fields + system_fields;
             return activity_fields + header_fields + detail_fields + strFishermanFields + system_fields;
@@ -265,6 +294,17 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(new List<string>(new string[] { "QAStatus", "Location" }));
                 }
+                else if ((this.Datastore.TablePrefix == "StreamNet_NOSA") ||
+                        (this.Datastore.TablePrefix == "StreamNet_RperS") ||
+                        (this.Datastore.TablePrefix == "StreamNet_SAR") ||
+                        (this.Datastore.TablePrefix == "Metrics")
+                        )
+                {
+                    labels = labels
+                      .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
+                      .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
+                      .Concat(new List<string>(new string[] { "Location" }));
+                }
                 else
                 {
                     labels = labels
@@ -276,7 +316,7 @@ namespace services.Models
 
                 foreach (var item in labels)
                 {
-                    //logger.Debug(item);    
+                    logger.Debug(item);    
                 }
                 
             }
