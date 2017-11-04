@@ -572,7 +572,7 @@ namespace services.Controllers
         public HttpResponseMessage SaveCrppSubproject(JObject jsonData)
         //public int SaveSubproject(JObject jsonData)
         {
-            logger.Debug("Inside SaveSubproject...");
+            logger.Debug("Inside SaveCrppSubproject...");
             var db = ServicesContext.Current;
             logger.Debug("db = " + db);
 
