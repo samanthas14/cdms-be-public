@@ -184,6 +184,10 @@
     <Compile Include="Migrations\201709292329224_Initial.Designer.cs">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.cs" />
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.Designer.cs">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -317,6 +321,7 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Migrations\20170929_datasetconfigupdates.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -368,6 +373,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709292329224_Initial.resx">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711092246383_dataset-config-add-activitiespage.resx">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
