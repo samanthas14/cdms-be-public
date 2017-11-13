@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.cs" />
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.Designer.cs">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
+	</Compile>
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.cs" />
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.Designer.cs">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -341,6 +345,7 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Migrations\20170929_datasetconfigupdates.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -394,6 +399,9 @@
     <EmbeddedResource Include="Migrations\201711021653101_StreamNetUpdConfig.resx">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
     </EmbeddedResource>
+	<EmbeddedResource Include="Migrations\201711092246383_dataset-config-add-activitiespage.resx">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
+	</EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
