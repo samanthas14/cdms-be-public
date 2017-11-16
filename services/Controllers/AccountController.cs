@@ -80,15 +80,6 @@ namespace services.Controllers
         {
             logger.Debug("in Login");
 
-            string strCyphered = "";
-            string strLastDigit = "";
-            string strPartSize = "";
-            int intPartSize = -1;
-            string strThePart = "";
-            string strDecript1 = "";
-            string strNumber1 = "";
-            string strNumber2 = "";
-
             //string result = "{\"message\": \"Failure'\"}";
             AccountResult result = new AccountResult();
 
@@ -105,76 +96,8 @@ namespace services.Controllers
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
 
-                // The password is coming in encrypted, so we must decript it.
-                strCyphered = model.Password;
-                //logger.Debug("strCyphered (incoming) = " + strCyphered);
-
-                strLastDigit = strCyphered.Substring(strCyphered.Length - 1, 1);
-                //logger.Debug("strLastDigit = " + strLastDigit);
-
-                strCyphered = strCyphered.Substring(0, strCyphered.Length - 1);
-                //logger.Debug("strCyphered (after rem last digit) = " + strCyphered);
-
-                strDecript1 = divideProcess(strCyphered, strLastDigit);
-                //logger.Debug("strDecript1 (after unwrap first step)= " + strDecript1);
-
-                // Separate out the pwHash, the client number, and the server number.
-                strNumber1 = strDecript1.Substring((strDecript1.Length - 20), 10);
-                strNumber2 = strDecript1.Substring((strDecript1.Length - 10), 10);
-                strCyphered = strDecript1.Substring(0, (strDecript1.Length - 20));
-                //logger.Debug("strCyphered = " + strCyphered);
-                //logger.Debug("strNumber1 = " + strNumber1);
-                //logger.Debug("strNumber2 = " + strNumber2);
-
-                pwPartsList = new List<originalText>();
-
-                int intCypheredLength = strCyphered.Length;
-                while (intCypheredLength > 0)
-                {
-                    originalText pwPart = new originalText();
-
-                    strPartSize = strCyphered.Substring(0, 1); // How many digits does the part have?
-                    intPartSize = Convert.ToInt32(strPartSize);
-                    pwPart.intSize = intPartSize;
-
-                    strCyphered = strCyphered.Substring(1); // Strip off the part size.
-
-                    strThePart = strCyphered.Substring(0, intPartSize);  // Extract the cyphered character
-                    pwPart.intNumber = Convert.ToInt32(strThePart);
-                    strCyphered = strCyphered.Substring(intPartSize); // Strip off the part.
-                    intCypheredLength = strCyphered.Length;
-
-                    pwPartsList.Add(pwPart);
-                }
-
-                int intFirstNumberLength = strNumber1.ToString().Length;
-                for (int i = intFirstNumberLength - 1; i > -1; i--)
-                {
-                    //logger.Debug("i = " + i);
-
-                    if ((i == 0) || (i == 3) || (i == 6) || (i == 9))
-                    {
-                        foreach (var item in pwPartsList)
-                        {
-                            item.intNumber = item.intNumber - getNumberFromPlace(Convert.ToInt32(strNumber1.Substring(i, 1)), strNumber2);
-                        }
-                    }
-                    else if ((i == 1) || (i == 4) || (i == 7))
-                    {
-                        foreach (var item in pwPartsList)
-                        {
-                            item.intNumber = item.intNumber / getNumberFromPlace(Convert.ToInt32(strNumber1.Substring(i, 1)), strNumber2);
-                        }
-                    }
-                    else if ((i == 2) || (i == 5) || (i == 8))
-                    {
-                        foreach (var item in pwPartsList)
-                        {
-                            item.intNumber = item.intNumber + getNumberFromPlace(Convert.ToInt32(strNumber1.Substring(i, 1)), strNumber2);
-                        }
-                    }
-                }
-                model.Password = assemblePw();
+                CipherHelper ciphHelper = new CipherHelper();
+                model.Password = ciphHelper.DecriptPassword(model.Password);
                 //logger.Debug("model.Password = " + model.Password);
 
                 //***************
