@@ -328,6 +328,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
+    <Compile Include="Resources\CipherHelper.cs" />
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
     <Compile Include="Resources\PitagisReader.cs" />
