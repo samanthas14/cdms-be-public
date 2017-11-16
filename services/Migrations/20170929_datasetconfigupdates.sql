@@ -43,4 +43,17 @@ where id in (select d.Id from Datasets d
  join DataStores ds on d.DatastoreId = ds.Id
 where ds.TablePrefix = 'Metrics' );
 
+--Benthic 21
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["ActivityDate","Instrument"], "ShowFields": ["SampleDate"]}}' 
+where id in (select d.Id from Datasets d
+ join DataStores ds on d.DatastoreId = ds.Id
+where ds.TablePrefix = 'Benthic' );
 
+--Drift 22
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["ActivityDate","Instrument"], "ShowFields": ["SampleDate"]}}' 
+where id in (select d.Id from Datasets d
+ join DataStores ds on d.DatastoreId = ds.Id
+where ds.TablePrefix = 'Drift' );
+
+--StreamNet
+update dbo.[Datasets] set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument"]}}' where ProjectId = 9999 and Name like 'StreamNet%'
