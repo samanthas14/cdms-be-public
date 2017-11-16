@@ -207,10 +207,14 @@
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.cs" />
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.Designer.cs">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
-	</Compile>
+    </Compile>
     <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.cs" />
     <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.Designer.cs">
       <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711160129442_ClearStatus.cs" />
+    <Compile Include="Migrations\201711160129442_ClearStatus.Designer.cs">
+      <DependentUpon>201711160129442_ClearStatus.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -399,9 +403,12 @@
     <EmbeddedResource Include="Migrations\201711021653101_StreamNetUpdConfig.resx">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Migrations\201711092246383_dataset-config-add-activitiespage.resx">
+    <EmbeddedResource Include="Migrations\201711092246383_dataset-config-add-activitiespage.resx">
       <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
-	</EmbeddedResource>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711160129442_ClearStatus.resx">
+      <DependentUpon>201711160129442_ClearStatus.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
