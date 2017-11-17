@@ -15,6 +15,15 @@ namespace services.Controllers
     public class CDMSController : ApiController
     {
         public static Logger logger = LogManager.GetCurrentClassLogger();
+        public static string config_server_environment = System.Configuration.ConfigurationManager.AppSettings["server_environment"]; //in web.config
+        public static string PRODUCTION_ENVIRONMENT = "prod";
+
+
+        public bool isProduction()
+        {
+            return (config_server_environment == PRODUCTION_ENVIRONMENT) ? true : false;
+        }
+
 
         public HttpResponseMessage error(string message)
         {

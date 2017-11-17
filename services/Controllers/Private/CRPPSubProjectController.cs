@@ -1120,7 +1120,8 @@ namespace services.Controllers
             }
             */
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ce);
+            return response;
 
         }
 
@@ -1134,6 +1135,12 @@ namespace services.Controllers
             logger.Debug("projectLeadFullName = " + projectLeadFullName);
             logger.Debug("projectName = " + projectName);
             logger.Debug("updatingPerson = " + updatingPerson);
+
+            if(!this.isProduction())
+            {
+                logger.Debug(" NOTICE -- not sending an email because we aren't in production ");
+                return;
+            }
 
             string strStatus = null;
             string strProjectLeadEmail = null;
