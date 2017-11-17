@@ -134,6 +134,10 @@ namespace services.Resources
                     conditions.Add("BroodYear = '" + filterForSQL(json.BroodYear) + "'");
                 else if (json.TablePrefix == "StreamNet_SAR")
                     conditions.Add("OutmigrationYear = " + filterForSQL(json.OutmigrationYear));
+                else if (json.TablePrefix == "Benthic")
+                    conditions.Add("SampleYear = " + filterForSQL(json.SampleYear));
+                else if (json.TablePrefix == "Drift")
+                    conditions.Add("SampleYear = " + filterForSQL(json.SampleYear));
             }
             else if (json.DateSearchType == "between")
             {
