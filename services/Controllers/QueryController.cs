@@ -60,17 +60,5 @@ namespace services.Controllers
             return datatable;
 
         }
-
-        //QUERY
-        //QueryDatasetActivities -- can call with a datasetId or a datastoreId
-        // POST /api/v1/query/queryspecificactivities
-        [HttpPost]
-        public DataTable QuerySpecificActivities(JObject jsonData)
-        {
-            var db = ServicesContext.Current;
-            DataTable datatable = null;
-
-            return datatable;
-        }
     }
 }
