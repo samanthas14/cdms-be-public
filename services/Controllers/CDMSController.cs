@@ -15,13 +15,26 @@ namespace services.Controllers
     public class CDMSController : ApiController
     {
         public static Logger logger = LogManager.GetCurrentClassLogger();
-        public static string config_server_environment = System.Configuration.ConfigurationManager.AppSettings["server_environment"]; //in web.config
+        public static string ServerEnvironment = System.Configuration.ConfigurationManager.AppSettings["ServerEnvironment"]; //in web.config
+        public static string DEV_ENVIRONMENT = "dev";
+        public static string TEST_ENVIRONMENT = "test";
         public static string PRODUCTION_ENVIRONMENT = "prod";
 
 
         public bool isProduction()
         {
-            return (config_server_environment == PRODUCTION_ENVIRONMENT) ? true : false;
+            return (ServerEnvironment == PRODUCTION_ENVIRONMENT) ? true : false;
+        }
+
+        public bool isTest()
+        {
+            return (ServerEnvironment == TEST_ENVIRONMENT) ? true : false;
+        }
+
+        public bool isDev()
+        {
+            return (ServerEnvironment == DEV_ENVIRONMENT) ? true : false;
+
         }
 
 
