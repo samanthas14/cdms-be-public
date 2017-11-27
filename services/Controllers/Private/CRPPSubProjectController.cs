@@ -1120,7 +1120,8 @@ namespace services.Controllers
             }
             */
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ce);
+            return response;
 
         }
 
@@ -1280,7 +1281,7 @@ namespace services.Controllers
 
             //***SET TO AND FROM MAIL PROPERTIES****
             //message.To.Add(new MailAddress(strProjectLeadEmail));  // Real email address.
-            if (blnDoesUserExist)
+            if (blnDoesUserExist && isProduction())
                 message.To.Add(new MailAddress(strProjectLeadEmail));  // Real email address.
             else
                 message.To.Add(new MailAddress(System.Configuration.ConfigurationManager.AppSettings["CrppDefaultEmail"]));  // Real email address.
