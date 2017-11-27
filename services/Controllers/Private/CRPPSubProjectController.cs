@@ -1136,12 +1136,6 @@ namespace services.Controllers
             logger.Debug("projectName = " + projectName);
             logger.Debug("updatingPerson = " + updatingPerson);
 
-            if(!this.isProduction())
-            {
-                logger.Debug(" NOTICE -- not sending an email because we aren't in production ");
-                return;
-            }
-
             string strStatus = null;
             string strProjectLeadEmail = null;
             bool foundEmail = false;
@@ -1287,7 +1281,7 @@ namespace services.Controllers
 
             //***SET TO AND FROM MAIL PROPERTIES****
             //message.To.Add(new MailAddress(strProjectLeadEmail));  // Real email address.
-            if (blnDoesUserExist)
+            if (blnDoesUserExist && isProduction())
                 message.To.Add(new MailAddress(strProjectLeadEmail));  // Real email address.
             else
                 message.To.Add(new MailAddress(System.Configuration.ConfigurationManager.AppSettings["CrppDefaultEmail"]));  // Real email address.
