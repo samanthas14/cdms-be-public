@@ -1,34 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "services", "services\services.csproj", "{8723687B-7446-4449-B1C9-81EF01BD6C07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6CA27549-D48E-4FCE-9427-CFDCFB21C1CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingProject", "TestingProject\TestingProject.csproj", "{9BBA78F9-7CE4-419A-80F8-23AE8329D6E0}"
-EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "cdms", "..\..\..\IIS-WEB\cdms-ken\cdms\", "{D511B4A3-8089-4D7B-9AD3-99E03BFB6DF7}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_50071"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\..\IIS-WEB\cdms-ken\cdms\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50071\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_50071"
-		Release.AspNetCompiler.PhysicalPath = "..\..\..\IIS-WEB\cdms-ken\cdms\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50071\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "50071"
-		SlnRelativePath = "..\..\..\IIS-WEB\cdms-ken\cdms\"
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +23,6 @@ Global
 		{9BBA78F9-7CE4-419A-80F8-23AE8329D6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BBA78F9-7CE4-419A-80F8-23AE8329D6E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BBA78F9-7CE4-419A-80F8-23AE8329D6E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D511B4A3-8089-4D7B-9AD3-99E03BFB6DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D511B4A3-8089-4D7B-9AD3-99E03BFB6DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D511B4A3-8089-4D7B-9AD3-99E03BFB6DF7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{D511B4A3-8089-4D7B-9AD3-99E03BFB6DF7}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
