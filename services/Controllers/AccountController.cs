@@ -35,8 +35,6 @@ namespace services.Controllers
     {
         public const String LOCAL_USER_AUTH = "LOCAL_AUTH";
         public const String MASQUERADE_KEY = "MasqueradePassword";
-        private List<originalText> pwPartsList;
-    
 
         [HttpGet]
         public User WhoAmI()
@@ -189,95 +187,6 @@ namespace services.Controllers
 
             return false;
 
-        }
-        
-        private string divideProcess(string strCypher, string strNumber)
-        {
-            string strPwHashWithNumbers = "";
-            string strA = "";
-            string strB = "";
-
-            strA = strCypher;
-            strB = strNumber;
-
-            strA.Trim();
-            strB.Trim();
-
-            int intALength = strA.Length;
-            int intBLength = strB.Length;
-
-            int intBDigit = -1;
-            int intWholeNumber = -1;
-            int intRemainder = -1;
-            string strResult = "";
-
-            string strRow1 = "";
-
-            int intN = -1;
-
-            // Example of what we are doing...
-            //  246 / 2 = 123
-
-            intBDigit = Convert.ToInt32(strB);
-
-            for (int i = 0; i <= intALength - 1; i++)
-            {
-                strRow1 += strA.Substring(i, 1);
-                intN = Convert.ToInt32(strRow1);
-
-                intWholeNumber = Divide(intN, intBDigit);
-                intRemainder = DivideRemainder(intN, intBDigit);
-                strResult += intWholeNumber;
-
-                strRow1 = intRemainder.ToString(); // Reset the row, after the math calculation.
-            }
-
-            strPwHashWithNumbers = strResult.TrimStart('0');
-
-            return strPwHashWithNumbers;
-        }
-
-        private int Divide(int intDividend, int intDivisor)
-        {
-            int intWholeNumber = 0;
-
-            intWholeNumber = intDividend / intDivisor;
-
-            return intWholeNumber;
-        }
-
-        private int DivideRemainder(int intDividend, int intDivisor)
-        {
-            int intRemainder = 0;
-
-            intRemainder = intDividend % intDivisor;
-
-            return intRemainder;
-        }
-
-        private int getNumberFromPlace(int aNumber, string strSecondNumber)
-        {
-            //logger.Debug("aNumber = " + aNumber);
-            int intDigitFromSecond = Convert.ToInt32(strSecondNumber.Substring(aNumber - 1, 1));
-
-            return intDigitFromSecond;
-        }
-
-        private string assemblePw()
-        {
-            string result = "";
-
-            foreach (var item in pwPartsList)
-            {
-                //Debug.WriteLine(item.strText + ", " + item.intNumber + ", " + item.intSize);
-                //logger.Debug(item.strText + ", " + item.intNumber);
-                //logger.Debug("***********");
-                //logger.Debug("***********");
-
-                result += (char)item.intNumber;
-            }
-
-            return result;
         }
     }
 }
