@@ -1285,11 +1285,23 @@ namespace services.Controllers
             if (dataset == null)
                 throw new System.Exception("Dataset could not be found: " + DatasetId);
 
-            int LocationId = json.LocationId.ToObject<int>();
-            logger.Debug("LocationId = " + LocationId);
+            //int LocationId = json.LocationId.ToObject<int>();
+            //logger.Debug("LocationId = " + LocationId);
+            string strActivityLocationList = json.LocationList.ToObject<string>();
+            logger.Debug("strActivityLocationList = " + strActivityLocationList);
 
             string strReadingDateTimeList = json.DateTimeList.ToObject<string>();
             logger.Debug("strReadingDateTimeList = " + strReadingDateTimeList);
+
+            var locList = strActivityLocationList.Split(',').ToList();
+            var locList2 = new List<int>();
+            logger.Debug("Created locLilst...");
+
+            foreach (var locItem in locList)
+            {
+                locList2.Add(Convert.ToInt32(locItem));
+            }
+            logger.Debug("Loaded dtList2...");
 
             //var dtList_in = JArray.Parse(strReadingDateTimeList);
             //logger.Debug("dtList_in = " + dtList_in);
@@ -1320,7 +1332,8 @@ namespace services.Controllers
             string query = "";
             //query += "select WaterTemp_Detail_Id from dbo.WaterTemp_VW where DatasetId = " + DatasetId;
             query += "select ReadingDateTime from dbo.WaterTemp_VW where DatasetId = " + DatasetId;
-            query += " AND LocationId = " + LocationId;
+            //query += " AND LocationId = " + LocationId;
+            query += " AND LocationId in (" + string.Join(",", locList2.ToArray()) + ")";
             query += " AND ReadingDateTime in (" + string.Join(",", dtList2.ToArray()) + ")";
 
             /*logger.Debug(json.RowQAStatusId);
