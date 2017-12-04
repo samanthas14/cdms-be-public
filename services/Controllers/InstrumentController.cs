@@ -63,7 +63,8 @@ namespace services.Controllers
                 db.SaveChanges();
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ac);
+            return response;
         }
 
         // POST /api/v1/instrument/saveprojectinstrument
@@ -87,8 +88,8 @@ namespace services.Controllers
             db.SaveChanges();
             logger.Debug("success adding NEW proejct instrument!");
 
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, instrument);
+            return response;
         }
 
         // POST /api/v1/instrument/removeprojectinstrument
@@ -150,7 +151,8 @@ namespace services.Controllers
 
             db.SaveChanges();
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, instrument);
+            return response;
         }
     }
 }
