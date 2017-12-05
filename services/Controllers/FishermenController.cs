@@ -148,7 +148,9 @@ namespace services.Controllers
             db.SaveChanges();
             logger.Debug("Just saved the DB changes.");
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, f);
+            return response;
+            
         }
     }
 }
