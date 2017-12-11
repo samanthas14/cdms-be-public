@@ -13,12 +13,13 @@ namespace services.Resources
 
         public DateTimeHelper(DateTime aDate)
         {
+            //logger.Debug("Inside DateTimeHelper.cs, contructor...");
             setQueryDateBounds(aDate);
         }
 
         public void setQueryDateBounds(DateTime aDate)
         {
-            logger.Debug("Inside DateTimeHelper.cs, setQueryDateBounds...");
+            //logger.Debug("Inside DateTimeHelper.cs, setQueryDateBounds...");
 
             /* When we save a date/time in the database, we usually store it like this:  2017-11-30 10:30:15.125
              * Later when we query for a date, we must do it like this:  StartDate = '2017-11-30 10:30:15.125'
@@ -47,21 +48,22 @@ namespace services.Resources
             intDay = aDate.Day;
 
             dtStart = new DateTime(intYear, intMonth, intDay);
-            logger.Debug("dtStart = " + dtStart.ToString());
+            //logger.Debug("dtStart = " + dtStart.ToString());
 
-            intDay++;
-            dtEnd = new DateTime(intYear, intMonth, intDay);
-            logger.Debug("dtEnd = " + dtEnd.ToString());
+            //intDay++;
+            //dtEnd = new DateTime(intYear, intMonth, intDay);
+            dtEnd = dtStart.AddDays(1);
+            //logger.Debug("dtEnd = " + dtEnd.ToString());
 
             string strDtStart = dtStart.ToString("u");
             strDtStart = strDtStart.Replace("Z", "");
             strDtStart += ".000";
-            logger.Debug("strDtStart = " + strDtStart);
+            //logger.Debug("strDtStart = " + strDtStart);
 
             string strDtEnd = dtEnd.ToString("u");
             strDtEnd = strDtEnd.Replace("Z", "");
             strDtEnd += ".000";
-            logger.Debug("strDtEnd = " + strDtEnd);
+            //logger.Debug("strDtEnd = " + strDtEnd);
 
             //strBounds = strDtStart + "," + strDtEnd;
 
