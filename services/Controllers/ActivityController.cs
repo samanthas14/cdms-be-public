@@ -1319,11 +1319,12 @@ namespace services.Controllers
             int intYear = 0;
             int intMonth = 0;
             int intDay = 0;
+
             foreach (var dtItem in jaryActivityDateList)
             {
                 strActivityDate = dtItem.ToString();
                 intSpaceLoc = strActivityDate.IndexOf(" ");
-                logger.Debug("intSpaceLoc = " + intSpaceLoc);
+                //logger.Debug("intSpaceLoc = " + intSpaceLoc);
 
                 //strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
                 //strActivityDate += " 00:00:00.000";
@@ -1335,9 +1336,13 @@ namespace services.Controllers
                 logger.Debug("intYear = " + intYear + ", intMonth = " + intMonth + ", intDay = " + intDay);
 
                 DateTime dtActivityDate2 = new DateTime(intYear, intMonth, intDay);
+                //logger.Debug("Created dtActivityDate2...");
+
                 dtActivityDate2 = dtActivityDate2.AddDays(1);
+                //logger.Debug("dtActivityDate2 = " + dtActivityDate2.ToString("u"));
 
                 dtList2.Add("\'" + strActivityDate + "\'");
+                //logger.Debug("Added dtActivityDate2 to dtList2...");
 
                 if (count == 0)
                     strDtList += "'" + dtItem + "'";
@@ -1400,7 +1405,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
@@ -1429,6 +1434,8 @@ namespace services.Controllers
                     strActivityLocationIdList = item.ToString();
                 else
                     strActivityLocationIdList += "," + item.ToString();
+
+                count++;
             }
             logger.Debug("strActivityLocationIdList = " + strActivityLocationIdList);
 
@@ -1437,6 +1444,7 @@ namespace services.Controllers
             //string strActivityDateList = "";
 
             JArray jaryActivityDateList = (JArray)json.ActivityDate;
+            logger.Debug("jaryActivityDateList.Count = " + jaryActivityDateList.Count);
 
             count = 0;
             //string strDtList = "";
@@ -1451,31 +1459,35 @@ namespace services.Controllers
             foreach (var dtItem in jaryActivityDateList)
             {
                 strActivityDate = dtItem.ToString();
-                logger.Debug("strActivityDate = " + strActivityDate);
+                //logger.Debug("strActivityDate = " + strActivityDate);
                 intSpaceLoc = strActivityDate.IndexOf(" ");
-                logger.Debug("intSpaceLoc = " + intSpaceLoc);
+                //logger.Debug("intSpaceLoc = " + intSpaceLoc);
 
                 //strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
                 //strActivityDate += " 00:00:00.000";
                 //logger.Debug("strActivityDate (after stripping time) = " + strActivityDate);
 
                 intYear = Convert.ToInt32(strActivityDate.Substring(0, 4)); // Start here, how many
-                logger.Debug("intYear = " + intYear);
+                //logger.Debug("intYear = " + intYear);
 
                 intMonth = Convert.ToInt32(strActivityDate.Substring(5, 2));
-                logger.Debug("intMonth = " + intMonth);
+                //logger.Debug("intMonth = " + intMonth);
 
                 intDay = Convert.ToInt32(strActivityDate.Substring(8, 2));
-                logger.Debug("intDay = " + intDay);
+                //logger.Debug("intDay = " + intDay);
 
                 DateTime dtActivityDate = new DateTime(intYear, intMonth, intDay);
+                //logger.Debug("dtActivityDate = " + dtActivityDate.ToString("u"));
                 //DateTime dtActivityDate2 = new DateTime(intYear, intMonth, intDay);
                 //dtActivityDate2 = dtActivityDate2.AddDays(1);
 
                 //dtList2.Add("\'" + strActivityDate + "\'");
 
                 DateTimeHelper dtPair = new DateTimeHelper(dtActivityDate);
+                //logger.Debug("Created dtPair...");
+
                 dtList.Add(dtPair);
+                //logger.Debug("Added dtPair to list...");
 
                 //if (count == 0)
                 //    strDtList += "\'" + dtItem + "'";
@@ -1512,7 +1524,7 @@ namespace services.Controllers
             string strDatePairList = "";
             foreach (var item in dtList)
             {
-                logger.Debug("item.strDateTime1 = " + item.strDateTime1 + ", item.strDateTime2 = " + item.strDateTime2);
+                //logger.Debug("item.strDateTime1 = " + item.strDateTime1 + ", item.strDateTime2 = " + item.strDateTime2);
                 if (count == 0)
                 {
                     strDatePairList = "(ActivityDate >= \'" + item.strDateTime1 + "\' AND ActivityDate < \'" + item.strDateTime2 + "\')";
@@ -1557,10 +1569,10 @@ namespace services.Controllers
                 }
             }
 
-            foreach (DataRow dr in datatable.Rows)
-            {
-                logger.Debug("dr = " + dr["ActivityDate"]);
-            }
+            //foreach (DataRow dr in datatable.Rows)
+            //{
+            //    logger.Debug("dr = " + dr["ActivityDate"]);
+            //}
 
             return datatable;
         }
