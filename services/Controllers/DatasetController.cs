@@ -45,21 +45,24 @@ namespace services.Controllers
             return dataset;
         }
 
-        public HttpResponseMessage PutDataset(int id, Dataset dataset)
+        // POST /api/v1/dataset/updatedataset
+        [HttpPost]
+        public HttpResponseMessage UpdateDataset(JObject jsonData)
         {
             var db = ServicesContext.Current;
 
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
+            dynamic json = jsonData;
 
-            if (id != dataset.Id)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
+            Dataset ds = db.Datasets.Find(json.dataset.Id.ToObject<int>());
 
-            db.Entry(dataset).State = EntityState.Modified;
+            ds.Name = json.dataset.Name;
+            ds.Description = json.dataset.Description;
+            ds.DefaultActivityQAStatusId = json.dataset.DefaultActivityQAStatusId.ToObject<int>();
+            ds.DefaultRowQAStatusId = json.dataset.DefaultRowQAStatusId.ToObject<int>();
+            ds.Config = json.dataset.Config;
+
+
+            db.Entry(ds).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +73,7 @@ namespace services.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, ds);
         }
 
         public HttpResponseMessage PostDataset(Dataset dataset)
@@ -172,7 +175,7 @@ namespace services.Controllers
 
             Dataset new_ds = new Dataset();
             new_ds.ProjectId = p.Id;
-            new_ds.Name = ds.Name;
+            new_ds.Name = p.Name + "-"+ds.Name;
             new_ds.DefaultRowQAStatusId = 1;
             new_ds.StatusId = 1;
             new_ds.CreateDateTime = DateTime.Now;
@@ -213,14 +216,14 @@ namespace services.Controllers
 
 
                 new_ds.Fields.Add(the_ds_field);
-                logger.Debug(" -- added " + field.Id);
+                //logger.Debug(" -- added " + field.Id);
 
             }
 
             db.Datasets.Add(new_ds);
             db.SaveChanges();
 
-            logger.Debug(new_ds);
+            //logger.Debug(new_ds);
             
             return new HttpResponseMessage(HttpStatusCode.OK);
 
