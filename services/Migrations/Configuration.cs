@@ -11,6 +11,12 @@ namespace services.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+
+            /*  In case an update takes a long time to run, such and building an index on a large table (WaterTemp),
+             *  and the Package Manager times out, we can set the CommandTimeout to unlimited, so that it runs
+             *  and completes, via the following command.
+             */
+            //CommandTimeout = 0;
         }
 
         protected override void Seed(services.Models.ServicesContext context)
