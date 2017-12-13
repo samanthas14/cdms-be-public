@@ -375,6 +375,7 @@
     <Content Include="Migrations\20170929_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171205_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171212_datasetconfigupdates.sql" />
+    <Content Include="Migrations\20171212_indexupdate.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
