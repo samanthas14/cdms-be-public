@@ -237,6 +237,10 @@
     <Compile Include="Migrations\201712122335129_WaterTempIdxReadingDateTime.Designer.cs">
       <DependentUpon>201712122335129_WaterTempIdxReadingDateTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs" />
+    <Compile Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.Designer.cs">
+      <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -376,6 +380,7 @@
     <Content Include="Migrations\20171205_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171212_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171212_indexupdate.sql" />
+    <Content Include="Migrations\20171220_UpdDsNonWtRemoveBulkRowQaBtn.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -443,6 +448,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712122335129_WaterTempIdxReadingDateTime.resx">
       <DependentUpon>201712122335129_WaterTempIdxReadingDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.resx">
+      <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

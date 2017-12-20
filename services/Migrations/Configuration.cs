@@ -16,7 +16,7 @@ namespace services.Migrations
              *  and the Package Manager times out, we can set the CommandTimeout to unlimited, so that it runs
              *  and completes, via the following command.
              */
-            //CommandTimeout = 0; // Number of seconds.
+            CommandTimeout = 0; // Number of seconds.
         }
 
         protected override void Seed(services.Models.ServicesContext context)
