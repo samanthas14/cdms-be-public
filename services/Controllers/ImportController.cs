@@ -31,13 +31,38 @@ namespace services.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
+            //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
+            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            logger.Debug("root location = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
+            logger.Debug("root Url = " + rootUrl);
+
+            // Make sure our folder exists
+            DirectoryInfo dirInfo = new DirectoryInfo(@root);
+            if (!dirInfo.Exists)
+            {
+                logger.Debug("Dir does not exist; will create it...");
+                try
+                {
+                    System.IO.Directory.CreateDirectory(root);
+                    logger.Debug("Created the dir...");
+                }
+                catch (IOException ioe)
+                {
+                    logger.Debug("Exception:  " + ioe.Message + ", " + ioe.InnerException);
+                }
+            }
+            else
+            {
+                logger.Debug("P dir already exists...");
+            }
+
 
             logger.Debug("saving files to location: " + root);
             logger.Debug(" and the root url = " + rootUrl);
 
             var provider = new MultipartFormDataStreamProvider(root);
+            logger.Debug("provider = " + provider.ToString());
 
             User me = AuthorizationManager.getCurrentUser();
 
@@ -45,7 +70,7 @@ namespace services.Controllers
 
             var task = Request.Content.ReadAsMultipartAsync(provider).ContinueWith(o =>
             {
-                logger.Debug("Inside task section...");
+                logger.Debug("Inside task part...");
 
                 if (o.IsFaulted || o.IsCanceled)
                 {
@@ -58,12 +83,40 @@ namespace services.Controllers
                 Int32 ProjectId = Convert.ToInt32(provider.FormData.Get("ProjectId"));
                 logger.Debug("And we think the projectid === " + ProjectId);
 
+                Int32 DatasetId = Convert.ToInt32(provider.FormData.Get("DatasetId"));
+                logger.Debug("And we think the DatasetId === " + DatasetId);
+
                 Project project = db.Projects.Find(ProjectId);
-                logger.Debug("Project = " + project);
+                logger.Debug("Project.Name = " + project.Name);
+
+                Dataset dataset = db.Datasets.Find(DatasetId);
+                logger.Debug("dataset.Name = " + dataset.Name);
+
+                if (project == null)
+                    throw new Exception("Project ID not found: " + ProjectId);
+
                 if (!project.isOwnerOrEditor(me))
                     throw new Exception("Authorization error:  The user trying to import is neither an Owner nor an Editor.");
                 else
                     logger.Debug("User authorized = " + me);
+
+                //If the project/dataset folder does not exist, create it.
+                string datasetPath = root + project.Id + "\\D\\" + dataset.Id;
+                //DirectoryInfo datasetDirInfo = new DirectoryInfo(@root);
+                DirectoryInfo datasetDirInfo = new DirectoryInfo(datasetPath);
+                if (!datasetDirInfo.Exists)
+                {
+                    logger.Debug("Dir does not exist; will create it...");
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(datasetPath);
+                        logger.Debug("Created the dir...");
+                    }
+                    catch (IOException ioe)
+                    {
+                        logger.Debug("Exception:  " + ioe.Message + ", " + ioe.InnerException);
+                    }
+                }
 
                 var newFileName = "";
 
@@ -82,9 +135,10 @@ namespace services.Controllers
                     {
                         try
                         {
-                            newFileName = FileController.relocateProjectFile(
+                            newFileName = FileController.relocateDatasetFile(
                                             file.LocalFileName,
                                             ProjectId,
+                                            DatasetId,
                                             filename,
                                             true);
 

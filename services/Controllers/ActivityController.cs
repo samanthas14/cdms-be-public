@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using services.Models;
 using services.Models.Data;
 using services.Resources;
@@ -1184,6 +1185,583 @@ namespace services.Controllers
             }//connection
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        //QuerySpecificActivities
+        // POST /api/v1/activity/queryspecificactivities
+        [HttpPost]
+        /*public DataTable QuerySpecificActivities(JObject jsonData)
+        {
+            logger.Debug("Inside ActivityController.cs, QuerySpecificActivities...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            dynamic json = jsonData;
+            logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            int LocationId = json.LocationId.ToObject<int>();
+            logger.Debug("LocationId = " + LocationId);
+
+            DateTime ActivityDate = json.ActivityDate.ToObject<DateTime>();
+            string strActivityDate = ActivityDate.ToString("u");
+            logger.Debug("strActivityDate = " + strActivityDate);
+
+            int intSpaceLoc = strActivityDate.IndexOf(" ");
+            logger.Debug("intSpaceLoc = " + intSpaceLoc);
+
+            strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
+            strActivityDate += " 00:00:00.000";
+            logger.Debug("strActivityDate (after stripping time) = " + strActivityDate);
+
+            DateTime ActivityDate2 = ActivityDate.AddDays(1);
+            string strActivityDate2 = ActivityDate2.ToString("u");
+            strActivityDate2 = strActivityDate2.Substring(0, intSpaceLoc);
+            strActivityDate2 += " 00:00:00.000";
+
+            string query = "";
+            query += "select Id from dbo.Activities where DatasetId = " + DatasetId;
+            query += " AND LocationId = " + LocationId;
+            query += " AND ActivityDate >= '" + strActivityDate + "'";
+            query += " AND ActivityDate < '" + strActivityDate2 + "'";
+
+            logger.Debug("query = " + query);
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            return datatable;
+        }
+        */
+        public DataTable QuerySpecificActivities(JObject jsonData)
+        {
+            logger.Debug("Inside ActivityController.cs, QuerySpecificActivities...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            dynamic json = jsonData;
+            logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            logger.Debug("dataset.Name = " + dataset.Name);
+
+            // This works for when one LocationId comes in by itself.
+            // However, when several location Ids come in, as an arry, it does not work.
+            //int LocationId = json.LocationId.ToObject<int>();
+            //logger.Debug("LocationId = " + LocationId);
+
+            // For an array, we handle it like this (one way anyway).
+            //*** Location Ids ***
+            string strActivityLocationIdList = "";
+
+            JArray jaryLocationIdList = (JArray)json.LocationId;
+
+            int count = 0;
+            foreach (var item in jaryLocationIdList)
+            {
+                //logger.Debug("item = " + item);
+                if (count == 0)
+                    strActivityLocationIdList = item.ToString();
+                else
+                    strActivityLocationIdList += "," + item.ToString();
+            }
+            logger.Debug("strActivityLocationIdList = " + strActivityLocationIdList);
+
+            //*** Activity Dates ***
+            var dtList2 = new List<string>();
+            string strActivityDateList = "";
+
+            JArray jaryActivityDateList = (JArray)json.ActivityDate;
+
+            count = 0;
+            string strDtList = "";
+            string strActivityDate = "";
+            int intSpaceLoc = -1;
+            int intYear = 0;
+            int intMonth = 0;
+            int intDay = 0;
+
+            foreach (var dtItem in jaryActivityDateList)
+            {
+                strActivityDate = dtItem.ToString();
+                intSpaceLoc = strActivityDate.IndexOf(" ");
+                //logger.Debug("intSpaceLoc = " + intSpaceLoc);
+
+                //strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
+                //strActivityDate += " 00:00:00.000";
+                //logger.Debug("strActivityDate (after stripping time) = " + strActivityDate);
+
+                intYear = Convert.ToInt32(strActivityDate.Substring(0, 4)); // Start here, how many
+                intMonth = Convert.ToInt32(strActivityDate.Substring(6, 2));
+                intDay = Convert.ToInt32(strActivityDate.Substring(9, 2));
+                logger.Debug("intYear = " + intYear + ", intMonth = " + intMonth + ", intDay = " + intDay);
+
+                DateTime dtActivityDate2 = new DateTime(intYear, intMonth, intDay);
+                //logger.Debug("Created dtActivityDate2...");
+
+                dtActivityDate2 = dtActivityDate2.AddDays(1);
+                //logger.Debug("dtActivityDate2 = " + dtActivityDate2.ToString("u"));
+
+                dtList2.Add("\'" + strActivityDate + "\'");
+                //logger.Debug("Added dtActivityDate2 to dtList2...");
+
+                if (count == 0)
+                    strDtList += "'" + dtItem + "'";
+                else
+                    strDtList += "\'" + dtItem + "\'";
+            }
+            logger.Debug("strActivityDateList = " + strActivityDateList);
+
+            string query = "";
+            query += "select Id from dbo.Activities where DatasetId = " + DatasetId;
+            //query += " AND LocationId = " + strActivityLocationIdList;
+            //query += " AND ActivityDate >= '" + strActivityDate + "'";
+            //query += " AND ActivityDate < '" + strActivityDate2 + "'";
+            query += " AND LocationId in (" + string.Join(",", jaryLocationIdList) + ")";
+            query += " AND ActivityDate in (" + string.Join(",", dtList2.ToArray()) + ")";
+
+            logger.Debug("query = " + query);
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            return datatable;
+        }
+
+        // QuerySpecificActivitiesWithBounds
+        // POST /api/v1/activity/queryspecificactivitieswithbounds
+        [HttpPost]
+        public DataTable QuerySpecificActivitiesWithBounds(JObject jsonData)
+        {
+            logger.Debug("Inside ActivityController.cs, QuerySpecificActivitiesWithBounds...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            dynamic json = jsonData;
+            //logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            logger.Debug("dataset.Name = " + dataset.Name);
+
+            // This works for when one LocationId comes in by itself.
+            // However, when several location Ids come in, as an arry, it does not work.
+            //int LocationId = json.LocationId.ToObject<int>();
+            //logger.Debug("LocationId = " + LocationId);
+
+            // For an array, we handle it like this (one way anyway).
+            //*** Location Ids ***
+            string strActivityLocationIdList = "";
+
+            JArray jaryLocationIdList = (JArray)json.LocationId;
+
+            int count = 0;
+            foreach (var item in jaryLocationIdList)
+            {
+                //logger.Debug("item = " + item);
+                if (count == 0)
+                    strActivityLocationIdList = item.ToString();
+                else
+                    strActivityLocationIdList += "," + item.ToString();
+
+                count++;
+            }
+            logger.Debug("strActivityLocationIdList = " + strActivityLocationIdList);
+
+            //*** Activity Dates ***
+            var dtList2 = new List<string>();
+            //string strActivityDateList = "";
+
+            JArray jaryActivityDateList = (JArray)json.ActivityDate;
+            logger.Debug("jaryActivityDateList.Count = " + jaryActivityDateList.Count);
+
+            count = 0;
+            //string strDtList = "";
+            string strActivityDate = "";
+            int intSpaceLoc = -1;
+            int intYear = 0;
+            int intMonth = 0;
+            int intDay = 0;
+
+            List<DateTimeHelper> dtList = new List<DateTimeHelper>();
+
+            foreach (var dtItem in jaryActivityDateList)
+            {
+                strActivityDate = dtItem.ToString();
+                //logger.Debug("strActivityDate = " + strActivityDate);
+                intSpaceLoc = strActivityDate.IndexOf(" ");
+                //logger.Debug("intSpaceLoc = " + intSpaceLoc);
+
+                //strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
+                //strActivityDate += " 00:00:00.000";
+                //logger.Debug("strActivityDate (after stripping time) = " + strActivityDate);
+
+                intYear = Convert.ToInt32(strActivityDate.Substring(0, 4)); // Start here, how many
+                //logger.Debug("intYear = " + intYear);
+
+                intMonth = Convert.ToInt32(strActivityDate.Substring(5, 2));
+                //logger.Debug("intMonth = " + intMonth);
+
+                intDay = Convert.ToInt32(strActivityDate.Substring(8, 2));
+                //logger.Debug("intDay = " + intDay);
+
+                DateTime dtActivityDate = new DateTime(intYear, intMonth, intDay);
+                //logger.Debug("dtActivityDate = " + dtActivityDate.ToString("u"));
+                //DateTime dtActivityDate2 = new DateTime(intYear, intMonth, intDay);
+                //dtActivityDate2 = dtActivityDate2.AddDays(1);
+
+                //dtList2.Add("\'" + strActivityDate + "\'");
+
+                DateTimeHelper dtPair = new DateTimeHelper(dtActivityDate);
+                //logger.Debug("Created dtPair...");
+
+                dtList.Add(dtPair);
+                //logger.Debug("Added dtPair to list...");
+
+                //if (count == 0)
+                //    strDtList += "\'" + dtItem + "'";
+                //else
+                //    strDtList += "\'" + dtItem + "\'";
+            }
+            //logger.Debug("strActivityDateList = " + strActivityDateList);
+
+            //DateTime ActivityDate = json.ActivityDate.ToObject<DateTime>();
+            //string strActivityDate = ActivityDate.ToString("u");
+            //logger.Debug("strActivityDate = " + strActivityDate);
+
+            //int intSpaceLoc = strActivityDate.IndexOf(" ");
+            //logger.Debug("intSpaceLoc = " + intSpaceLoc);
+
+            //strActivityDate = strActivityDate.Substring(0, intSpaceLoc);
+            //strActivityDate += " 00:00:00.000";
+            //logger.Debug("strActivityDate (after stripping time) = " + strActivityDate);
+
+            //DateTime ActivityDate2 = ActivityDate.AddDays(1);
+            //string strActivityDate2 = ActivityDate2.ToString("u");
+            //strActivityDate2 = strActivityDate2.Substring(0, intSpaceLoc);
+            //strActivityDate2 += " 00:00:00.000";
+
+            string query = "";
+            query += "select ActivityDate from dbo.Activities where DatasetId = " + DatasetId;
+            //query += " AND LocationId = " + strActivityLocationIdList;
+            //query += " AND ActivityDate >= '" + strActivityDate + "'";
+            //query += " AND ActivityDate < '" + strActivityDate2 + "'";
+            query += " AND LocationId in (" + string.Join(",", jaryLocationIdList) + ")";
+            //query += " AND ActivityDate in (" + string.Join(",", dtList2.ToArray()) + ")";
+
+            count = 0;
+            string strDatePairList = "";
+            foreach (var item in dtList)
+            {
+                //logger.Debug("item.strDateTime1 = " + item.strDateTime1 + ", item.strDateTime2 = " + item.strDateTime2);
+                if (count == 0)
+                {
+                    strDatePairList = "(ActivityDate >= \'" + item.strDateTime1 + "\' AND ActivityDate < \'" + item.strDateTime2 + "\')";
+                }
+                else
+                {
+                    strDatePairList += " OR (ActivityDate >= \'" + item.strDateTime1 + "\' AND ActivityDate < \'" + item.strDateTime2 + "\')";
+                }
+                count++;
+            }
+            query += " AND (" + strDatePairList + ")";
+
+            logger.Debug("query = " + query);
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            //foreach (DataRow dr in datatable.Rows)
+            //{
+            //    logger.Debug("dr = " + dr["ActivityDate"]);
+            //}
+
+            return datatable;
+        }
+
+        //QuerySpecificWaterTempActivities
+        // POST /api/v1/activity/queryspecificwatertempactivities
+        [HttpPost]
+        public DataTable QuerySpecificWaterTempActivities(JObject jsonData)
+        {
+            logger.Debug("Inside ActivityController.cs, QuerySpecificWaterTempActivities...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            dynamic json = jsonData;
+            logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            logger.Debug("dataset.Name = " + dataset.Name);
+
+            // This works for when one LocationId comes in by itself.
+            // However, when several location Ids come in, as an arry, it does not work.
+            //int LocationId = json.LocationId.ToObject<int>();
+            //logger.Debug("LocationId = " + LocationId);
+
+            // For an array, we handle it like this (one way anyway).
+            //*** Location Ids ***
+            string strActivityLocationIdList = "";
+
+            JArray jaryLocationIdList = (JArray)json.LocationId;
+
+            int count = 0;
+            foreach (var item in jaryLocationIdList)
+            {
+                //logger.Debug("item = " + item);
+                if (count == 0)
+                    strActivityLocationIdList = item.ToString();
+                else
+                    strActivityLocationIdList += "," + item.ToString();
+            }
+            logger.Debug("strActivityLocationIdList = " + strActivityLocationIdList);
+
+
+            //*** Instrument Ids Ids ***
+            string strInstrumentIdList = "";
+
+            JArray jaryInstrumentIdList = (JArray)json.InstrumentId;
+
+            count = 0;
+            foreach (var item in jaryInstrumentIdList)
+            {
+                //logger.Debug("item = " + item);
+                if (count == 0)
+                    strInstrumentIdList = item.ToString();
+                else
+                    strInstrumentIdList += "," + item.ToString();
+            }
+            logger.Debug("strInstrumentIdList = " + strInstrumentIdList);
+
+            //*** ReadingDateTime ***
+            string strReadingDateTimeList = "";
+
+            JArray jaryReadingDateTimeList = (JArray)json.DateTimeList;
+
+            count = 0;
+            foreach (var item in jaryReadingDateTimeList)
+            {
+                //logger.Debug("item = " + item);
+                if (count == 0)
+                    strReadingDateTimeList = item.ToString();
+                else
+                    strReadingDateTimeList += "," + item.ToString();
+            }
+            logger.Debug("strReadingDateTimeList = " + strReadingDateTimeList);
+
+            //var locList = strActivityLocationIdList.Split(',').ToList();
+            //var locList2 = new List<int>();
+            //logger.Debug("Created locLilst...");
+
+            //foreach (var locItem in locList)
+            //{
+            //    locList2.Add(Convert.ToInt32(locItem));
+            //}
+            //logger.Debug("Loaded locList2...");
+
+            //var instrumentList = strInstrumentIdList.Split(',').ToList();
+            //var instrumentList2 = new List<int>();
+            //logger.Debug("Created instrumentList2...");
+
+            //foreach (var instrumentItem in instrumentList)
+            //{
+            //    instrumentList2.Add(Convert.ToInt32(instrumentItem));
+            //}
+            //logger.Debug("Loaded instrumentList2...");
+
+            //var dtList_in = JArray.Parse(strReadingDateTimeList);
+            //logger.Debug("dtList_in = " + dtList_in);
+
+            //var dtList = strReadingDateTimeList.Split(',').ToList();
+            //var dtList2 = new List<string>();
+            //logger.Debug("Created dtList...");
+
+            //foreach(var dtItem in dtList)
+            //{
+            //    dtList2.Add("\'" + dtItem + "\'");
+            //}
+            //logger.Debug("Loaded dtList2...");
+            var dtList2 = new List<string>();
+
+
+            /*string strDtList = "";
+            int count = 0;
+            foreach(var dtItem in dtList)
+            {
+                if (count == 0)
+                    strDtList += "'" + dtItem + "'";
+                else
+                    strDtList += "\'" + dtItem + "\'";
+            }
+            logger.Debug("strDtList = " + strDtList);
+            */
+            string strDtList = "";
+            foreach (var dtItem in jaryReadingDateTimeList)
+            {
+                dtList2.Add("\'" + dtItem.ToString() + "\'");
+
+                if (count == 0)
+                    strDtList += "'" + dtItem + "'";
+                else
+                    strDtList += "\'" + dtItem + "\'";
+            }
+
+            string query = "";
+            query += "select ReadingDateTime from dbo.WaterTemp_VW where DatasetId = " + DatasetId;
+            //query += " AND LocationId in (" + string.Join(",", locList2.ToArray()) + ")";
+            //query += " AND InstrumentId in (" + string.Join(",", instrumentList2.ToArray()) + ")";
+            //query += " AND ReadingDateTime in (" + string.Join(",", dtList2.ToArray()) + ")";
+            query += " AND LocationId in (" + string.Join(",", jaryLocationIdList) + ")";
+            query += " AND InstrumentId in (" + string.Join(",", jaryInstrumentIdList) + ")";
+            query += " AND ReadingDateTime in (" + string.Join(",", dtList2.ToArray()) + ")";
+
+            /*logger.Debug(json.RowQAStatusId);
+            var rowqas = new List<string>();
+            var rowqas_in = JArray.Parse(json.RowQAStatusId.ToObject<string>());
+            foreach (var item in rowqas_in)
+            {
+                rowqas.Add(filterForSQL(item));
+            }
+            conditions.Add("QAStatusId IN (" + string.Join(",", rowqas.ToArray()) + ")");
+            */
+
+            logger.Debug("query = " + query);
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            return datatable;
         }
     }
 }

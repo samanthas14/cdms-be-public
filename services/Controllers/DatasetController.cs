@@ -45,21 +45,24 @@ namespace services.Controllers
             return dataset;
         }
 
-        public HttpResponseMessage PutDataset(int id, Dataset dataset)
+        // POST /api/v1/dataset/updatedataset
+        [HttpPost]
+        public HttpResponseMessage UpdateDataset(JObject jsonData)
         {
             var db = ServicesContext.Current;
 
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
+            dynamic json = jsonData;
 
-            if (id != dataset.Id)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
+            Dataset ds = db.Datasets.Find(json.dataset.Id.ToObject<int>());
 
-            db.Entry(dataset).State = EntityState.Modified;
+            ds.Name = json.dataset.Name;
+            ds.Description = json.dataset.Description;
+            ds.DefaultActivityQAStatusId = json.dataset.DefaultActivityQAStatusId.ToObject<int>();
+            ds.DefaultRowQAStatusId = json.dataset.DefaultRowQAStatusId.ToObject<int>();
+            ds.Config = json.dataset.Config;
+
+
+            db.Entry(ds).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +73,7 @@ namespace services.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, ds);
         }
 
         public HttpResponseMessage PostDataset(Dataset dataset)
@@ -151,6 +154,81 @@ namespace services.Controllers
 
             return dt;
         }
+
+        //api/v1/dataset/adddatasettoproject
+        [HttpPost]
+        public HttpResponseMessage AddDatasetToProject(JObject jsonData)
+        {
+            logger.Debug("Here we are adding a dataset to a project!");
+            var db = ServicesContext.Current;
+
+            dynamic json = jsonData;
+            int DatastoreId = json.DatastoreId.ToObject<int>();
+            Datastore ds = db.Datastores.Find(DatastoreId);
+
+            int ProjectId = json.ProjectId.ToObject<int>();
+            Project p = db.Projects.Find(ProjectId);
+
+            logger.Debug("We have a datastore to save: " + ds.Name + " for Project: " + p.Name);
+
+            //CREATE A TRANSACTION!
+
+            Dataset new_ds = new Dataset();
+            new_ds.ProjectId = p.Id;
+            new_ds.Name = p.Name + "-"+ds.Name;
+            new_ds.DefaultRowQAStatusId = 1;
+            new_ds.StatusId = 1;
+            new_ds.CreateDateTime = DateTime.Now;
+            new_ds.DefaultActivityQAStatusId = 6;
+            new_ds.DatastoreId = ds.Id;
+            new_ds.Config = null;
+
+            QAStatus qa1 = db.QAStatuses.Find(5);
+            QAStatus qa2 = db.QAStatuses.Find(6);
+            QAStatus qa3 = db.QAStatuses.Find(1);
+
+            new_ds.QAStatuses = new List<QAStatus>();
+            new_ds.QAStatuses.Add(qa1);
+            new_ds.QAStatuses.Add(qa2);
+
+            new_ds.RowQAStatuses = new List<QAStatus>();
+            new_ds.RowQAStatuses.Add(qa3);
+
+            new_ds.Fields= new List<DatasetField>();
+
+            foreach (var field in json.DatasetFields)
+            {
+                logger.Debug(" -- " + field.Id); 
+                int field_id = field.Id.ToObject<int>();
+                Field the_field = db.Fields.Find(field_id);
+
+                DatasetField the_ds_field = new DatasetField();
+
+                the_ds_field.FieldId = the_field.Id;
+                the_ds_field.FieldRoleId = 2;
+                the_ds_field.CreateDateTime = DateTime.Now;
+                the_ds_field.Label = the_field.Name;
+                the_ds_field.DbColumnName = the_field.DbColumnName;
+                the_ds_field.ControlType = the_field.ControlType;
+                the_ds_field.Validation = the_field.Validation;
+                the_ds_field.Rule = the_field.Rule;
+                the_ds_field.SourceId = 1;
+
+
+                new_ds.Fields.Add(the_ds_field);
+                //logger.Debug(" -- added " + field.Id);
+
+            }
+
+            db.Datasets.Add(new_ds);
+            db.SaveChanges();
+
+            //logger.Debug(new_ds);
+            
+            return new HttpResponseMessage(HttpStatusCode.OK);
+
+        }
+
 
         //TODO: this is a (currently) unused feature we will want to revisit to support NESTED DATASETS
         // GET /api/v1/dataset/getrelationdata

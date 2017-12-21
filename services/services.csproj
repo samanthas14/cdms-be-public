@@ -57,10 +57,10 @@
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Excel, Version=2.1.2.3, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.2.1.2.3\lib\net45\Excel.dll</HintPath>
@@ -69,11 +69,20 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Data.Edm, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.Edm.5.8.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    <Reference Include="Microsoft.Data.Edm, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.8.3\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.OData.5.8.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.8.3\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Core, Version=6.14.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Core.6.14.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.OData.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Edm, Version=6.14.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Edm.6.14.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.OData.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Spatial, Version=6.14.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Spatial.6.14.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -106,8 +115,8 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
+    <Reference Include="System.Spatial, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.8.3\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
@@ -207,6 +216,30 @@
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.cs" />
     <Compile Include="Migrations\201711021653101_StreamNetUpdConfig.Designer.cs">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.cs" />
+    <Compile Include="Migrations\201711092246383_dataset-config-add-activitiespage.Designer.cs">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711160129442_ClearStatus.cs" />
+    <Compile Include="Migrations\201711160129442_ClearStatus.Designer.cs">
+      <DependentUpon>201711160129442_ClearStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712052126231_DsFieldsUpdForValidation.cs" />
+    <Compile Include="Migrations\201712052126231_DsFieldsUpdForValidation.Designer.cs">
+      <DependentUpon>201712052126231_DsFieldsUpdForValidation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712122008344_FieldsAndDsFieldsWtRule.cs" />
+    <Compile Include="Migrations\201712122008344_FieldsAndDsFieldsWtRule.Designer.cs">
+      <DependentUpon>201712122008344_FieldsAndDsFieldsWtRule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712122335129_WaterTempIdxReadingDateTime.cs" />
+    <Compile Include="Migrations\201712122335129_WaterTempIdxReadingDateTime.Designer.cs">
+      <DependentUpon>201712122335129_WaterTempIdxReadingDateTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs" />
+    <Compile Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.Designer.cs">
+      <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -320,6 +353,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
+    <Compile Include="Resources\CipherHelper.cs" />
+    <Compile Include="Resources\DateTimeHelper.cs" />
     <Compile Include="Resources\LookupFieldHelper.cs" />
     <Compile Include="Resources\MD5Util.cs" />
     <Compile Include="Resources\PitagisReader.cs" />
@@ -341,6 +376,11 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Migrations\20170929_datasetconfigupdates.sql" />
+    <Content Include="Migrations\20171205_datasetconfigupdates.sql" />
+    <Content Include="Migrations\20171212_datasetconfigupdates.sql" />
+    <Content Include="Migrations\20171212_indexupdate.sql" />
+    <Content Include="Migrations\20171220_UpdDsNonWtRemoveBulkRowQaBtn.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -393,6 +433,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711021653101_StreamNetUpdConfig.resx">
       <DependentUpon>201711021653101_StreamNetUpdConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711092246383_dataset-config-add-activitiespage.resx">
+      <DependentUpon>201711092246383_dataset-config-add-activitiespage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711160129442_ClearStatus.resx">
+      <DependentUpon>201711160129442_ClearStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712052126231_DsFieldsUpdForValidation.resx">
+      <DependentUpon>201712052126231_DsFieldsUpdForValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712122008344_FieldsAndDsFieldsWtRule.resx">
+      <DependentUpon>201712122008344_FieldsAndDsFieldsWtRule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712122335129_WaterTempIdxReadingDateTime.resx">
+      <DependentUpon>201712122335129_WaterTempIdxReadingDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.resx">
+      <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

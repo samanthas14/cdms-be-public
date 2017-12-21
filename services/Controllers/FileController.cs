@@ -662,7 +662,7 @@ namespace services.Controllers
                     throw new Exception("Project ID not found: " + ProjectId);
 
                 if (!project.isOwnerOrEditor(me))
-                    throw new Exception("Authorization error.");
+                    throw new Exception("Authorization error:  The user trying to import is neither an Owner nor an Editor.");
 
                 if (dataset == null)
                     throw new Exception("Dataset ID not found: " + DatasetId);
@@ -676,7 +676,8 @@ namespace services.Controllers
                     logger.Debug("Dir does not exist; will create it...");
                     try
                     {
-                        System.IO.Directory.CreateDirectory(root);
+                        //System.IO.Directory.CreateDirectory(root);
+                        System.IO.Directory.CreateDirectory(datasetPath);
                         logger.Debug("Created the dir...");
                     }
                     catch (IOException ioe)

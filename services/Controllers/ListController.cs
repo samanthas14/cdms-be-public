@@ -285,14 +285,80 @@ namespace services.Controllers
             return db.Sources.AsEnumerable();
         }
 
-        
+        // GET /api/v1/list/getbenthicsampleyears/5
+        //returns empty list if none found...
+        [HttpGet]
+        public IEnumerable<Benthic_Header> GetBenthicSampleYears(int Id)
+        {
+            List<Benthic_Header> ryHeaderList = new List<Benthic_Header>();
 
-        
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                con.Open();
 
+                var query = "";
 
-        
+                query = "SET QUOTED_IDENTIFIER OFF; SELECT DISTINCT SampleYear FROM dbo.[Benthic_vw] WHERE DatasetId = " + Id + " AND SampleYear is not null ORDER BY SampleYear desc";
+                logger.Debug("SQL command = " + query);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Benthic_Header ryHead = new Benthic_Header();
+                                ryHead.SampleYear = Convert.ToInt32(reader.GetValue(0).ToString());
+                                ryHeaderList.Add(ryHead);
+                            }
+                        }
+                        reader.Close();
+                    }
+                    cmd.Dispose();
+                }
+                con.Close();
+            }
 
+            return ryHeaderList.AsEnumerable();
+        }
 
+        // GET /api/v1/list/getdriftsampleyears/5
+        //returns empty list if none found...
+        [HttpGet]
+        public IEnumerable<Drift_Header> GetDriftSampleYears(int Id)
+        {
+            List<Drift_Header> ryHeaderList = new List<Drift_Header>();
 
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                con.Open();
+
+                var query = "";
+
+                query = "SET QUOTED_IDENTIFIER OFF; SELECT DISTINCT SampleYear FROM dbo.[Drift_vw] WHERE DatasetId = " + Id + " AND SampleYear is not null ORDER BY SampleYear desc";
+                logger.Debug("SQL command = " + query);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Drift_Header ryHead = new Drift_Header();
+                                ryHead.SampleYear = Convert.ToInt32(reader.GetValue(0).ToString());
+                                ryHeaderList.Add(ryHead);
+                            }
+                        }
+                        reader.Close();
+                    }
+                    cmd.Dispose();
+                }
+                con.Close();
+            }
+
+            return ryHeaderList.AsEnumerable();
+        }
     }
 }
