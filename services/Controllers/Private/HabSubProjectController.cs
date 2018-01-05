@@ -93,9 +93,33 @@ namespace services.Controllers
             logger.Debug("Inside UploadHabitatFile...");
             logger.Debug("starting to process incoming Habitat files.");
 
-            if (!Request.Content.IsMimeMultipartContent())
+            /* -- ken you were here -- I think we can use the files here instead of the old way... 
+             https://stackoverflow.com/questions/10320232/how-to-accept-a-file-post
+            */
+            var httpRequest = System.Web.HttpContext.Current.Request;
+            logger.Debug("So we have files: " + httpRequest.Files.Count);
+
+
+            foreach (string file in httpRequest.Files)
             {
+                var postedFile = httpRequest.Files[file];
+                var filePath = System.Web.HttpContext.Current.Server.MapPath("~/" + postedFile.FileName);
+                //postedFile.SaveAs(filePath);
+                logger.Debug("--> " + filePath);
+                // NOTE: To store in memory use postedFile.InputStream
+            }
+
+            var result_dictionary = new Dictionary<string, dynamic>();
+
+            /*
+             * -- this ends your new stuff --
+            */
+
+        if (!Request.Content.IsMimeMultipartContent())
+            {
+                //TODO: wrap into results?
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                
             }
 
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
