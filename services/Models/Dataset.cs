@@ -167,6 +167,14 @@ namespace services.Models
                 else
                     system_fields = "QAStatusName,LocationLabel";
             }
+            else if (this.Datastore.TablePrefix == "SpawningGroundSurvey")
+            {
+                logger.Debug("This dataset is SpawningGroundSurvey-related...");
+                if (productTarget == "Query")
+                    system_fields = "ActivityQAStatusId,LocationId";
+                else
+                    system_fields = "QAStatusName,LocationLabel";
+            }
             else if ((this.Datastore.TablePrefix == "BSample") ||
                     (this.Datastore.TablePrefix == "JvRearing") ||
                     (this.Datastore.TablePrefix == "Genetic") ||
@@ -182,8 +190,15 @@ namespace services.Models
             }
             else
             {
-                logger.Debug("This dataset IS NOT WaterTemp-related...");
-                system_fields = "CreateDate,QAStatusName, ActivityQAComments, LocationId,ActivityQAStatusId,DatasetId,ActivityId,RowId, RowStatusId";
+                //logger.Debug("This dataset IS NOT WaterTemp-related...");
+                logger.Debug("Using the default field list on this dataset...");
+                if (productTarget == "Query")
+                {
+                    //system_fields = "CreateDate,QAStatusName, ActivityQAComments, LocationId,ActivityQAStatusId,DatasetId,ActivityId,RowId, RowStatusId";
+                    system_fields = "QAStatusId,ActivityQAComments,LocationId,ActivityQAStatusId";
+                }
+                else
+                    system_fields = "QAStatusName,ActivityQAComments,LocationLabel";
             }
 
             string strFishermanFields = "";
@@ -271,7 +286,7 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationName" }));
-                      .Concat(new List<string>(new string[] { "QAStatusId", "QAStatus", "ActivityQAComments", "LocationName" }));
+                      .Concat(new List<string>(new string[] { "QAStatusId","QAStatus","ActivityQAComments","LocationName" }));
 
                 }
                 else if (this.Datastore.TablePrefix == "CreelSurvey")
@@ -280,19 +295,21 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                         //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationId", "ActivityQAStatusId", "DatasetId", "ActivityId","RowId","RowStatusId"}));
-                      .Concat(new List<string>(new string[] {"FullName", "QAStatus", "Location"}));
+                      .Concat(new List<string>(new string[] {"FullName","QAStatus","Location"}));
                 }
                 else if ((this.Datastore.TablePrefix == "BSample") ||
                         (this.Datastore.TablePrefix == "JvRearing") ||
                         (this.Datastore.TablePrefix == "Genetic") ||
                         (this.Datastore.TablePrefix == "Benthic") ||
                         (this.Datastore.TablePrefix == "Drift") ||
-                        (this.Datastore.TablePrefix == "AdultWeir"))
+                        (this.Datastore.TablePrefix == "AdultWeir") ||
+                        (this.Datastore.TablePrefix == "SpawningGroundSurvey")
+                        )
                 {
                     labels = labels
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
-                      .Concat(new List<string>(new string[] { "QAStatus", "Location" }));
+                      .Concat(new List<string>(new string[] { "QAStatus","Location" }));
                 }
                 else if ((this.Datastore.TablePrefix == "StreamNet_NOSA") ||
                         (this.Datastore.TablePrefix == "StreamNet_RperS") ||
@@ -311,7 +328,8 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                         //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationId", "ActivityQAStatusId", "DatasetId", "ActivityId","RowId","RowStatusId"}));
-                      .Concat(new List<string>(new string[] { "CreateDate", "QAStatus", "ActivityQAComments", "LocationId", "ActivityQAStatusId", "DatasetId", "ActivityId", "RowId", "RowStatusId" }));
+                      //.Concat(new List<string>(new string[] { "CreateDate", "QAStatus", "ActivityQAComments", "LocationId", "ActivityQAStatusId", "DatasetId", "ActivityId", "RowId", "RowStatusId" }));
+                      .Concat(new List<string>(new string[] { "QAStatus","ActivityQAComments","Location","ActivityQAStatus"}));
                 }
 
                 foreach (var item in labels)

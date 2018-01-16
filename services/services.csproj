@@ -241,6 +241,26 @@
     <Compile Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.Designer.cs">
       <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801111604059_SgsDropPercRetFromDetails.cs" />
+    <Compile Include="Migrations\201801111604059_SgsDropPercRetFromDetails.Designer.cs">
+      <DependentUpon>201801111604059_SgsDropPercRetFromDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801111632255_SgsAddPercRetToDetails.cs" />
+    <Compile Include="Migrations\201801111632255_SgsAddPercRetToDetails.Designer.cs">
+      <DependentUpon>201801111632255_SgsAddPercRetToDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801111928261_SgsUpdTblDatasetFields.cs" />
+    <Compile Include="Migrations\201801111928261_SgsUpdTblDatasetFields.Designer.cs">
+      <DependentUpon>201801111928261_SgsUpdTblDatasetFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801121916141_SgsDetPercRetAllowNull.cs" />
+    <Compile Include="Migrations\201801121916141_SgsDetPercRetAllowNull.Designer.cs">
+      <DependentUpon>201801121916141_SgsDetPercRetAllowNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.cs" />
+    <Compile Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.Designer.cs">
+      <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -451,6 +471,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.resx">
       <DependentUpon>201712202148471_UpdDsNonWtRemoveBulkRowQaBtn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801111604059_SgsDropPercRetFromDetails.resx">
+      <DependentUpon>201801111604059_SgsDropPercRetFromDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801111632255_SgsAddPercRetToDetails.resx">
+      <DependentUpon>201801111632255_SgsAddPercRetToDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801111928261_SgsUpdTblDatasetFields.resx">
+      <DependentUpon>201801111928261_SgsUpdTblDatasetFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801121916141_SgsDetPercRetAllowNull.resx">
+      <DependentUpon>201801121916141_SgsDetPercRetAllowNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.resx">
+      <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
