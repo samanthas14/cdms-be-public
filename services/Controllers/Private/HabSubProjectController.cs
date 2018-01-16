@@ -1663,7 +1663,6 @@ namespace services.Controllers
                 "hi.EffDt = " + hi.EffDt + "\n"
                 );
 
-
             try
             {
                 //hi.SubprojectId = spId;
@@ -1809,7 +1808,9 @@ namespace services.Controllers
             }
             */
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            //return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, hi);
+            return response;
 
         }
 
