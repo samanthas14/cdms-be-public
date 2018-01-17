@@ -1712,9 +1712,9 @@ namespace services.Controllers
             }
             */
 
-            //return new HttpResponseMessage(HttpStatusCode.OK);
-            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, hi);
-            return response;
+
+            return Request.CreateResponse(HttpStatusCode.Created, hi);
+
 
         }
 

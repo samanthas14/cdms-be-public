@@ -19,14 +19,14 @@ where ds.TablePrefix = 'CreelSurvey' );
 
 --Appraisal 4
 update datasets set Config =
- '{"RestrictRoles":["DECD"],"ActivitiesPage": {"Route": "appraisals", "ShowFields": ["Allotment","AllotmentStatus"]}, "DataEntryPage": {"HiddenFields": ["Location","ActivityDate","Instrument","QA"]},"ActivitiesPage":{"ShowFields":["headerdata.Allotment","headerdata.AllotmentStatus"]}}' 
+ '{"RestrictRoles":["DECD"],"ActivitiesPage":{"Route":"appraisals","ShowFields":["Allotment","AllotmentStatus"]},"DataEntryPage":{"HiddenFields":["Location","ActivityDate","Instrument","QA"]}}' 
 where id in (select d.Id from Datasets d
  join DataStores ds on d.DatastoreId = ds.Id
 where ds.TablePrefix = 'Appraisal' );
 
 --CrppContracts 16
 update datasets set Config = 
-'{"RestrictRoles":["CRPP"],"ActivitiesPage": {"Route": "crpp"}, "DataEntryPage": {"HiddenFields": ["Location","ActivityDate","QA","Instrument"]},"ActivitiesPage":{"ShowFields":["headerdata.Allotment","headerdata.AllotmentStatus"]}}'
+'{"RestrictRoles":["CRPP"],"ActivitiesPage": {"Route": "crpp", "ShowFields":["headerdata.Allotment","headerdata.AllotmentStatus"]}, "DataEntryPage": {"HiddenFields": ["Location","ActivityDate","QA","Instrument"]}}'
 where id in (select d.Id from Datasets d
  join DataStores ds on d.DatastoreId = ds.Id
 where ds.TablePrefix = 'CrppContracts' );
@@ -43,4 +43,17 @@ where id in (select d.Id from Datasets d
  join DataStores ds on d.DatastoreId = ds.Id
 where ds.TablePrefix = 'Metrics' );
 
+--Benthic 21
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["ActivityDate","Instrument"], "ShowFields": ["SampleDate"]}}' 
+where id in (select d.Id from Datasets d
+ join DataStores ds on d.DatastoreId = ds.Id
+where ds.TablePrefix = 'Benthic' );
 
+--Drift 22
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["ActivityDate","Instrument"], "ShowFields": ["SampleDate"]}}' 
+where id in (select d.Id from Datasets d
+ join DataStores ds on d.DatastoreId = ds.Id
+where ds.TablePrefix = 'Drift' );
+
+--StreamNet
+update dbo.[Datasets] set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument"]}}' where ProjectId = 9999 and Name like 'StreamNet%'

@@ -19,6 +19,8 @@ namespace services.Models.Data
         public string FinClips { get; set; }
         public string Marks { get; set; }
         //public int? SpawningStatus { get; set; }
+
+        public Single? PercentRetained { get; set; }
         public int? ForkLength { get; set; }
         public int? MeHPLength { get; set; }
         public string SnoutID { get; set; }

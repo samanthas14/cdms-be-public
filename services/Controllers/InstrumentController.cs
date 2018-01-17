@@ -3,7 +3,9 @@ using services.Models;
 using services.Resources;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -63,7 +65,8 @@ namespace services.Controllers
                 db.SaveChanges();
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ac);
+            return response;
         }
 
         // POST /api/v1/instrument/saveprojectinstrument
@@ -87,8 +90,8 @@ namespace services.Controllers
             db.SaveChanges();
             logger.Debug("success adding NEW proejct instrument!");
 
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, instrument);
+            return response;
         }
 
         // POST /api/v1/instrument/removeprojectinstrument
@@ -113,6 +116,37 @@ namespace services.Controllers
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
+        }
+
+        //POST /api/v1/instrument/removeinstrumentaccuracycheck
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage RemoveInstrumentAccuracyCheck(JObject jsonData)
+        {
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+            User me = AuthorizationManager.getCurrentUser();
+
+            Instrument instrument = db.Instruments.Find(json.InstrumentId.ToObject<int>());
+            if (instrument == null)
+                throw new System.Exception("Configuration error.  Please try again.");
+
+            InstrumentAccuracyCheck ac = db.AccuracyChecks.Find(json.AccuracyCheck.Id.ToObject<int>());
+            if(ac == null)
+                throw new System.Exception("Configuration error.  Please try again.");
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                con.Open();
+
+                var query = "DELETE FROM InstrumentAccuracyChecks WHERE Id  = " + ac.Id;
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    logger.Debug(query);
+                    cmd.ExecuteNonQuery();
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
         }
 
         // POST /api/v1/instrument/saveinstrument
@@ -150,7 +184,8 @@ namespace services.Controllers
 
             db.SaveChanges();
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, instrument);
+            return response;
         }
     }
 }
