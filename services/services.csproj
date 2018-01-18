@@ -261,6 +261,22 @@
     <Compile Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.Designer.cs">
       <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801181735272_CrppUpdContractsDataset.cs" />
+    <Compile Include="Migrations\201801181735272_CrppUpdContractsDataset.Designer.cs">
+      <DependentUpon>201801181735272_CrppUpdContractsDataset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181736202_CrppUpdViews.cs" />
+    <Compile Include="Migrations\201801181736202_CrppUpdViews.Designer.cs">
+      <DependentUpon>201801181736202_CrppUpdViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.cs" />
+    <Compile Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.Designer.cs">
+      <DependentUpon>201801181743069_CrppCleanupFieldsAndDsFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181818152_CrppAddNewDatasetFields.cs" />
+    <Compile Include="Migrations\201801181818152_CrppAddNewDatasetFields.Designer.cs">
+      <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -401,6 +417,8 @@
     <Content Include="Migrations\20171212_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171212_indexupdate.sql" />
     <Content Include="Migrations\20171220_UpdDsNonWtRemoveBulkRowQaBtn.sql" />
+    <Content Include="Migrations\20180118a_CrppCleanupFieldsAndDsFields.sql" />
+    <Content Include="Migrations\20180118b_CrppAddNewDatasetFields.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -486,6 +504,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.resx">
       <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181735272_CrppUpdContractsDataset.resx">
+      <DependentUpon>201801181735272_CrppUpdContractsDataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181736202_CrppUpdViews.resx">
+      <DependentUpon>201801181736202_CrppUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.resx">
+      <DependentUpon>201801181743069_CrppCleanupFieldsAndDsFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181818152_CrppAddNewDatasetFields.resx">
+      <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
