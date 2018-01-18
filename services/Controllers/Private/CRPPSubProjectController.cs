@@ -1286,7 +1286,7 @@ namespace services.Controllers
             else
                 message.To.Add(new MailAddress(System.Configuration.ConfigurationManager.AppSettings["CrppDefaultEmail"]));  // Real email address.
 
-            message.From = new MailAddress("NO-REPLY@ctuir.org");
+            message.From = new MailAddress("NO-Reply@ctuir.org");
             //message.To.Add(new MailAddress("GeorgeClark@ctuir.org")); // Test email address.
             //message.From = new MailAddress("GeorgeClark@ctuir.org");
 
