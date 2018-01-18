@@ -7,7 +7,7 @@ namespace services.Models.Data
 {
     public class CrppContracts_Detail: DataDetail
     {
-        public double? AcresSurveyed { get; set; }
+        //public double? AcresSurveyed { get; set; }
         public string Testing { get; set; }
         public int? NewSites { get; set; }
         public int? MonitoredSites { get; set; }
@@ -15,10 +15,17 @@ namespace services.Models.Data
         public int? UpdatedSites { get; set; }
         public int? NewIsolates { get; set; }
         public string Evaluation { get; set; }
-        public string HprcsitsRecorded { get; set; }
+        //public string HprcsitsRecorded { get; set; }
         public string Monitoring { get; set; }
         public string Notes { get; set; }
-        public string ShpoReportNumber { get; set; }
-        public string ShpoCaseNumber { get; set; }
+        //public string ShpoReportNumber { get; set; }
+        //public string ShpoCaseNumber { get; set; }
+
+        public double? SurveyAcres { get; set; }
+        public int? TestSites { get; set; }
+        public string SHRENum { get; set; }
+        public string SHCSNum { get; set; }
+        public string HPRCSIT { get; set; }
+
     }
 }
