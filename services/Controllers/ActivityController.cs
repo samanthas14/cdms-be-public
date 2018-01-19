@@ -618,7 +618,7 @@ namespace services.Controllers
             User me = AuthorizationManager.getCurrentUser();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             //COPY PASTE -- TODO -- reduce code smell!
             Dataset dataset = db.Datasets.Find(json.DatasetId.ToObject<int>());
@@ -1274,7 +1274,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
@@ -1588,7 +1588,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
