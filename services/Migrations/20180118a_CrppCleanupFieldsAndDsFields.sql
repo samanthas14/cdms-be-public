@@ -1,5 +1,9 @@
 declare @DatasetId as numeric;
-set @DatasetId = (select Id from dbo.Datasets where Name = 'CRPP Contracts') --2247
+set @DatasetId = (select Id from dbo.Datasets where Name = 'CRPP Contracts') --1232, ProjectId = 2247
+
+update dbo.Datasets
+set Config = '{"RestrictRoles":["CRPP"], "DataEntryPage": {"HiddenFields": ["Location","ActivityDate","QA","Instrument"], "ShowFields": ["DateReceived","ProjectLead"]}}'
+where [Id] = @DatasetId 
 
 delete from dbo.DatasetFields
 where DatasetId = @DatasetId
