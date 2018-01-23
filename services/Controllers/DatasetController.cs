@@ -131,6 +131,7 @@ namespace services.Controllers
         // GET /api/v1/dataset/getheadersdatafordataset/5
         public DataTable GetHeadersDataForDataset(int id)
         {
+            logger.Debug("Inside DatasetController.cs, GetHeadersDataForDataset...");
             var db = ServicesContext.Current;
             Dataset dataset = db.Datasets.Find(id);
             if (dataset == null)
