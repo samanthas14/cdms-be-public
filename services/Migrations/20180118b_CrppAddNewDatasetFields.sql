@@ -41,7 +41,7 @@ SELECT
         DataType = 'string',
         PossibleValues = null,
         DbColumnName = 'ProjectLead',
-        ControlType = 'text',
+        ControlType = 'select',
         [Rule] = NULL
 
 UNION ALL SELECT

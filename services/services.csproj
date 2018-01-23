@@ -425,6 +425,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
+    <Folder Include="Views\CrppDataset\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
