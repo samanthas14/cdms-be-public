@@ -19,3 +19,5 @@ where FieldCategoryId = @FieldCategoryId
 and DbColumnName in ('CrppPersonnel', 'ActivityTypeId', 
 'Agency', 'PermitNumber', 'DateReceived', 'DateOfAction', 'ActionTaken', 'ActivityNotes', 
 'AttachedDocument', 'AcresSurveyed', 'HprcsitsRecorded', 'ShpoReportNumber', 'ShpoCaseNumber')
+
+update dbo.Fields set [Validation] = 'i' where FieldCategoryId = 17 and DataType = 'int'

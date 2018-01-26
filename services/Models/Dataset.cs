@@ -188,6 +188,14 @@ namespace services.Models
                 else
                     system_fields = "QAStatusName,LocationLabel";
             }
+            else if (this.Datastore.TablePrefix == "CrppContracts")
+            {
+                logger.Debug("This dataset is CrppContracts-related...");
+                if (productTarget == "Query")
+                    system_fields = "ActivityQAStatusId,LocationId";
+                else
+                    system_fields = "QAStatusName,LocationLabel";
+            }
             else
             {
                 //logger.Debug("This dataset IS NOT WaterTemp-related...");
@@ -310,6 +318,14 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(new List<string>(new string[] { "QAStatus","Location" }));
+                }
+                else if (this.Datastore.TablePrefix == "CrppContracts")
+                {
+                    labels = labels
+                      .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
+                      .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
+                      //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationId", "ActivityQAStatusId", "DatasetId", "ActivityId","RowId","RowStatusId"}));
+                      .Concat(new List<string>(new string[] { "QAStatus", "Location" }));
                 }
                 else if ((this.Datastore.TablePrefix == "StreamNet_NOSA") ||
                         (this.Datastore.TablePrefix == "StreamNet_RperS") ||

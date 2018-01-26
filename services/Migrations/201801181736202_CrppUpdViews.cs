@@ -40,15 +40,15 @@ CREATE VIEW [dbo].[CrppContracts_VW]
 AS
 SELECT        a.Id AS ActivityId, a.DatasetId, a.SourceId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, 
 h.Id, h.ProjectProponent, h.ByUserId, h.EffDt, h.ProjectLead, h.CostCenter, h.ProjectName, h.Client, h.AgreeNumb, h.DateExec, 
-h.DraftDue, h.FinalDue, h.ContractEnd, h.ModExtDate, h.DocumentLink, h.ActivityComments, h.ActivityId,
+h.DraftDue, h.FinalDue, h.ContractEnd, h.ModExtDate, h.DocumentLink, h.ActivityComments,
 d.Id AS CrppContracts_Detail_Id, d.Testing, d.NewSites, d.MonitoredSites, d.SitesEvaluated, d.UpdatedSites, d.NewIsolates, 
 d.Evaluation, d.Monitoring, d.Notes, d.RowId, d.RowStatusId, d.ByUserId AS CrppContracts_Detail_ByUserId, d.QAStatusId, 
 d.EffDt AS CrppContracts_Detail_EffDt, d.SurveyAcres, d.TestSites, d.SHRENum, d.SHCSNum, d.HPRCSIT,
 aq.QAStatusId AS ActivityQAStatusId, aq.UserId AS ActivityQAUserId, aq.Comments, aq.QAStatusName
 FROM            dbo.Activities AS a INNER JOIN
-                         dbo.CrppContracts_Header AS h ON a.Id = h.ActivityId INNER JOIN
-                         dbo.CrppContracts_Detail AS d ON a.Id = d.ActivityId INNER JOIN
-                         dbo.ActivityQAs AS aq ON a.Id = aq.ActivityId
+                         dbo.CrppContracts_Header_VW AS h ON a.Id = h.ActivityId LEFT OUTER JOIN
+                         dbo.CrppContracts_Detail_VW AS d ON a.Id = d.ActivityId INNER JOIN
+                         dbo.ActivityQAs_VW AS aq ON a.Id = aq.ActivityId
 GO
             ");
         }
