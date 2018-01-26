@@ -277,6 +277,18 @@
     <Compile Include="Migrations\201801181818152_CrppAddNewDatasetFields.Designer.cs">
       <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801262233538_CrppContractsAddCols.cs" />
+    <Compile Include="Migrations\201801262233538_CrppContractsAddCols.Designer.cs">
+      <DependentUpon>201801262233538_CrppContractsAddCols.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801262302467_CrppContractsAddData.cs" />
+    <Compile Include="Migrations\201801262302467_CrppContractsAddData.Designer.cs">
+      <DependentUpon>201801262302467_CrppContractsAddData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801262306076_CrppUpdViews2.cs" />
+    <Compile Include="Migrations\201801262306076_CrppUpdViews2.Designer.cs">
+      <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -419,6 +431,7 @@
     <Content Include="Migrations\20171220_UpdDsNonWtRemoveBulkRowQaBtn.sql" />
     <Content Include="Migrations\20180118a_CrppCleanupFieldsAndDsFields.sql" />
     <Content Include="Migrations\20180118b_CrppAddNewDatasetFields.sql" />
+    <Content Include="Migrations\20180126a_CrppAddNewDatasetFields.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -517,6 +530,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801181818152_CrppAddNewDatasetFields.resx">
       <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262233538_CrppContractsAddCols.resx">
+      <DependentUpon>201801262233538_CrppContractsAddCols.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262302467_CrppContractsAddData.resx">
+      <DependentUpon>201801262302467_CrppContractsAddData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262306076_CrppUpdViews2.resx">
+      <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

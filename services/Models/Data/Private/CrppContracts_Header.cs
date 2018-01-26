@@ -30,5 +30,8 @@ namespace services.Models.Data
         public DateTime? ModExtDate { get; set; }
         public string DocumentLink { get; set; }
         public string ActivityComments { get; set; }
+
+        public Single? AwardAmount { get; set; }
+        public DateTime? FinalReportSubmitted { get; set; }
     }
 }
