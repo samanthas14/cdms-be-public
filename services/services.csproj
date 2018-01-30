@@ -289,6 +289,10 @@
     <Compile Include="Migrations\201801262306076_CrppUpdViews2.Designer.cs">
       <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801301748562_FishScalesViewsUpd.cs" />
+    <Compile Include="Migrations\201801301748562_FishScalesViewsUpd.Designer.cs">
+      <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -539,6 +543,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801262306076_CrppUpdViews2.resx">
       <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801301748562_FishScalesViewsUpd.resx">
+      <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
