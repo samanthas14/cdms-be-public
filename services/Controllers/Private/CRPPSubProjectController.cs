@@ -450,7 +450,6 @@ namespace services.Controllers
         public HttpResponseMessage RemoveCorrespondenceEvent(JObject jsonData)
         {
             logger.Debug("Inside RemoveCorrespondenceEvent...");
-            bool blnEventFilesPresent = true;
 
             var db = ServicesContext.Current;
             logger.Debug("Set database...");
@@ -478,83 +477,21 @@ namespace services.Controllers
 
             string strDatastoreTablePrefix = json.DatastoreTablePrefix.ToObject<string>();
 
-            if (correspondenceEvent.EventFiles != null)
+            var files_in_subproject = (from file in db.Files
+                                       where file.Subproject_CrppId == subproject.Id
+                                       select file).ToList();
+
+            //iterate potential files for match to delete
+            foreach (var file in files_in_subproject)
             {
-                logger.Debug("EventFiles = " + correspondenceEvent.EventFiles);
-                // If there were no attached files, the contents will not be null, but they won't have any files either.
-                // The contents will be [];
-                if (correspondenceEvent.EventFiles.Length < 3)
-                    blnEventFilesPresent = false;
-
-                if (blnEventFilesPresent)
+                //habitatItem.ItemFiles is a JSON string of filenames that belong to this item. If we match, delete this one.
+                if (correspondenceEvent.EventFiles != null && correspondenceEvent.EventFiles.Contains("\"" + file.Name + "\"")) //use "somefile.jpg" so that we don't delete: mysomefile.jpg
                 {
-                    // We have a json object (EventFiles) within a json object.  So let's take EventFiles apart, to get the file name.
-                    List<string> strFileList = correspondenceEvent.EventFiles.Split(',').ToList();
-                    string strFile = "";
-                    int intColonLocation = -1;
-                    int intLastBracketLocation = -1;
-                    int intLastDblQuoteLocation = -1;
-                    int intFileNameLength = 0;
-                    //string thePath = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "uploads\\subprojects\\" + subproject.Id + "\\";
-                    string thePath = "";
-                    thePath = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + p.Id + "\\S\\" + subproject.Id + "\\";
-
-                    if (Directory.Exists(thePath))
-                    {
-                        string strFilePath = "";
-                        foreach (var item in strFileList)
-                        {
-                            //logger.Debug("item = " + item);
-                            intColonLocation = item.IndexOf(":");
-                            //logger.Debug("intColonLocation = " + intColonLocation);
-
-                            intLastBracketLocation = item.IndexOf("]");
-                            if (intLastBracketLocation == -1)
-                                intLastDblQuoteLocation = item.Length - 1;
-                            else
-                                intLastDblQuoteLocation = item.Length - 2;
-
-                            //logger.Debug("intLastDblQuoteLocation = " + intLastDblQuoteLocation);
-
-                            intFileNameLength = (intLastDblQuoteLocation - 1) - (intColonLocation + 2);
-                            //logger.Debug("intFileNameLength = " + intFileNameLength);
-
-                            strFile = item.Substring(intColonLocation + 2, intFileNameLength);
-                            //logger.Debug("strFile = " + strFile);
-
-                            strFilePath = thePath + strFile;
-                            logger.Debug("The files location = " + strFilePath);
-
-                            System.IO.File.Delete(strFilePath);
-                            logger.Debug("Deleted the file...");
-                            strFilePath = "";
-
-                            // Now let's remove the file from the Files table in the database.
-                            List<Models.File> listOfFiles = (from aFile in db.Files
-                                                             where aFile.Subproject_CrppId == subproject.Id && aFile.Name == strFile
-                                                             select aFile).ToList();
-                            foreach (var fileRecord in listOfFiles)
-                            {
-                                db.Files.Remove(db.Files.Single(ff => ff.Id == fileRecord.Id));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        logger.Debug("Could not find folder: " + thePath);
-                    }
+                    //removes the File and the actual filesystem file
+                    Resources.SubprojectFileHelper.DeleteSubprojectFile(file, p.Id, subproject.Id);
                 }
             }
 
-            /*string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
-            logger.Debug("root = " + root);
-
-            string strSubprojectsPath = root + "\\" + crppCorrespondenceEvent.Id;
-            logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
-
-            System.IO.Directory.Delete(strSubprojectsPath, true);
-            logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
-            */
 
             db.CorrespondenceEvents().Remove(correspondenceEvent);
             logger.Debug("Just removed this event from table CorrespondenceEvents:  " + correspondenceEvent.Id);
@@ -780,9 +717,17 @@ namespace services.Controllers
 
                 //int intPropNameLength = prop.Name.Length;
                 //logger.Debug("intPropNameLength = " + intPropNameLength);
-
-                strTmp = item.ToObject<string>(); // We will use to determine if the value is blank, regardless of what the ultimate value is.
-                logger.Debug("strTmp = " + strTmp);
+                try
+                {
+                    strTmp = item.ToObject<string>(); // We will use to determine if the value is blank, regardless of what the ultimate value is.
+                    logger.Debug("strTmp = " + strTmp);
+                }
+                catch (Exception e)
+                {
+                    logger.Debug("Hmm -- couldn't convert this to a string: " + prop.Name + " ... this is probably fine." );
+                    //logger.Debug(e);
+                }
+                
 
                 if (prop.Name == "NumberOfDays") // Optional
                 {
