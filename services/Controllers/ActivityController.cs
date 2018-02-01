@@ -512,6 +512,9 @@ namespace services.Controllers
                                 adw.Id = 0;
                                 adw.RowStatusId = DataDetail.ROWSTATUS_DELETED;
                                 details.Add(adw);
+
+                                //delete any files associated with this detail item
+                                Resources.ActivitiesFileHelper.DeleteAllFilesForDetail(adw, dataset);
                             }
                             //otherwise nothing.
                         }
