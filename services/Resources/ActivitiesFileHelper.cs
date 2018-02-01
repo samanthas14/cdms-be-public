@@ -21,7 +21,7 @@ namespace services.Resources
             //all files for this dataset
             List<Models.File> files = (from f in db.Files where f.DatasetId == dataset.Id select f).ToList<Models.File>();
 
-
+            //delete files from the header
             //iterate all files
             //and then iterate all file fields and see if file is in one... if so, delete it.
             foreach (var file in files)
@@ -40,7 +40,7 @@ namespace services.Resources
                         //logger.Debug("checking for file match in file_field_value = " + file_field_value);
                         //logger.Debug("  looking for: " + @"""" + file.Name + @"""");
 
-                        if (file_field_value.ToString().Contains(@"""" + file.Name + @""""))
+                        if (file_field_value != null && file_field_value.ToString().Contains(@"""" + file.Name + @""""))
                         {
                             logger.Debug("OK! we are deleting this file : " + file.Name + " because it is in this field " + file_field_value);
                             DeleteDatasetFile(file, dataset.ProjectId, dataset.Id);
@@ -50,19 +50,42 @@ namespace services.Resources
                     {
                         logger.Debug("property not found (no files for that field?): " + field.DbColumnName);
                     }
-                    
-
                 }
-
-                /*
-                //detail fields that have files
-                foreach (var field in dataset.Fields.Where(o => o.ControlType == "file" && o.FieldRoleId == 2))
-                {
-                    //look for match
-
-                }
-                */
             }
+
+            //delete files from each detail row
+            foreach (var detail in data.Details)
+            {
+                foreach(var file in files)
+                {
+                    foreach (var field in dataset.Fields.Where(o => o.ControlType == "file" && o.FieldRoleId == 2)) //detail role fields
+                    {
+                        //look for match
+                        var file_field_property = detail.GetType().GetProperty(field.DbColumnName);
+
+                        if (file_field_property != null)
+                        {
+                            var file_field_value = file_field_property.GetValue(detail, null);
+
+                            //logger.Debug("checking for file match in file_field_value = " + file_field_value);
+                            //logger.Debug("  looking for: " + @"""" + file.Name + @"""");
+
+                            if (file_field_value != null && file_field_value.ToString().Contains(@"""" + file.Name + @""""))
+                            {
+                                logger.Debug("OK! we are deleting this file : " + file.Name + " because it is in this field " + file_field_value);
+                                DeleteDatasetFile(file, dataset.ProjectId, dataset.Id);
+                            }
+                        }
+                        else
+                        {
+                            logger.Debug("property not found (no files for that field?): " + field.DbColumnName);
+                        }
+                    }
+                }
+            }
+
+            logger.Debug(" >> done -- all files deleted for activity ID: " + data.Header.ActivityId);
+
         }
 
         //removes the file from both the File table and the disk
