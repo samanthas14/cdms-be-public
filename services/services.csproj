@@ -371,6 +371,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ActivitiesFileHelper.cs" />
     <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
     <Compile Include="Resources\CipherHelper.cs" />
