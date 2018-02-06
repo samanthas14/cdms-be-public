@@ -293,6 +293,10 @@
     <Compile Include="Migrations\201801301748562_FishScalesViewsUpd.Designer.cs">
       <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802062119013_AppraisalQAStatusFix.cs" />
+    <Compile Include="Migrations\201802062119013_AppraisalQAStatusFix.Designer.cs">
+      <DependentUpon>201802062119013_AppraisalQAStatusFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -436,6 +440,7 @@
     <Content Include="Migrations\20180118a_CrppCleanupFieldsAndDsFields.sql" />
     <Content Include="Migrations\20180118b_CrppAddNewDatasetFields.sql" />
     <Content Include="Migrations\20180126a_CrppAddNewDatasetFields.sql" />
+    <Content Include="Migrations\20180206_appraisalqastatusfix.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -546,6 +551,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801301748562_FishScalesViewsUpd.resx">
       <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802062119013_AppraisalQAStatusFix.resx">
+      <DependentUpon>201802062119013_AppraisalQAStatusFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
