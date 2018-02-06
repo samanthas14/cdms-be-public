@@ -33,7 +33,7 @@ namespace services.Resources
 
             //logger.Debug(json.Fields);
             //logger.Debug(json.Fields.ToString());
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             //fields in the criteria
             foreach (var item in json.Fields)
