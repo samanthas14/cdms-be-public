@@ -208,10 +208,17 @@ namespace services.Controllers
                 //make sure we can cast as an int otherwise it will throw an exception.
                 int test_int = item.Id.ToObject<int>();
                 Activities.Add("" + test_int);
+
+                //delete all the files for this activity
+                Resources.ActivitiesFileHelper.DeleteAllFilesForActivity(GetDatasetActivityData(test_int), dataset);
             }
 
             var ActivityIds = string.Join(",", Activities);
+
+            logger.Debug("Deleting the following activities: " + ActivityIds);
+
             var DataTable = dataset.Datastore.TablePrefix;
+
 
             //open a raw database connection...
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -246,7 +253,7 @@ namespace services.Controllers
                     cmd.ExecuteNonQuery();
                 }
             }
-
+            
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
@@ -505,6 +512,9 @@ namespace services.Controllers
                                 adw.Id = 0;
                                 adw.RowStatusId = DataDetail.ROWSTATUS_DELETED;
                                 details.Add(adw);
+
+                                //delete any files associated with this detail item
+                                Resources.ActivitiesFileHelper.DeleteAllFilesForDetail(adw, dataset);
                             }
                             //otherwise nothing.
                         }
