@@ -305,6 +305,10 @@
     <Compile Include="Migrations\201802072318166_WtUpdDatasetConfig.Designer.cs">
       <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.cs" />
+    <Compile Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.Designer.cs">
+      <DependentUpon>201802080041112_FixMissingActivitiesPageInConfigs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -451,6 +455,7 @@
     <Content Include="Migrations\20180118b_CrppAddNewDatasetFields.sql" />
     <Content Include="Migrations\20180126a_CrppAddNewDatasetFields.sql" />
     <Content Include="Migrations\20180206_appraisalqastatusfix.sql" />
+    <Content Include="Migrations\20180208_updateconfig_activitiespage.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -570,6 +575,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802072318166_WtUpdDatasetConfig.resx">
       <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.resx">
+      <DependentUpon>201802080041112_FixMissingActivitiesPageInConfigs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
