@@ -301,6 +301,10 @@
     <Compile Include="Migrations\201802070052225_WqUpdateDatasetConfig.Designer.cs">
       <DependentUpon>201802070052225_WqUpdateDatasetConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802072318166_WtUpdDatasetConfig.cs" />
+    <Compile Include="Migrations\201802072318166_WtUpdDatasetConfig.Designer.cs">
+      <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -563,6 +567,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802070052225_WqUpdateDatasetConfig.resx">
       <DependentUpon>201802070052225_WqUpdateDatasetConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802072318166_WtUpdDatasetConfig.resx">
+      <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
