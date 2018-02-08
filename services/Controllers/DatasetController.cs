@@ -206,7 +206,12 @@ namespace services.Controllers
                 DatasetField the_ds_field = new DatasetField();
 
                 the_ds_field.FieldId = the_field.Id;
-                the_ds_field.FieldRoleId = 2;
+
+                //pick up the fieldroleid from the way it is used in datasetfields.
+                the_ds_field.FieldRoleId = (from d in db.DatasetFields
+                                            where d.FieldId == the_field.Id
+                                            select d.FieldRoleId).FirstOrDefault();
+
                 the_ds_field.CreateDateTime = DateTime.Now;
                 the_ds_field.Label = the_field.Name;
                 the_ds_field.DbColumnName = the_field.DbColumnName;
