@@ -14,7 +14,7 @@ where id in (select d.Id from Datasets d
 where ds.TablePrefix = 'CrppContracts' );
 
 --waterquality - update ShowFields to HiddenFields
-update datasets set Config = '{"DataEntryPage":{"HiddenFields": ["BulkQaChange","ActivityDate"],"ActivitiesPage":{"ShowFields":["Description","Location.Label","headerdata.DataType","User.Fullname"]}}' 
+update datasets set Config = '{"DataEntryPage":{"HiddenFields": ["BulkQaChange","ActivityDate"]},"ActivitiesPage":{"ShowFields":["Description","Location.Label","headerdata.DataType","User.Fullname"]}}' 
 where id in (select d.Id from Datasets d
  join DataStores ds on d.DatastoreId = ds.Id
 where ds.TablePrefix = 'WaterQuality' );
