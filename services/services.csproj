@@ -317,6 +317,10 @@
     <Compile Include="Migrations\201802091829502_MetricsUpdView.Designer.cs">
       <DependentUpon>201802091829502_MetricsUpdView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802091905138_ArtProdUpdView.cs" />
+    <Compile Include="Migrations\201802091905138_ArtProdUpdView.Designer.cs">
+      <DependentUpon>201802091905138_ArtProdUpdView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -593,6 +597,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802091829502_MetricsUpdView.resx">
       <DependentUpon>201802091829502_MetricsUpdView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802091905138_ArtProdUpdView.resx">
+      <DependentUpon>201802091905138_ArtProdUpdView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
