@@ -330,8 +330,38 @@ namespace services.Controllers
             //now move the file from where it is to the project directory with the new name.
             new_filename = subproject_directory + @"\" + orig_filename;
             logger.Debug("Moving uploaded file to: " + new_filename);
+
+            //*** For BodyPart cleanup, turn this line off.
             System.IO.File.Move(current_fullfile, new_filename);
 
+            // Turn these lines on.
+            /*
+            if (System.IO.File.Exists(new_filename))
+            {
+                logger.Debug("Oops!  That file already exists in the folder.  Cleaning up...");
+                logger.Debug("current_fullfile = " + current_fullfile);
+                logger.Debug("Deleting this file:  " + current_fullfile);
+                System.IO.File.Delete(current_fullfile);
+                return "Error_Duplicate_file";
+            }
+
+            try
+            {
+                System.IO.File.Move(current_fullfile, new_filename);
+                logger.Debug("File moved OK...");
+                return new_filename;
+            }
+            catch (System.IO.IOException sioe)
+            {
+                logger.Debug("This file was not a duplicate, but it could not be saved.  This was the error...");
+                string strErrorMessage = "Error message = " + sioe.Message.ToString() + ", inner error message = " + sioe.InnerException.ToString();
+                logger.Debug(strErrorMessage);
+                logger.Debug("Leaving the body part in place, for follow-up troubleshooting....");
+                return "Error" + strErrorMessage;
+            }
+            */
+
+            // Turn this line off.
             return new_filename;
         }
 

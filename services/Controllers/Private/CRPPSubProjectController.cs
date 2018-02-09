@@ -32,6 +32,8 @@ namespace services.Controllers
             logger.Debug("Inside UploadSubprojectFile...");
             logger.Debug("starting to process incoming subproject files.");
 
+            string strErrorMessage = "";
+
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
@@ -162,43 +164,57 @@ namespace services.Controllers
                                             filename,
                                             false);
 
-                            var info = new System.IO.FileInfo(newFileName);
+                            //*** For BodyPart cleanup, turn this lines on.
+                            //if (newFileName.IndexOf("Error") < 0)
+                            //{
 
-                            services.Models.File newFile = new services.Models.File();
-                            newFile.Title = provider.FormData.Get("Title"); //"Title_1, etc.
-                            logger.Debug("Title = " + newFile.Title);
+                                var info = new System.IO.FileInfo(newFileName);
 
-                            newFile.Description = provider.FormData.Get("Description"); //"Description_1, etc.
-                            logger.Debug("Desc = " + newFile.Description);
+                                services.Models.File newFile = new services.Models.File();
+                                newFile.Title = provider.FormData.Get("Title"); //"Title_1, etc.
+                                logger.Debug("Title = " + newFile.Title);
 
-                            newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
-                                                     //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
-                                                     //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
-                                                     //if (strDatastoreTablePrefix == "CrppContracts")
-                                                     //{
-                                                     //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\uploads\\" + SubprojectId + "\\" + info.Name;
-                                                     //    newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
-                                                     //}
-                                                     //else
-                                                     //    newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/" + ProjectId + "/" + info.Name;
+                                newFile.Description = provider.FormData.Get("Description"); //"Description_1, etc.
+                                logger.Debug("Desc = " + newFile.Description);
 
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
-                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
+                                newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
+                                                         //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
+                                                         //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
+                                                         //if (strDatastoreTablePrefix == "CrppContracts")
+                                                         //{
+                                                         //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\uploads\\" + SubprojectId + "\\" + info.Name;
+                                                         //    newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
+                                                         //}
+                                                         //else
+                                                         //    newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/" + ProjectId + "/" + info.Name;
+
+                                //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
+                                newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
 
 
 
-                            newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
-                            newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
-                            newFile.UserId = me.Id;
-                            newFile.ProjectId = ProjectId;
-                            newFile.DatasetId = null; // No datasetId for subproject files.
-                            newFile.Subproject_CrppId = SubprojectId;
-                            logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
+                                newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
+                                newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
+                                newFile.UserId = me.Id;
+                                newFile.ProjectId = ProjectId;
+                                newFile.DatasetId = null; // No datasetId for subproject files.
+                                newFile.Subproject_CrppId = SubprojectId;
+                                logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
 
-                            files.Add(newFile);
+                                files.Add(newFile);
+
+                            // For BodyPart cleanup, turn these lines on.
+                            //}
+                            //else
+                            //{
+                            //    Exception anException = new Exception(newFileName);
+                            //    throw anException;
+                            //}
                         }
                         catch (Exception e)
                         {
+                            // For BodyPart cleanup, turn this line on.
+                            //strErrorMessage = "Error: " + e.ToString();
                             logger.Debug("Error: " + e.ToString());
                         }
                     }
@@ -221,11 +237,33 @@ namespace services.Controllers
 
                 }
 
+                //*** For BodyPart cleanup, turn these lines off.
+                // Original lines
                 logger.Debug("Done saving subproject files.");
                 var result = JsonConvert.SerializeObject(thefiles);
                 HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
                 resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
 
+                //*** For BodyPart cleanup, turn these lines on. 
+                // New lines to return the error message.
+                /*HttpResponseMessage resp;
+                if (String.IsNullOrEmpty(strErrorMessage))
+                {
+                    logger.Debug("Done saving subproject files.");
+                    var result = JsonConvert.SerializeObject(thefiles);
+                    resp = new HttpResponseMessage(HttpStatusCode.OK);
+                    resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
+                    return resp;
+                }
+                else
+                {
+                    resp = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                    resp.Content = new StringContent(strErrorMessage, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
+                    return resp;
+                }
+                */
+
+                //*** For BodyPart cleanup, turn this line off.
                 return resp;
             });
 
