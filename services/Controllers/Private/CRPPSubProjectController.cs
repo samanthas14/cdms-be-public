@@ -314,7 +314,7 @@ namespace services.Controllers
         {
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
@@ -455,7 +455,7 @@ namespace services.Controllers
             logger.Debug("Set database...");
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
             User me = AuthorizationManager.getCurrentUser();
             Project p = db.Projects.Find(json.ProjectId.ToObject<int>());
             logger.Debug("ProjectId = " + p.Id);
@@ -514,7 +514,7 @@ namespace services.Controllers
             logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             logger.Debug("me = " + me);
@@ -657,7 +657,7 @@ namespace services.Controllers
             logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             //logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
