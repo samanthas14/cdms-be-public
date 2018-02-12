@@ -313,13 +313,9 @@
     <Compile Include="Migrations\201802081943419_HideRowQAStatusForCertainDatasets.Designer.cs">
       <DependentUpon>201802081943419_HideRowQAStatusForCertainDatasets.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201802091829502_MetricsUpdView.cs" />
-    <Compile Include="Migrations\201802091829502_MetricsUpdView.Designer.cs">
-      <DependentUpon>201802091829502_MetricsUpdView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201802091905138_ArtProdUpdView.cs" />
-    <Compile Include="Migrations\201802091905138_ArtProdUpdView.Designer.cs">
-      <DependentUpon>201802091905138_ArtProdUpdView.cs</DependentUpon>
+    <Compile Include="Migrations\201802100102334_UpdViewsForLocationLabel.cs" />
+    <Compile Include="Migrations\201802100102334_UpdViewsForLocationLabel.Designer.cs">
+      <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -595,11 +591,8 @@
     <EmbeddedResource Include="Migrations\201802081943419_HideRowQAStatusForCertainDatasets.resx">
       <DependentUpon>201802081943419_HideRowQAStatusForCertainDatasets.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802091829502_MetricsUpdView.resx">
-      <DependentUpon>201802091829502_MetricsUpdView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802091905138_ArtProdUpdView.resx">
-      <DependentUpon>201802091905138_ArtProdUpdView.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201802100102334_UpdViewsForLocationLabel.resx">
+      <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1276,6 +1276,47 @@ namespace services.Controllers
             return datatable;
         }
         */
+
+        public DataTable QueryActivities(string strQuery)
+        {
+            logger.Debug("Inside ActivityController.cs, QueryActivities...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(strQuery, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            return datatable;
+        }
+
         public DataTable QuerySpecificActivities(JObject jsonData)
         {
             logger.Debug("Inside ActivityController.cs, QuerySpecificActivities...");
@@ -1371,7 +1412,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1402,6 +1445,7 @@ namespace services.Controllers
             }
 
             return datatable;
+            */
         }
 
         // QuerySpecificActivitiesWithBounds
@@ -1412,7 +1456,7 @@ namespace services.Controllers
             logger.Debug("Inside ActivityController.cs, QuerySpecificActivitiesWithBounds...");
             var db = ServicesContext.Current;
             //DataTable datatable = null;
-            DataTable datatable = new DataTable();
+            //DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
             //logger.Debug("json = " + json);
@@ -1549,7 +1593,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1585,6 +1631,7 @@ namespace services.Controllers
             //}
 
             return datatable;
+            */
         }
 
         //QuerySpecificWaterTempActivities
@@ -1741,7 +1788,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1772,6 +1821,7 @@ namespace services.Controllers
             }
 
             return datatable;
+            */
         }
     }
 }

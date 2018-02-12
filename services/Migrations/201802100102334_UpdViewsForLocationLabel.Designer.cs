@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class MetricsUpdView : IMigrationMetadata
+    public sealed partial class UpdViewsForLocationLabel : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MetricsUpdView));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdViewsForLocationLabel));
         
         string IMigrationMetadata.Id
         {
-            get { return "201802091829502_MetricsUpdView"; }
+            get { return "201802100102334_UpdViewsForLocationLabel"; }
         }
         
         string IMigrationMetadata.Source
