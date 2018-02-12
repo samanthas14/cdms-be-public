@@ -93,7 +93,7 @@ namespace services.Controllers
             logger.Debug("Inside UploadHabitatFile...");
             logger.Debug("starting to process incoming Habitat files.");
 
-            /* -- ken you were here -- I think we can use the files here instead of the old way... 
+            /* -- we can simplify this maybe -- check out this newer way... 
              https://stackoverflow.com/questions/10320232/how-to-accept-a-file-post
             */
             var httpRequest = System.Web.HttpContext.Current.Request;
@@ -224,12 +224,6 @@ namespace services.Controllers
                     {
                         try
                         {
-                            //var newFileName = ActionController.relocateSubprojectFile(
-                            //                file.LocalFileName,
-                            //                SubprojectId,
-                            //                filename,
-                            //                false);
-
                             var newFileName = FileController.relocateSubprojectFile(
                                             file.LocalFileName,
                                             ProjectId,
@@ -249,9 +243,6 @@ namespace services.Controllers
                             newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
                             logger.Debug("newFile.Name = " + newFile.Name);
 
-                            //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
-                            //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
                             newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
                             logger.Debug("newFile.Link = " + newFile.Link);
 
@@ -288,6 +279,7 @@ namespace services.Controllers
                         catch (Exception e)
                         {
                             logger.Debug("Error: " + e.ToString());
+                            throw e; //rethrow.
                         }
                     }
                 }
@@ -334,7 +326,7 @@ namespace services.Controllers
                         catch (System.Exception e)
                         {
                             logger.Debug("Error = " + e.InnerException);
-
+                            throw e;
                         }
                     }
 
@@ -364,52 +356,14 @@ namespace services.Controllers
                     catch (System.Exception e)
                     {
                         logger.Debug("Error = " + e.InnerException);
+                        throw e;
 
                     }
                     logger.Debug("Saved changes to db...");
                 }
-
-
-                // Now get the ID of the file we just saved.
-                /*foreach (var file in files)
-                {
-                    List<services.Models.File> fileList = (from item in db.Files
-                                                           where item.Name == file.Name
-                                                           where item.ProjectId == project.Id
-                                                           where item.FileTypeId == file.FileTypeId
-                                                           orderby item.Id
-                                                           select item).ToList();
-
-                    // Add the record to the subbproject files
-                    // There should be only one.
-                    string strAFile = "";
-                    foreach (var fileRecord in fileList)
-                    {
-                        logger.Debug("Saving fileId " + fileRecord.Id + ", fileName = " + fileRecord.Name);
-                        SubprojectFiles aFile = new SubprojectFiles();
-                        aFile.ProjectId = project.Id;
-                        aFile.SubprojectId = subproject.Id;
-                        aFile.FileId = fileRecord.Id;
-                        aFile.FileName = fileRecord.Name;
-                        aFile.FeatureImage = SubprojectFeatureImage;
-
-                        strAFile += " aFile.ProjectId = " + aFile.ProjectId + "\n";
-                        strAFile += " aFile.SubprojectId = " + aFile.SubprojectId + "\n";
-                        strAFile += " aFile.FileId = " + aFile.FileId + "\n";
-                        strAFile += " aFile.FileName = " + aFile.FileName + "\n";
-                        strAFile += " aFile.FeatureImage = " + aFile.FeatureImage + "\n";
-                        logger.Debug("strAFile = " + strAFile);
-
-                        db.SubprojectFiles.Add(aFile);
-                    }
-                    db.SaveChanges();
-                }
-                */
-
+                
                 logger.Debug("Done saving files.");
-                //var result = JsonConvert.SerializeObject(thefiles);
                 var result = JsonConvert.SerializeObject(files);
-                //var result2 = JsonConvert.SerializeObject(fileIds);
                 logger.Debug("result = " + result);
 
                 HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
