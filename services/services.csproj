@@ -317,6 +317,10 @@
     <Compile Include="Migrations\201802100102334_UpdViewsForLocationLabel.Designer.cs">
       <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.cs" />
+    <Compile Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.Designer.cs">
+      <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -593,6 +597,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802100102334_UpdViewsForLocationLabel.resx">
       <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.resx">
+      <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

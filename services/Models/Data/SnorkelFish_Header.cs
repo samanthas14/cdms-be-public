@@ -9,8 +9,7 @@ namespace services.Models.Data
         public string NoteTaker { get; set; } 
         public string StartTime { get; set; } 
         public string EndTime { get; set; } 
-        //public double? WaterTemperature { get; set; }
-        public double? StartWaterTemp { get; set; }
+        public double? StartWaterTemp { get; set; } 
         public string Visibility { get; set; }
         public string WeatherConditions{ get; set; } 
         public int? VisitId { get; set; }
@@ -19,7 +18,6 @@ namespace services.Models.Data
         public string DominantSpecies { get; set; } 
         public string CommonSpecies { get; set; } 
         public string RareSpecies { get; set; } 
-        //public string Unit { get; set; }
         public string IsAEM { get; set; }
 
         public int? HabitatVisitId { get; set; }
