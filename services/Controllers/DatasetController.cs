@@ -302,6 +302,7 @@ namespace services.Controllers
             df.Label = json.Label;
             df.Validation = json.Validation;
             df.Rule = json.Rule;
+            df.DbColumnName = json.DbColumnName;
             df.FieldRoleId = json.FieldRoleId.ToObject<int>();
             try
             {
