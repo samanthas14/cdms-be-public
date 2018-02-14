@@ -321,9 +321,22 @@
     <Compile Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.Designer.cs">
       <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.cs" />
+    <Compile Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.Designer.cs">
+      <DependentUpon>201802142229433_AddTblCountyAndUpdCrppSp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802142237140_CrppReviseDbData.cs" />
+    <Compile Include="Migrations\201802142237140_CrppReviseDbData.Designer.cs">
+      <DependentUpon>201802142237140_CrppReviseDbData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802142245112_UsersUpdCrpp.cs" />
+    <Compile Include="Migrations\201802142245112_UsersUpdCrpp.Designer.cs">
+      <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
+    <Compile Include="Models\County.cs" />
     <Compile Include="Models\Data\Benthic.cs" />
     <Compile Include="Models\Data\Benthic_Detail.cs" />
     <Compile Include="Models\Data\Benthic_Header.cs" />
@@ -600,6 +613,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.resx">
       <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.resx">
+      <DependentUpon>201802142229433_AddTblCountyAndUpdCrppSp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142237140_CrppReviseDbData.resx">
+      <DependentUpon>201802142237140_CrppReviseDbData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142245112_UsersUpdCrpp.resx">
+      <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

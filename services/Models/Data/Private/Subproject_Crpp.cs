@@ -50,6 +50,7 @@ namespace services.Models.Data
         public string OtherAgency { get; set; }
         public string OtherProjectProponent { get; set; }
         public string OtherCounty { get; set; }
+        public int ProjectId { get; set; }
 
         public virtual List<CorrespondenceEvents> CorrespondenceEvents { get; set; }
     }
