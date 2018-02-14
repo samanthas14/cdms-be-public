@@ -181,7 +181,7 @@ namespace services.Controllers
         public HttpResponseMessage SaveProject(JObject jsonData)
         {
             var db = ServicesContext.Current;
-
+            Project return_project = null;
             dynamic json = jsonData;
 
             var in_project = json.Project.ToObject<Project>();
@@ -219,6 +219,7 @@ namespace services.Controllers
                 in_project.Metadata = metadata;
                 db.SaveChanges(); //not sure if this is required.
                 logger.Debug("Created new project: " + in_project.Id);
+                return_project = in_project;
             }
             else
             {
@@ -249,12 +250,14 @@ namespace services.Controllers
 
                 project.Metadata = metadata;
                 db.SaveChanges();
+                return_project = project;
 
             }
 
-            HttpResponseMessage resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            //HttpResponseMessage resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, return_project);
 
-            return resp;
+            return response;
         }
 
 
