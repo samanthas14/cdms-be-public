@@ -300,6 +300,27 @@ namespace services.Controllers
             /******************************************/
         }
 
+        // GET /api/v1/crppsubproject/getprojectcounties/5
+        [System.Web.Http.HttpGet]
+        public IEnumerable<County> GetProjectCounties(int Id)
+        {
+            logger.Debug("Inside GetProjectCounties...");
+            logger.Debug("Fetching Counties for Project " + Id);
+            var result = new List<Collaborator>();
+
+            var ndb = ServicesContext.Current;
+
+            //var datasets = ndb.Datasets.Where(o => o.ProjectId == Id);
+            var c = (from item in ndb.Counties
+                         //where item.Id > 1
+                     where item.ProjectId == Id
+                     orderby item.ProjectId, item.SubprojectId
+                     select item).ToList();
+
+            //return datasets;
+            return c;
+        }
+
         // POST /api/v1/crppsubproject/deletecorreseventfile
         [HttpPost]
         public HttpResponseMessage DeleteCorresEventFile(JObject jsonData)
