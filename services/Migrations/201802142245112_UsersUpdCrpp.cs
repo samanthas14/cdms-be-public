@@ -8,7 +8,7 @@ namespace services.Migrations
         public override void Up()
         {
             Sql(@"
-update dbo.Users set Inactive = 1 where  [Id] in (3120, 3121)
+update dbo.Users set Inactive = 1 where  [Id] in (3120, 3121, 3131)
             ");
         }
         
