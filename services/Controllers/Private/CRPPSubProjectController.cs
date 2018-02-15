@@ -569,7 +569,7 @@ namespace services.Controllers
                 "s.ProjectLead = " + s.ProjectLead + "\n" +
                 "s.EffDt = " + s.EffDt + "\n" +
                 "s.ByUserId = " + s.ByUserId + "\n" +
-                "s.County = " + s.County + "\n" +
+                //"s.County = " + s.County + "\n" +
                 "s.OtherCounty = " + s.OtherCounty + "\n" +
                 "s.ProjectDescription = " + s.ProjectDescription + "\n" +
                 "s.UIR = " + s.UIR + "\n" +
@@ -616,7 +616,7 @@ namespace services.Controllers
                     s2.TrackingNumber = s.TrackingNumber;
                     s2.Closed = s.Closed;
                     s2.ProjectLead = s.ProjectLead;
-                    s2.County = s.County;
+                    //s2.County = s.County;
                     s2.OtherAgency = s.OtherAgency;
                     s2.OtherCounty = s.OtherCounty;
                     s2.ProjectDescription = s.ProjectDescription;
@@ -652,6 +652,90 @@ namespace services.Controllers
 
             System.IO.Directory.CreateDirectory(strSubprojectsPath);
             logger.Debug("Just created folder for the new subproject:  " + s.Id);
+
+            int newId = s.Id;
+            logger.Debug("newId = " + s.Id);
+
+
+            // Counties Start*********************************
+            var counties = new List<County>();
+            logger.Debug("Created counties...");
+
+            // Let's check for a county object.
+            // This works.  Now we need to add the incoming record to the County table.
+            try
+            {
+                logger.Debug("Trying to extract County...");
+                string strCounty = (string)jsonData["Subproject"]["CountyAry"].ToString();
+                logger.Debug("strCounty = " + strCounty);
+                if ((!String.IsNullOrEmpty(strCounty)) || (strCounty.Length < 3)) // < 3 means "[]"
+                {
+                    JArray aryCounty = (JArray)jsonData["Subproject"]["CountyAry"];
+                    logger.Debug("Created aryCounty...");
+                    foreach (JToken c in aryCounty)
+                    {
+                        logger.Debug("Inside aryCounty loop.");
+                        //logger.Debug("Name = " + c["Name"]);
+
+                        County county = new County();
+                        //county.Id = Convert.ToInt32(c["Id"].ToString());
+                        county.Name = c["Name"].ToString();
+                        county.SubprojectId = newId;
+                        county.ProjectId = p.Id;
+
+                        //logger.Debug("county.Id = " + county.Id);
+                        logger.Debug("county.Name = " + county.Name);
+                        logger.Debug("county.SubprojectId = " + s.Id);
+                        logger.Debug("county.ProjectId = " + p.Id);
+
+                        counties.Add(county);
+                    }
+
+                    logger.Debug("Cleaning out county data for this subproject...");
+                    // If the county list changes, we cannot use the current list to determine who used to be on the list.
+                    // Therefore, just delete all the county for this subproject first, then we will add the ones actually assocated to the subproject.
+                    List<services.Models.County> countyList = (from item in db.Counties
+                                                               where item.ProjectId == p.Id
+                                                               where item.SubprojectId == s.Id
+                                                               orderby item.Id
+                                                               select item).ToList();
+
+                    foreach (var item in countyList)
+                    {
+                        db.Counties.Remove(item);
+                        logger.Debug("Removed county: " + item.Name);
+                    }
+
+
+
+                    logger.Debug("");
+                    logger.Debug("counties.length = " + counties.Count());
+                    foreach (var item in counties)
+                    {
+                        //logger.Debug("item.Id = " + item.Id);
+                        logger.Debug("item.Name = " + item.Name);
+                        //logger.Debug("item.OtherName = " + item.OtherName);
+                        //if (item.Id == 0)
+                        //{
+                        db.Counties.Add(item);
+                        logger.Debug("Added county Name: " + item.Name);
+                        //}
+                        //else
+                        //{
+                        //    db.Entry(item).State = EntityState.Modified;
+                        //    logger.Debug("Updated funder Id: " + item.Id + ", Name: " + item.Name);
+                        //}
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch (System.Exception e)
+            {
+                logger.Debug(e.Message + ", " + e.InnerException);
+                logger.Debug("Could not locate county (optional field).  Skipping...");
+            }
+            // County end**************************************
+
 
             //return new HttpResponseMessage(HttpStatusCode.OK);
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, s);
