@@ -29,7 +29,7 @@ namespace services.Controllers
             logger.Debug("Inside SaveProjectLocation...");
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
             User me = AuthorizationManager.getCurrentUser();
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
             if (project == null)

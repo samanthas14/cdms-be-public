@@ -272,5 +272,19 @@ namespace services.Controllers
 
             return myprojects;
         }
+
+        // GET api/v1/user/getCrppStaff
+        public IEnumerable<User> GetCrppStaff()
+        {
+            logger.Debug("Inside UserController.cs, GetCrppStaff...");
+            var db = ServicesContext.Current;
+            List<User> userList = (from u in db.User
+                                   where u.Inactive == null && u.Roles.Contains("CRPP")
+                                   orderby u.Fullname
+                                   select u).ToList();
+
+            //return userAsEnumerable();
+            return userList.AsEnumerable();
+        }
     }
 }

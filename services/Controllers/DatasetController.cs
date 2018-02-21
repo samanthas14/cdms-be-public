@@ -131,6 +131,7 @@ namespace services.Controllers
         // GET /api/v1/dataset/getheadersdatafordataset/5
         public DataTable GetHeadersDataForDataset(int id)
         {
+            logger.Debug("Inside DatasetController.cs, GetHeadersDataForDataset...");
             var db = ServicesContext.Current;
             Dataset dataset = db.Datasets.Find(id);
             if (dataset == null)
@@ -205,7 +206,14 @@ namespace services.Controllers
                 DatasetField the_ds_field = new DatasetField();
 
                 the_ds_field.FieldId = the_field.Id;
-                the_ds_field.FieldRoleId = 2;
+
+                var field_role = (from d in db.DatasetFields
+                                  where d.FieldId == the_field.Id
+                                  select d.FieldRoleId).FirstOrDefault();
+
+                //pick up the fieldroleid from the way it is used in datasetfields.
+                the_ds_field.FieldRoleId = (field_role != 0) ? field_role : 2; //default to DETAIL (2)
+
                 the_ds_field.CreateDateTime = DateTime.Now;
                 the_ds_field.Label = the_field.Name;
                 the_ds_field.DbColumnName = the_field.DbColumnName;
@@ -296,6 +304,7 @@ namespace services.Controllers
             df.Label = json.Label;
             df.Validation = json.Validation;
             df.Rule = json.Rule;
+            df.DbColumnName = json.DbColumnName;
             df.FieldRoleId = json.FieldRoleId.ToObject<int>();
             try
             {

@@ -208,10 +208,17 @@ namespace services.Controllers
                 //make sure we can cast as an int otherwise it will throw an exception.
                 int test_int = item.Id.ToObject<int>();
                 Activities.Add("" + test_int);
+
+                //delete all the files for this activity
+                Resources.ActivitiesFileHelper.DeleteAllFilesForActivity(GetDatasetActivityData(test_int), dataset);
             }
 
             var ActivityIds = string.Join(",", Activities);
+
+            logger.Debug("Deleting the following activities: " + ActivityIds);
+
             var DataTable = dataset.Datastore.TablePrefix;
+
 
             //open a raw database connection...
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -246,7 +253,7 @@ namespace services.Controllers
                     cmd.ExecuteNonQuery();
                 }
             }
-
+            
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 
@@ -505,6 +512,9 @@ namespace services.Controllers
                                 adw.Id = 0;
                                 adw.RowStatusId = DataDetail.ROWSTATUS_DELETED;
                                 details.Add(adw);
+
+                                //delete any files associated with this detail item
+                                Resources.ActivitiesFileHelper.DeleteAllFilesForDetail(adw, dataset);
                             }
                             //otherwise nothing.
                         }
@@ -618,7 +628,7 @@ namespace services.Controllers
             User me = AuthorizationManager.getCurrentUser();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             //COPY PASTE -- TODO -- reduce code smell!
             Dataset dataset = db.Datasets.Find(json.DatasetId.ToObject<int>());
@@ -1266,6 +1276,47 @@ namespace services.Controllers
             return datatable;
         }
         */
+
+        public DataTable QueryActivities(string strQuery)
+        {
+            logger.Debug("Inside ActivityController.cs, QueryActivities...");
+            var db = ServicesContext.Current;
+            //DataTable datatable = null;
+            DataTable datatable = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                // Enable setting the command timeout.
+                con.Open();
+                logger.Debug("Opened connection...");
+
+                SqlCommand cmd = new SqlCommand(strQuery, con);
+                logger.Debug("Created SQL commaned...");
+
+                cmd.CommandTimeout = 120; // 2 minutes in seconds.
+                logger.Debug("Set cmd timeout...");
+
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    logger.Debug("Created SqlDataAdapter...");
+
+                    da.SelectCommand.CommandTimeout = 120; // 2 minutes in seconds
+                    logger.Debug("Set da timeout...");
+
+                    da.Fill(datatable);
+                    logger.Debug("Filled SqlDataAdapter da...");
+                }
+                catch (SqlException e)
+                {
+                    logger.Debug("Query sql command timed out..." + e.Message);
+                    logger.Debug(e.InnerException);
+                }
+            }
+
+            return datatable;
+        }
+
         public DataTable QuerySpecificActivities(JObject jsonData)
         {
             logger.Debug("Inside ActivityController.cs, QuerySpecificActivities...");
@@ -1274,7 +1325,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
@@ -1361,7 +1412,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1392,6 +1445,7 @@ namespace services.Controllers
             }
 
             return datatable;
+            */
         }
 
         // QuerySpecificActivitiesWithBounds
@@ -1402,7 +1456,7 @@ namespace services.Controllers
             logger.Debug("Inside ActivityController.cs, QuerySpecificActivitiesWithBounds...");
             var db = ServicesContext.Current;
             //DataTable datatable = null;
-            DataTable datatable = new DataTable();
+            //DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
             //logger.Debug("json = " + json);
@@ -1539,7 +1593,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1575,6 +1631,7 @@ namespace services.Controllers
             //}
 
             return datatable;
+            */
         }
 
         //QuerySpecificWaterTempActivities
@@ -1588,7 +1645,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
@@ -1731,7 +1788,9 @@ namespace services.Controllers
 
             logger.Debug("query = " + query);
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            return QueryActivities(query);
+
+            /*using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 // Enable setting the command timeout.
                 con.Open();
@@ -1762,6 +1821,7 @@ namespace services.Controllers
             }
 
             return datatable;
+            */
         }
     }
 }

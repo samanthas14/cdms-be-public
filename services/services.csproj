@@ -123,9 +123,9 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -261,9 +261,82 @@
     <Compile Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.Designer.cs">
       <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801181735272_CrppUpdContractsDataset.cs" />
+    <Compile Include="Migrations\201801181735272_CrppUpdContractsDataset.Designer.cs">
+      <DependentUpon>201801181735272_CrppUpdContractsDataset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181736202_CrppUpdViews.cs" />
+    <Compile Include="Migrations\201801181736202_CrppUpdViews.Designer.cs">
+      <DependentUpon>201801181736202_CrppUpdViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.cs" />
+    <Compile Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.Designer.cs">
+      <DependentUpon>201801181743069_CrppCleanupFieldsAndDsFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801181818152_CrppAddNewDatasetFields.cs" />
+    <Compile Include="Migrations\201801181818152_CrppAddNewDatasetFields.Designer.cs">
+      <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801262233538_CrppContractsAddCols.cs" />
+    <Compile Include="Migrations\201801262233538_CrppContractsAddCols.Designer.cs">
+      <DependentUpon>201801262233538_CrppContractsAddCols.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801262302467_CrppContractsAddData.cs" />
+    <Compile Include="Migrations\201801262302467_CrppContractsAddData.Designer.cs">
+      <DependentUpon>201801262302467_CrppContractsAddData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801262306076_CrppUpdViews2.cs" />
+    <Compile Include="Migrations\201801262306076_CrppUpdViews2.Designer.cs">
+      <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801301748562_FishScalesViewsUpd.cs" />
+    <Compile Include="Migrations\201801301748562_FishScalesViewsUpd.Designer.cs">
+      <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802062119013_AppraisalQAStatusFix.cs" />
+    <Compile Include="Migrations\201802062119013_AppraisalQAStatusFix.Designer.cs">
+      <DependentUpon>201802062119013_AppraisalQAStatusFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802070052225_WqUpdateDatasetConfig.cs" />
+    <Compile Include="Migrations\201802070052225_WqUpdateDatasetConfig.Designer.cs">
+      <DependentUpon>201802070052225_WqUpdateDatasetConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802072318166_WtUpdDatasetConfig.cs" />
+    <Compile Include="Migrations\201802072318166_WtUpdDatasetConfig.Designer.cs">
+      <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.cs" />
+    <Compile Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.Designer.cs">
+      <DependentUpon>201802080041112_FixMissingActivitiesPageInConfigs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802081943419_HideRowQAStatusForCertainDatasets.cs" />
+    <Compile Include="Migrations\201802081943419_HideRowQAStatusForCertainDatasets.Designer.cs">
+      <DependentUpon>201802081943419_HideRowQAStatusForCertainDatasets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802100102334_UpdViewsForLocationLabel.cs" />
+    <Compile Include="Migrations\201802100102334_UpdViewsForLocationLabel.Designer.cs">
+      <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.cs" />
+    <Compile Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.Designer.cs">
+      <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.cs" />
+    <Compile Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.Designer.cs">
+      <DependentUpon>201802142229433_AddTblCountyAndUpdCrppSp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802142237140_CrppReviseDbData.cs" />
+    <Compile Include="Migrations\201802142237140_CrppReviseDbData.Designer.cs">
+      <DependentUpon>201802142237140_CrppReviseDbData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802142245112_UsersUpdCrpp.cs" />
+    <Compile Include="Migrations\201802142245112_UsersUpdCrpp.Designer.cs">
+      <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
+    <Compile Include="Models\County.cs" />
     <Compile Include="Models\Data\Benthic.cs" />
     <Compile Include="Models\Data\Benthic_Detail.cs" />
     <Compile Include="Models\Data\Benthic_Header.cs" />
@@ -371,6 +444,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ActivitiesFileHelper.cs" />
     <Compile Include="Resources\Attributes\DecimalPrecisionAttribute.cs" />
     <Compile Include="Resources\AuthorizationManager.cs" />
     <Compile Include="Resources\CipherHelper.cs" />
@@ -380,6 +454,7 @@
     <Compile Include="Resources\PitagisReader.cs" />
     <Compile Include="Resources\QueryHelper.cs" />
     <Compile Include="Resources\StringHelper.cs" />
+    <Compile Include="Resources\SubprojectFileHelper.cs" />
     <Compile Include="Resources\TSVReader.cs" />
     <Compile Include="Resources\CSVReader.cs" />
     <Compile Include="Resources\EFFileRepository.cs" />
@@ -401,12 +476,19 @@
     <Content Include="Migrations\20171212_datasetconfigupdates.sql" />
     <Content Include="Migrations\20171212_indexupdate.sql" />
     <Content Include="Migrations\20171220_UpdDsNonWtRemoveBulkRowQaBtn.sql" />
+    <Content Include="Migrations\20180118a_CrppCleanupFieldsAndDsFields.sql" />
+    <Content Include="Migrations\20180118b_CrppAddNewDatasetFields.sql" />
+    <Content Include="Migrations\20180126a_CrppAddNewDatasetFields.sql" />
+    <Content Include="Migrations\20180206_appraisalqastatusfix.sql" />
+    <Content Include="Migrations\2018020819_HideRowQAStatusForCertainDatasets.sql" />
+    <Content Include="Migrations\20180208_updateconfig_activitiespage.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
+    <Folder Include="Views\CrppDataset\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -486,6 +568,60 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801121935501_SgsDetPercRetCpyInOld.resx">
       <DependentUpon>201801121935501_SgsDetPercRetCpyInOld.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181735272_CrppUpdContractsDataset.resx">
+      <DependentUpon>201801181735272_CrppUpdContractsDataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181736202_CrppUpdViews.resx">
+      <DependentUpon>201801181736202_CrppUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181743069_CrppCleanupFieldsAndDsFields.resx">
+      <DependentUpon>201801181743069_CrppCleanupFieldsAndDsFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801181818152_CrppAddNewDatasetFields.resx">
+      <DependentUpon>201801181818152_CrppAddNewDatasetFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262233538_CrppContractsAddCols.resx">
+      <DependentUpon>201801262233538_CrppContractsAddCols.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262302467_CrppContractsAddData.resx">
+      <DependentUpon>201801262302467_CrppContractsAddData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801262306076_CrppUpdViews2.resx">
+      <DependentUpon>201801262306076_CrppUpdViews2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801301748562_FishScalesViewsUpd.resx">
+      <DependentUpon>201801301748562_FishScalesViewsUpd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802062119013_AppraisalQAStatusFix.resx">
+      <DependentUpon>201802062119013_AppraisalQAStatusFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802070052225_WqUpdateDatasetConfig.resx">
+      <DependentUpon>201802070052225_WqUpdateDatasetConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802072318166_WtUpdDatasetConfig.resx">
+      <DependentUpon>201802072318166_WtUpdDatasetConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802080041112_FixMissingActivitiesPageInConfigs.resx">
+      <DependentUpon>201802080041112_FixMissingActivitiesPageInConfigs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802081943419_HideRowQAStatusForCertainDatasets.resx">
+      <DependentUpon>201802081943419_HideRowQAStatusForCertainDatasets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802100102334_UpdViewsForLocationLabel.resx">
+      <DependentUpon>201802100102334_UpdViewsForLocationLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802132321272_SnorkelFieldDbColumnNameFix.resx">
+      <DependentUpon>201802132321272_SnorkelFieldDbColumnNameFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142229433_AddTblCountyAndUpdCrppSp.resx">
+      <DependentUpon>201802142229433_AddTblCountyAndUpdCrppSp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142237140_CrppReviseDbData.resx">
+      <DependentUpon>201802142237140_CrppReviseDbData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802142245112_UsersUpdCrpp.resx">
+      <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

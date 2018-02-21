@@ -33,7 +33,7 @@ namespace services.Controllers
             var db = ServicesContext.Current;
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
             logger.Debug("project.Id = " + project.Id);
@@ -93,9 +93,33 @@ namespace services.Controllers
             logger.Debug("Inside UploadHabitatFile...");
             logger.Debug("starting to process incoming Habitat files.");
 
-            if (!Request.Content.IsMimeMultipartContent())
+            /* -- we can simplify this maybe -- check out this newer way... 
+             https://stackoverflow.com/questions/10320232/how-to-accept-a-file-post
+            */
+            var httpRequest = System.Web.HttpContext.Current.Request;
+            logger.Debug("So we have files: " + httpRequest.Files.Count);
+
+
+            foreach (string file in httpRequest.Files)
             {
+                var postedFile = httpRequest.Files[file];
+                var filePath = System.Web.HttpContext.Current.Server.MapPath("~/" + postedFile.FileName);
+                //postedFile.SaveAs(filePath);
+                logger.Debug("--> " + filePath);
+                // NOTE: To store in memory use postedFile.InputStream
+            }
+
+            var result_dictionary = new Dictionary<string, dynamic>();
+
+            /*
+             * -- this ends your new stuff --
+            */
+
+        if (!Request.Content.IsMimeMultipartContent())
+            {
+                //TODO: wrap into results?
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                
             }
 
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
@@ -200,12 +224,6 @@ namespace services.Controllers
                     {
                         try
                         {
-                            //var newFileName = ActionController.relocateSubprojectFile(
-                            //                file.LocalFileName,
-                            //                SubprojectId,
-                            //                filename,
-                            //                false);
-
                             var newFileName = FileController.relocateSubprojectFile(
                                             file.LocalFileName,
                                             ProjectId,
@@ -225,9 +243,6 @@ namespace services.Controllers
                             newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
                             logger.Debug("newFile.Name = " + newFile.Name);
 
-                            //newFile.Link = rootUrl + "/services/uploads/subprojects/" + SubprojectId + "/" + info.Name; //file.LocalFileName;
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/subprojects/" + SubprojectId + "/" + info.Name;
-                            //newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + "\\" + SubprojectId + "\\" + info.Name;
                             newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\S\\" + SubprojectId + "\\" + info.Name;
                             logger.Debug("newFile.Link = " + newFile.Link);
 
@@ -264,6 +279,7 @@ namespace services.Controllers
                         catch (Exception e)
                         {
                             logger.Debug("Error: " + e.ToString());
+                            throw e; //rethrow.
                         }
                     }
                 }
@@ -310,7 +326,7 @@ namespace services.Controllers
                         catch (System.Exception e)
                         {
                             logger.Debug("Error = " + e.InnerException);
-
+                            throw e;
                         }
                     }
 
@@ -340,52 +356,14 @@ namespace services.Controllers
                     catch (System.Exception e)
                     {
                         logger.Debug("Error = " + e.InnerException);
+                        throw e;
 
                     }
                     logger.Debug("Saved changes to db...");
                 }
-
-
-                // Now get the ID of the file we just saved.
-                /*foreach (var file in files)
-                {
-                    List<services.Models.File> fileList = (from item in db.Files
-                                                           where item.Name == file.Name
-                                                           where item.ProjectId == project.Id
-                                                           where item.FileTypeId == file.FileTypeId
-                                                           orderby item.Id
-                                                           select item).ToList();
-
-                    // Add the record to the subbproject files
-                    // There should be only one.
-                    string strAFile = "";
-                    foreach (var fileRecord in fileList)
-                    {
-                        logger.Debug("Saving fileId " + fileRecord.Id + ", fileName = " + fileRecord.Name);
-                        SubprojectFiles aFile = new SubprojectFiles();
-                        aFile.ProjectId = project.Id;
-                        aFile.SubprojectId = subproject.Id;
-                        aFile.FileId = fileRecord.Id;
-                        aFile.FileName = fileRecord.Name;
-                        aFile.FeatureImage = SubprojectFeatureImage;
-
-                        strAFile += " aFile.ProjectId = " + aFile.ProjectId + "\n";
-                        strAFile += " aFile.SubprojectId = " + aFile.SubprojectId + "\n";
-                        strAFile += " aFile.FileId = " + aFile.FileId + "\n";
-                        strAFile += " aFile.FileName = " + aFile.FileName + "\n";
-                        strAFile += " aFile.FeatureImage = " + aFile.FeatureImage + "\n";
-                        logger.Debug("strAFile = " + strAFile);
-
-                        db.SubprojectFiles.Add(aFile);
-                    }
-                    db.SaveChanges();
-                }
-                */
-
+                
                 logger.Debug("Done saving files.");
-                //var result = JsonConvert.SerializeObject(thefiles);
                 var result = JsonConvert.SerializeObject(files);
-                //var result2 = JsonConvert.SerializeObject(fileIds);
                 logger.Debug("result = " + result);
 
                 HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
@@ -562,7 +540,7 @@ namespace services.Controllers
 
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
@@ -594,72 +572,11 @@ namespace services.Controllers
                 logger.Debug("The file exists.");
              */
 
-            //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + ("\\uploads\\subprojects");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
-            string theFullPath = root + project.Id + "\\S\\" + subprojectId + "\\" + existing_file.Name;
-            //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
-            //logger.Debug("Deleting files from location: " + root + "\\" + subprojectId);
-            //logger.Debug(" and the root url = " + rootUrl);
-            //logger.Debug("theFullPath = " + theFullPath);
-
-            //var provider = new MultipartFormDataStreamProvider(root);
-            var provider = new MultipartFormDataStreamProvider(theFullPath);
-            //logger.Debug("provider = " + provider);
-
-            logger.Debug("About to delete the file:  " + theFullPath);
-
-            FileInfo fi = new FileInfo(theFullPath);
-            bool exists = fi.Exists;
-            if (exists)
-            {
-                logger.Debug("File exists.  Deleting...");
-                System.IO.File.Delete(theFullPath);
-            }
-            else
-            {
-                logger.Debug("File does not exist.");
-            }
-
-            //result = ActionController.deleteProjectFile(theFullPath);
-            //logger.Debug("Result of delete action:  " + result);
-
-            // Using a list, but there should only be one.
-            //List<int> FileId = (from sf in db.SubprojectFiles
-            //                    where sf.ProjectId == project.Id && sf.SubprojectId == subprojectId && sf.FileName == existing_file.Name
-            //                    select sf.Id).ToList();
-
-            //foreach (var aFileId in FileId)
-            //{
-            //    SubprojectFiles spFile = db.SubprojectFiles.Find(aFileId);
-            //    db.SubprojectFiles.Remove(spFile);
-            //    db.SaveChanges();
-            //    logger.Debug("Removed file with ID = " + aFileId + " from table SubprojectFiles");
-            //}
-
-            int numFiles = (from sf in db.Files
-                            where sf.ProjectId == project.Id && sf.Subproject_CrppId == subprojectId && sf.Name == existing_file.Name
-                            select sf).Count();
-
-            if (numFiles > 0)
-            {
-                var fileToDelete = (from f in db.Files
-                                    where f.ProjectId == project.Id && f.Subproject_CrppId == subprojectId && f.Name == existing_file.Name
-                                    select f).FirstOrDefault();
-
-                logger.Debug("Removing " + fileToDelete.Name + " from subproject " + subprojectId + " in the database.");
-                db.Files.Remove(fileToDelete);
-                logger.Debug("Saving the action");
-                db.SaveChanges();
-            }
-            else
-            {
-                logger.Debug("No record in tbl Files for Pid:  " + project.Id + ", SubpId = " + subprojectId + ", fileName = " + existing_file.Name);
-            }
-            logger.Debug("Done.");
+            Resources.SubprojectFileHelper.DeleteSubprojectFile(existing_file, project.Id, subprojectId);
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
+
 
         // POST /api/v1/habsubproject/deletehabsubprojectfile
         [HttpPost]
@@ -667,7 +584,7 @@ namespace services.Controllers
         {
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
@@ -780,7 +697,7 @@ namespace services.Controllers
 
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             logger.Debug("Got me...");
@@ -935,7 +852,7 @@ namespace services.Controllers
             logger.Debug("Set database...");
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
             User me = AuthorizationManager.getCurrentUser();
             Project p = db.Projects.Find(json.ProjectId.ToObject<int>());
             logger.Debug("ProjectId = " + p.Id);
@@ -964,107 +881,21 @@ namespace services.Controllers
 
                 //string strDatastoreTablePrefix = json.DatastoreTablePrefix.ToObject<string>();
 
-                if (habitatItem.ItemFiles != null)
+                var files_in_subproject = (from file in db.Files
+                         where file.Subproject_CrppId == subproject.Id
+                         select file).ToList();
+
+                //iterate potential files for match to delete
+                foreach (var file in files_in_subproject)
                 {
-                    logger.Debug("ItemFiles = " + habitatItem.ItemFiles);
-                    // If there were no attached files, the contents will not be null, but they won't have any files either.
-                    // The contents will be [];
-                    if (habitatItem.ItemFiles.Length < 3)
-                        blnEventFilesPresent = false;
-
-                    if (blnEventFilesPresent)
+                    //habitatItem.ItemFiles is a JSON string of filenames that belong to this item. If we match, delete this one.
+                    if (habitatItem.ItemFiles != null && habitatItem.ItemFiles.Contains("\"" + file.Name + "\"")) //use "somefile.jpg" so that we don't delete: mysomefile.jpg
                     {
-                        // We have a json object (EventFiles) within a json object.  So let's take EventFiles apart, to get the file name.
-                        List<string> strFileList = habitatItem.ItemFiles.Split(',').ToList();
-                        string strFile = "";
-                        int intColonLocation = -1;
-                        int intLastBracketLocation = -1;
-                        int intLastDblQuoteLocation = -1;
-                        int intFileNameLength = 0;
-                        //string thePath = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "uploads\\subprojects\\" + subproject.Id + "\\";
-                        string thePath = "";
+                        //removes the File and the actual filesystem file
+                        Resources.SubprojectFileHelper.DeleteSubprojectFile(file, subproject.ProjectId, subproject.Id);
 
-                        //thePath = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + "\\" + subproject.Id + "\\";
-                        thePath = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + p.Id + "\\S\\" + subproject.Id + "\\";
-
-                        if (Directory.Exists(thePath))
-                        {
-                            string strFilePath = "";
-                            foreach (var item in strFileList)
-                            {
-                                //logger.Debug("item = " + item);
-                                intColonLocation = item.IndexOf(":");
-                                //logger.Debug("intColonLocation = " + intColonLocation);
-
-                                intLastBracketLocation = item.IndexOf("]");
-                                if (intLastBracketLocation == -1)
-                                    intLastDblQuoteLocation = item.Length - 1;
-                                else
-                                    intLastDblQuoteLocation = item.Length - 2;
-
-                                //logger.Debug("intLastDblQuoteLocation = " + intLastDblQuoteLocation);
-
-                                intFileNameLength = (intLastDblQuoteLocation - 1) - (intColonLocation + 2);
-                                //logger.Debug("intFileNameLength = " + intFileNameLength);
-
-                                strFile = item.Substring(intColonLocation + 2, intFileNameLength);
-                                //logger.Debug("strFile = " + strFile);
-
-                                strFilePath = thePath + strFile;
-                                logger.Debug("The files location = " + strFilePath);
-
-                                System.IO.File.Delete(strFilePath);
-                                logger.Debug("Deleted the file...");
-                                strFilePath = "";
-
-                                // First, get the ID number of the file in the Files table.
-                                List<Models.File> listOfFiles = (from aFile in db.Files
-                                                                 where aFile.ProjectId == p.Id && aFile.Subproject_CrppId == subproject.Id && aFile.Name == strFile
-                                                                 select aFile).ToList();
-
-                                // Remove the file from SubprojectFiles table.
-                                //foreach (var fileRecord in listOfFiles)
-                                //{
-                                // Locate the related record(s) in the SubprojectFiles table.
-                                //    List<SubprojectFiles> sfList = (from aFile in db.SubprojectFiles
-                                //                                    where aFile.ProjectId == p.Id && aFile.SubprojectId == subproject.Id && aFile.FileId == fileRecord.Id && aFile.FileName == fileRecord.Name
-                                //                                    select aFile).ToList();
-
-                                // Remove the file from the SubprojectFiles table.
-                                //foreach (var singleFile in sfList)
-                                //{
-                                //    db.SubprojectFiles.Remove(singleFile);
-                                //    logger.Debug("Removed file " + singleFile.FileName + " from table SubprojectFiles.");
-                                //}
-                                //db.SaveChanges();
-                                //logger.Debug("Saved changes to table SubprojectFiles.");
-                                //}
-
-                                // Now let's remove the file from the Files table in the database.
-                                foreach (var fileRecord in listOfFiles)
-                                {
-                                    db.Files.Remove(db.Files.Single(ff => ff.Id == fileRecord.Id));
-                                }
-
-                            }
-                        }
-                        else
-                        {
-                            logger.Debug("Could not find folder: " + thePath);
-                        }
                     }
                 }
-
-
-                /*string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
-                logger.Debug("root = " + root);
-
-                string strSubprojectsPath = root + "\\" + crppCorrespondenceEvent.Id;
-                logger.Debug("The path for the subproject is:  " + strSubprojectsPath);
-
-                System.IO.Directory.Delete(strSubprojectsPath, true);
-                logger.Debug("Just deleted documents folder and contents for this subproject:  " + crppCorrespondenceEvent.Id);
-                */
 
                 db.HabitatItem().Remove(habitatItem);
                 logger.Debug("Just removed this event from table HabitatItems:  " + habitatItem.Id);
@@ -1090,7 +921,7 @@ namespace services.Controllers
             logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             //string strJson = "[" + json + "]";
 
@@ -1481,7 +1312,7 @@ namespace services.Controllers
             logger.Debug("db = " + db);
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             //logger.Debug("me = " + me); // getCurrentUser displays the username; this is just machinestuff.
@@ -1639,7 +1470,6 @@ namespace services.Controllers
                 "hi.EffDt = " + hi.EffDt + "\n"
                 );
 
-
             try
             {
                 //hi.SubprojectId = spId;
@@ -1784,6 +1614,7 @@ namespace services.Controllers
                 duplicateActivities.Add(activity);
             }
             */
+
 
             return Request.CreateResponse(HttpStatusCode.Created, hi);
 

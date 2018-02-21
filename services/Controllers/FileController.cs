@@ -330,8 +330,31 @@ namespace services.Controllers
             //now move the file from where it is to the project directory with the new name.
             new_filename = subproject_directory + @"\" + orig_filename;
             logger.Debug("Moving uploaded file to: " + new_filename);
-            System.IO.File.Move(current_fullfile, new_filename);
 
+           
+            if (System.IO.File.Exists(new_filename))
+            {
+                logger.Debug("Oops!  That file already exists in the folder.  Cleaning up...");
+                logger.Debug("current_fullfile = " + current_fullfile);
+                logger.Debug("Deleting this file:  " + current_fullfile);
+                System.IO.File.Delete(current_fullfile);
+                throw new Exception("File already exists");
+            }
+
+            try
+            {
+                System.IO.File.Move(current_fullfile, new_filename);
+                logger.Debug("File moved OK...");
+            }
+            catch (System.IO.IOException sioe)
+            {
+                logger.Debug("This file was not a duplicate, but it could not be saved.  This was the error...");
+                string strErrorMessage = "Error message = " + sioe.Message.ToString() + ", inner error message = " + sioe.InnerException.ToString();
+                logger.Debug(strErrorMessage);
+                logger.Debug("Leaving the body part in place, for follow-up troubleshooting....");
+                throw new Exception("This file was not a duplicate, but it could not be saved.  This was the error...");
+            }
+            
             return new_filename;
         }
 
@@ -982,7 +1005,7 @@ namespace services.Controllers
 
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             User me = AuthorizationManager.getCurrentUser();
             Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
