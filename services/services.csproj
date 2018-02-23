@@ -333,6 +333,18 @@
     <Compile Include="Migrations\201802142245112_UsersUpdCrpp.Designer.cs">
       <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802211829384_SnorkAddProtocol.cs" />
+    <Compile Include="Migrations\201802211829384_SnorkAddProtocol.Designer.cs">
+      <DependentUpon>201802211829384_SnorkAddProtocol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802211831414_SnorkUpdDb.cs" />
+    <Compile Include="Migrations\201802211831414_SnorkUpdDb.Designer.cs">
+      <DependentUpon>201802211831414_SnorkUpdDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802211835445_SnorkUpdViews.cs" />
+    <Compile Include="Migrations\201802211835445_SnorkUpdViews.Designer.cs">
+      <DependentUpon>201802211835445_SnorkUpdViews.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -482,6 +494,7 @@
     <Content Include="Migrations\20180206_appraisalqastatusfix.sql" />
     <Content Include="Migrations\2018020819_HideRowQAStatusForCertainDatasets.sql" />
     <Content Include="Migrations\20180208_updateconfig_activitiespage.sql" />
+    <Content Include="Migrations\20180221_SnorkUpdDb.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -622,6 +635,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802142245112_UsersUpdCrpp.resx">
       <DependentUpon>201802142245112_UsersUpdCrpp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802211829384_SnorkAddProtocol.resx">
+      <DependentUpon>201802211829384_SnorkAddProtocol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802211831414_SnorkUpdDb.resx">
+      <DependentUpon>201802211831414_SnorkUpdDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802211835445_SnorkUpdViews.resx">
+      <DependentUpon>201802211835445_SnorkUpdViews.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

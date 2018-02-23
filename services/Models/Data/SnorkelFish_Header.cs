@@ -22,6 +22,7 @@ namespace services.Models.Data
 
         public int? HabitatVisitId { get; set; }
         public double? EndWaterTemp { get; set; }
+        public string Protocol { get; set; }
     }
 }
 
