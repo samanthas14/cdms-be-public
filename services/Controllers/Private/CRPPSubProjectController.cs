@@ -32,7 +32,7 @@ namespace services.Controllers
             logger.Debug("Inside UploadSubprojectFile...");
             logger.Debug("starting to process incoming subproject files.");
 
-            string strErrorMessage = "";
+            //string strErrorMessage = "";
 
             if (!Request.Content.IsMimeMultipartContent())
             {
@@ -447,6 +447,19 @@ namespace services.Controllers
                 logger.Debug("Could not find folder: " + strSubprojectsPath);
             }
 
+            // Remove the list of counties from table Counties, before removing the Subproject itself.
+            List<County> c = (from item in db.Counties
+                                       where item.ProjectId == p.Id
+                                       where item.SubprojectId == crppSubproject.Id
+                                       select item).ToList();
+
+            foreach (var item in c)
+            {
+                db.Counties.Remove(item);
+                db.SaveChanges();
+            }
+
+            //Now we can remove the Subproject itself.
             db.Subproject_Crpp().Remove(crppSubproject);
             logger.Debug("Just removed this subproject from table CrppSubprojects:  " + crppSubproject.Id);
 
