@@ -846,7 +846,7 @@ namespace services.Controllers
         public HttpResponseMessage RemoveHabitatItem(JObject jsonData)
         {
             logger.Debug("Inside RemoveHabitatItem...");
-            bool blnEventFilesPresent = true;
+            //bool blnEventFilesPresent = true;
 
             var db = ServicesContext.Current;
             logger.Debug("Set database...");
