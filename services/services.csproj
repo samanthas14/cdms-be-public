@@ -353,6 +353,10 @@
     <Compile Include="Migrations\201803012216014_DecimalFieldUpdates.Designer.cs">
       <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803012225345_MultiselectViewFixes.cs" />
+    <Compile Include="Migrations\201803012225345_MultiselectViewFixes.Designer.cs">
+      <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -503,6 +507,8 @@
     <Content Include="Migrations\2018020819_HideRowQAStatusForCertainDatasets.sql" />
     <Content Include="Migrations\20180208_updateconfig_activitiespage.sql" />
     <Content Include="Migrations\20180221_SnorkUpdDb.sql" />
+    <Content Include="Migrations\20180301_multiselectviewfix.sql" />
+    <Content Include="Migrations\20180301_SRRCodeNameChange.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -658,6 +664,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803012216014_DecimalFieldUpdates.resx">
       <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803012225345_MultiselectViewFixes.resx">
+      <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
