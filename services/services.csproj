@@ -349,6 +349,10 @@
     <Compile Include="Migrations\201802272325070_CreelUpdDsConfig.Designer.cs">
       <DependentUpon>201802272325070_CreelUpdDsConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803012216014_DecimalFieldUpdates.cs" />
+    <Compile Include="Migrations\201803012216014_DecimalFieldUpdates.Designer.cs">
+      <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -651,6 +655,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802272325070_CreelUpdDsConfig.resx">
       <DependentUpon>201802272325070_CreelUpdDsConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803012216014_DecimalFieldUpdates.resx">
+      <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

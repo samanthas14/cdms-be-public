@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using services.Resources.Attributes;
 
 namespace services.Models.Data
 {
@@ -14,7 +15,10 @@ namespace services.Models.Data
         public string AppraisalStatus { get; set; }
         public string AppraisalType { get; set; }
         public string AppraisalLogNumber { get; set; }
-        public int? AppraisalValue { get; set; }
+
+        [DecimalPrecision(9, 2)]
+        public decimal? AppraisalValue { get; set; }
+
         public DateTime? AppraisalValuationDate { get; set; }
         public string Appraiser { get; set; }
         public string TypeOfTransaction { get; set; }
