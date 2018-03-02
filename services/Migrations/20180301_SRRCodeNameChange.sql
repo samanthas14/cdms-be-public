@@ -52,4 +52,4 @@ FROM            dbo.Screwtrap_Detail_VW AS d INNER JOIN
                          dbo.Locations AS l ON l.Id = a.LocationId LEFT OUTER JOIN
                          dbo.WaterBodies AS w ON w.Id = l.WaterBodyId INNER JOIN
                          dbo.ActivityQAs_VW AS aq ON aq.ActivityId = a.Id
-						 WHERE DatasetId = 1214;
+;
