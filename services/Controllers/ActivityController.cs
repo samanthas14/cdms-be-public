@@ -82,7 +82,13 @@ namespace services.Controllers
         [HttpGet]
         public dynamic GetDatasetActivitiesView(int Id)
         {
-            var query = @"SELECT a.Id, a.LocationId, a.UserId, a.ActivityDate, a.Description, l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId,
+            var db = ServicesContext.Current;
+
+            Dataset ds = db.Datasets.Find(Id);
+            if (ds == null)
+                throw new Exception("Configuration Error:  Could not find the DatasetID in the database.");
+
+            /*var query = @"SELECT a.Id, a.LocationId, a.UserId, a.ActivityDate, a.Description, l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId,
                 l.OtherAgencyId, l.GPSEasting, l.GPSNorthing, l.Projection, l.UTMZone, l.Latitude, l.Longitude, w.Name as WaterBodyName,
                 u.Fullname, qa.QAStatusId, qa.UserId as QAStatusUserId, qa.QAStatusName
                 FROM dbo.Activities AS a
@@ -91,11 +97,14 @@ namespace services.Controllers
                     LEFT JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
                     JOIN dbo.Users AS u ON a.UserId = u.Id
                 WHERE a.DatasetId = " + Id;
+            */
+            string strQuery = BuildQueryString(Id, ds.Datastore.TablePrefix);
 
             DataTable activities = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(strQuery, con))
                 {
                     con.Open();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -106,7 +115,7 @@ namespace services.Controllers
             //build up our json instead of sending back the whole blasted object graph
             //return activities;
 
-            JArray datasetactivities =
+            /*JArray datasetactivities =
                 new JArray(                     //array of activities
                 from a in activities.AsEnumerable()
                 select new JObject              //one for each activity
@@ -147,6 +156,8 @@ namespace services.Controllers
                             ))
                 )
                   );
+            */
+            JArray datasetactivities = BuildJArray(activities, ds.Datastore.TablePrefix);
 
             return datasetactivities;
         }
@@ -1914,6 +1925,144 @@ namespace services.Controllers
 
             return datatable;
             */
+        }
+
+        private string BuildQueryString(int Id, string strTblPrefix)
+        {
+            string strQuery = "";
+
+            if (strTblPrefix == "CreelSurvey")
+            {
+                strQuery = @"SELECT a.Id, a.LocationId, a.UserId, a.Description, 
+                h.ByUserId, convert(varchar(19), h.TimeStart, 120) AS TimeStart,
+                l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId, l.OtherAgencyId, 
+                l.GPSEasting, l.GPSNorthing, l.Projection, l.UTMZone, l.Latitude, l.Longitude, 
+                w.Name as WaterBodyName,
+                u.Fullname, 
+                qa.QAStatusId, qa.UserId as QAStatusUserId, qa.QAStatusName
+                FROM dbo.Activities AS a
+                    JOIN dbo.ActivityQAs_VW AS qa ON a.Id = qa.ActivityId
+					JOIN dbo.CreelSurvey_Header AS h on a.Id = h.ActivityId
+                    JOIN dbo.Locations AS l ON a.LocationId = l.Id
+                    LEFT JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
+                    JOIN dbo.Users AS u ON a.UserId = u.Id
+                WHERE a.DatasetId = " + Id +
+                "AND (h.EffDt = (SELECT MAX(EffDt) AS MaxEffDt " +
+                "FROM dbo.CreelSurvey_Header AS hh WHERE(ActivityId = h.ActivityId)))";
+            }
+            else
+            {
+                strQuery = @"SELECT a.Id, a.LocationId, a.UserId, a.ActivityDate, a.Description, l.Label, l.LocationTypeId, l.SdeObjectId, l.WaterBodyId,
+                l.OtherAgencyId, l.GPSEasting, l.GPSNorthing, l.Projection, l.UTMZone, l.Latitude, l.Longitude, w.Name as WaterBodyName,
+                u.Fullname, qa.QAStatusId, qa.UserId as QAStatusUserId, qa.QAStatusName
+                FROM dbo.Activities AS a
+                    JOIN dbo.ActivityQAs_VW AS qa ON a.Id = qa.ActivityId
+                    JOIN dbo.Locations AS l ON a.LocationId = l.Id
+                    LEFT JOIN dbo.WaterBodies AS w ON l.WaterBodyId = w.Id
+                    JOIN dbo.Users AS u ON a.UserId = u.Id
+                WHERE a.DatasetId = " + Id;
+            }
+
+            return strQuery;
+        }
+
+        private JArray BuildJArray(DataTable activities, string strTblPrefix)
+        {
+            JArray datasetactivities = null;
+            if (strTblPrefix == "CreelSurvey")
+            {
+                datasetactivities =
+                    new JArray(                     //array of activities
+                    from a in activities.AsEnumerable()
+                    select new JObject              //one for each activity
+                    (
+                        new JProperty("Id", a["Id"]),
+                        new JProperty("LocationId", a["LocationId"]),
+                        new JProperty("UserId", a["UserId"]),
+                        new JProperty("Description", a["Description"]),
+                        //new JProperty("ActivityDate", a["ActivityDate"]),
+                        new JProperty("Location",
+                            new JObject(
+                                new JProperty("Id", a["LocationId"]),
+                                new JProperty("Label", a["Label"]),
+                                new JProperty("OtherAgencyId", a["OtherAgencyId"]),
+                                new JProperty("LocationTypeId", a["LocationTypeId"]),
+                                new JProperty("SdeObjectId", a["SdeObjectId"]),
+                                new JProperty("WaterBodyId", a["WaterBodyId"]),
+                                new JProperty("GPSEasting", a["GPSEasting"]),
+                                new JProperty("GPSNorthing", a["GPSNorthing"]),
+                                new JProperty("Projection", a["Projection"]),
+                                new JProperty("UTMZone", a["UTMZone"]),
+                                new JProperty("Latitude", a["Latitude"]),
+                                new JProperty("Longitude", a["Longitude"]),
+                                new JProperty("WaterBody",
+                                    new JObject(
+                                        new JProperty("Id", a["WaterBodyId"]),
+                                        new JProperty("Name", a["WaterBodyName"])))
+                                )), //closes location
+                        new JProperty("headerdata",
+                            new JObject(
+                                new JProperty("ByUserId", a["ByUserId"]),
+                                new JProperty("TimeStart", a["TimeStart"]))),
+                        new JProperty("User",
+                            new JObject(
+                                new JProperty("Id", a["UserId"]),
+                                new JProperty("Fullname", a["Fullname"]))),
+                        new JProperty("ActivityQAStatus",
+                            new JObject(
+                                new JProperty("QAStatusId", a["QAStatusId"]),
+                                new JProperty("UserId", a["QAStatusUserId"]),
+                                new JProperty("QAStatusName", a["QAStatusName"])
+                                ))
+                    )
+                );
+            }
+            else
+            {
+                datasetactivities =
+                    new JArray(                     //array of activities
+                    from a in activities.AsEnumerable()
+                    select new JObject              //one for each activity
+                    (
+                        new JProperty("Id", a["Id"]),
+                        new JProperty("LocationId", a["LocationId"]),
+                        new JProperty("UserId", a["UserId"]),
+                        new JProperty("Description", a["Description"]),
+                        new JProperty("ActivityDate", a["ActivityDate"]),
+                        new JProperty("Location",
+                            new JObject(
+                                new JProperty("Id", a["LocationId"]),
+                                new JProperty("Label", a["Label"]),
+                                new JProperty("OtherAgencyId", a["OtherAgencyId"]),
+                                new JProperty("LocationTypeId", a["LocationTypeId"]),
+                                new JProperty("SdeObjectId", a["SdeObjectId"]),
+                                new JProperty("WaterBodyId", a["WaterBodyId"]),
+                                new JProperty("GPSEasting", a["GPSEasting"]),
+                                new JProperty("GPSNorthing", a["GPSNorthing"]),
+                                new JProperty("Projection", a["Projection"]),
+                                new JProperty("UTMZone", a["UTMZone"]),
+                                new JProperty("Latitude", a["Latitude"]),
+                                new JProperty("Longitude", a["Longitude"]),
+                                new JProperty("WaterBody",
+                                    new JObject(
+                                        new JProperty("Id", a["WaterBodyId"]),
+                                        new JProperty("Name", a["WaterBodyName"])))
+                                )), //closes location
+                        new JProperty("User",
+                            new JObject(
+                                new JProperty("Id", a["UserId"]),
+                                new JProperty("Fullname", a["Fullname"]))),
+                        new JProperty("ActivityQAStatus",
+                            new JObject(
+                                new JProperty("QAStatusId", a["QAStatusId"]),
+                                new JProperty("UserId", a["QAStatusUserId"]),
+                                new JProperty("QAStatusName", a["QAStatusName"])
+                                ))
+                    )
+                );
+            }
+
+            return datasetactivities;
         }
     }
 }
