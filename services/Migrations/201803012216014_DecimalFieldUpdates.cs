@@ -13,6 +13,7 @@ namespace services.Migrations
             Sql(@"
             update DatasetFields set ControlType = 'text' where id = 1177;
             update DatasetFields set ControlType = 'text' where id = 1371;
+            update Fields set Validation = null where Id = 1630;
             ");
 
         }
