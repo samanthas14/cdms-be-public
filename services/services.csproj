@@ -357,6 +357,10 @@
     <Compile Include="Migrations\201803012225345_MultiselectViewFixes.Designer.cs">
       <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803030157446_FishScaleUpdDsConfig.cs" />
+    <Compile Include="Migrations\201803030157446_FishScaleUpdDsConfig.Designer.cs">
+      <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -667,6 +671,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803012225345_MultiselectViewFixes.resx">
       <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803030157446_FishScaleUpdDsConfig.resx">
+      <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
