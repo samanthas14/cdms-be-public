@@ -9,7 +9,7 @@ namespace services.Migrations
         {
             Sql(@"
 update dbo.[Datasets]
-set Config = '{""DataEntryPage"":{""HiddenFields"":[""Instrument"",""Location"",""BulkQaChange""]},""ActivitiesPage"":{""ShowFields"":[""headerdata.RunYear"",""Location.Label"",""User.Fullname""],""HiddenFields"":[""MapButton""]}}'
+set Config = '{""DataEntryPage"":{""HiddenFields"":[""Instrument"",""Location"",""BulkQaChange""]},""ActivitiesPage"":{""ShowFields"":[""headerdata.RunYear"",""Location.Label"",""User.Fullname""],""HasDatasetLocations"":""Yes"",""AllowMultipleLocations"":""No""}}'
 where[Id] in (select[Id] from dbo.Datasets where [Description] like '%Fish Scale%')
             ");
         }
