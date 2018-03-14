@@ -361,6 +361,10 @@
     <Compile Include="Migrations\201803030157446_FishScaleUpdDsConfig.Designer.cs">
       <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803131734221_FishTransUpdView.cs" />
+    <Compile Include="Migrations\201803131734221_FishTransUpdView.Designer.cs">
+      <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -674,6 +678,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803030157446_FishScaleUpdDsConfig.resx">
       <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803131734221_FishTransUpdView.resx">
+      <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
