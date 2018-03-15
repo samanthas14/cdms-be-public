@@ -345,6 +345,26 @@
     <Compile Include="Migrations\201802211835445_SnorkUpdViews.Designer.cs">
       <DependentUpon>201802211835445_SnorkUpdViews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802272325070_CreelUpdDsConfig.cs" />
+    <Compile Include="Migrations\201802272325070_CreelUpdDsConfig.Designer.cs">
+      <DependentUpon>201802272325070_CreelUpdDsConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803012216014_DecimalFieldUpdates.cs" />
+    <Compile Include="Migrations\201803012216014_DecimalFieldUpdates.Designer.cs">
+      <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803012225345_MultiselectViewFixes.cs" />
+    <Compile Include="Migrations\201803012225345_MultiselectViewFixes.Designer.cs">
+      <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803030157446_FishScaleUpdDsConfig.cs" />
+    <Compile Include="Migrations\201803030157446_FishScaleUpdDsConfig.Designer.cs">
+      <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803131734221_FishTransUpdView.cs" />
+    <Compile Include="Migrations\201803131734221_FishTransUpdView.Designer.cs">
+      <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -495,6 +515,8 @@
     <Content Include="Migrations\2018020819_HideRowQAStatusForCertainDatasets.sql" />
     <Content Include="Migrations\20180208_updateconfig_activitiespage.sql" />
     <Content Include="Migrations\20180221_SnorkUpdDb.sql" />
+    <Content Include="Migrations\20180301_multiselectviewfix.sql" />
+    <Content Include="Migrations\20180301_SRRCodeNameChange.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -644,6 +666,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802211835445_SnorkUpdViews.resx">
       <DependentUpon>201802211835445_SnorkUpdViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802272325070_CreelUpdDsConfig.resx">
+      <DependentUpon>201802272325070_CreelUpdDsConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803012216014_DecimalFieldUpdates.resx">
+      <DependentUpon>201803012216014_DecimalFieldUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803012225345_MultiselectViewFixes.resx">
+      <DependentUpon>201803012225345_MultiselectViewFixes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803030157446_FishScaleUpdDsConfig.resx">
+      <DependentUpon>201803030157446_FishScaleUpdDsConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803131734221_FishTransUpdView.resx">
+      <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
