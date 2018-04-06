@@ -96,7 +96,8 @@ namespace services.Controllers
                             while (reader.Read())
                             {
                                 AdultWeir_Detail awDet = new AdultWeir_Detail();
-                                awDet.RunYear = reader.GetValue(0).ToString();
+                                //awDet.RunYear = reader.GetValue(0).ToString();
+                                awDet.RunYear = Convert.ToInt32(reader.GetValue(0).ToString());
                                 awDetailList.Add(awDet);
                             }
                         }
@@ -109,6 +110,7 @@ namespace services.Controllers
 
             return awDetailList.AsEnumerable();
         }
+        
 
         // GET /api/v1/list/getreportyears/5
         //returns empty list if none found...
