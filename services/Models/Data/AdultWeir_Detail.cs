@@ -29,7 +29,8 @@ namespace services.Models.Data
         public int? TotalFishRepresented { get; set; }
         public string FishComments { get; set; }
         public string OtolithNumber { get; set; }
-        public string RunYear { get; set; }
+        //public string RunYear { get; set; }
+        public int? RunYear { get; set; }
         public string OtherTagId { get; set; }
         public string PercentSpawned { get; set; }
         public string OtolithGenetics { get; set; }
