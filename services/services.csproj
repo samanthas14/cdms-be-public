@@ -365,6 +365,22 @@
     <Compile Include="Migrations\201803131734221_FishTransUpdView.Designer.cs">
       <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804052318137_AwDropRunYear.cs" />
+    <Compile Include="Migrations\201804052318137_AwDropRunYear.Designer.cs">
+      <DependentUpon>201804052318137_AwDropRunYear.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804052325274_AwAddRunYear.cs" />
+    <Compile Include="Migrations\201804052325274_AwAddRunYear.Designer.cs">
+      <DependentUpon>201804052325274_AwAddRunYear.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804052331416_AwFillRunYearCol.cs" />
+    <Compile Include="Migrations\201804052331416_AwFillRunYearCol.Designer.cs">
+      <DependentUpon>201804052331416_AwFillRunYearCol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804052343118_AwUpdFieldsAndDsFields.cs" />
+    <Compile Include="Migrations\201804052343118_AwUpdFieldsAndDsFields.Designer.cs">
+      <DependentUpon>201804052343118_AwUpdFieldsAndDsFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -681,6 +697,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803131734221_FishTransUpdView.resx">
       <DependentUpon>201803131734221_FishTransUpdView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804052318137_AwDropRunYear.resx">
+      <DependentUpon>201804052318137_AwDropRunYear.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804052325274_AwAddRunYear.resx">
+      <DependentUpon>201804052325274_AwAddRunYear.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804052331416_AwFillRunYearCol.resx">
+      <DependentUpon>201804052331416_AwFillRunYearCol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804052343118_AwUpdFieldsAndDsFields.resx">
+      <DependentUpon>201804052343118_AwUpdFieldsAndDsFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
