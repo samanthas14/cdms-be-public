@@ -381,6 +381,10 @@
     <Compile Include="Migrations\201804052343118_AwUpdFieldsAndDsFields.Designer.cs">
       <DependentUpon>201804052343118_AwUpdFieldsAndDsFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804131555391_WtAddRowQa.cs" />
+    <Compile Include="Migrations\201804131555391_WtAddRowQa.Designer.cs">
+      <DependentUpon>201804131555391_WtAddRowQa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -709,6 +713,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804052343118_AwUpdFieldsAndDsFields.resx">
       <DependentUpon>201804052343118_AwUpdFieldsAndDsFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804131555391_WtAddRowQa.resx">
+      <DependentUpon>201804131555391_WtAddRowQa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
