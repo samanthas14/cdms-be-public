@@ -187,8 +187,6 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
-    <Compile Include="Controllers\Private\HabSubProjectController.cs" />
-    <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201709292329224_Initial.cs" />
     <Compile Include="Migrations\201709292329224_Initial.Designer.cs">
       <DependentUpon>201709292329224_Initial.cs</DependentUpon>
@@ -396,9 +394,6 @@
     <Compile Include="Models\Data\BSample_Detail.cs" />
     <Compile Include="Models\Data\BSample_Header.cs" />
     <Compile Include="Models\Data\Subproject.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts_Detail.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts_Header.cs" />
     <Compile Include="Models\Data\Drift.cs" />
     <Compile Include="Models\Data\Drift_Detail.cs" />
     <Compile Include="Models\Data\Drift_Header.cs" />
@@ -430,9 +425,6 @@
     <Compile Include="Models\Data\Electrofishing_Detail.cs" />
     <Compile Include="Models\Data\SnorkelFish_Header.cs" />
     <Compile Include="Models\Data\Electrofishing_Header.cs" />
-    <Compile Include="Models\Data\Private\Appraisal.cs" />
-    <Compile Include="Models\Data\Private\Appraisal_Detail.cs" />
-    <Compile Include="Models\Data\Private\Appraisal_Header.cs" />
     <Compile Include="Models\Data\ArtificialProduction.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Detail.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Header.cs" />
@@ -454,8 +446,6 @@
     <Compile Include="Models\Data\StreamNet_NOSA_Header .cs" />
     <Compile Include="Models\Data\StreamNet_SAR_Header.cs" />
     <Compile Include="Models\Data\StreamNet_RperS_Header.cs" />
-    <Compile Include="Models\Data\Private\Subproject_Crpp.cs" />
-    <Compile Include="Models\Data\Private\Subproject_Hab.cs" />
     <Compile Include="Models\Data\WaterQuality.cs" />
     <Compile Include="Models\Data\SpawningGroundSurvey.cs" />
     <Compile Include="Models\Data\WaterQuality_Detail.cs" />
@@ -553,10 +543,12 @@
   <ItemGroup>
     <Content Include="ControllerClassDiagram.cd" />
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
+    <None Include="Properties\PublishProfiles\cdms-public.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
     <None Include="Properties\PublishProfiles\local-services-dev.pubxml" />
+    <None Include="Web.example.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="stdole">
@@ -732,7 +724,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62741</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
