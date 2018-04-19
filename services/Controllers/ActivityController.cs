@@ -373,6 +373,7 @@ namespace services.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateDatasetActivities(JObject jsonData)
         {
+            logger.Debug("Inside UpdateDatasetActivities...");
             var db = ServicesContext.Current;
 
             dynamic json = jsonData;
@@ -1016,6 +1017,85 @@ namespace services.Controllers
                         con.Open();
                         var query = "update Activities set Description = (select concat(convert(varchar,min(SampleDate),111), ' - ', convert(varchar,max(SampleDate),111)) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + newActivityId + ") where Id = " + newActivityId;
 
+                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        {
+                            logger.Debug(query);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                else if (newActivityId != 0 && (dataset.Datastore.TablePrefix == "Genetic")) // others with SampleYear?
+                {
+                    DataTable dt = new DataTable();
+                    //int minSampleYear = 0;
+                    //int maxSampleYear = 0;
+                    string strMinSampleYear = "";
+                    string strMaxSampleYear = "";
+                    string strSampleYearRange = "";
+
+                    string query = "";
+                    using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+                    {
+                        con.Open();
+
+                        // *** Get the bottom of the SampleYear range.
+                        query = "select min(SampleYear) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + newActivityId;
+                        logger.Debug("query (min) = " + query);
+                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        {
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.SelectCommand.CommandTimeout = 120;
+                            da.Fill(dt);
+                            da.Dispose();
+                            cmd.Dispose();
+                        }
+                        query = "";
+                        logger.Debug("Filled dt...");
+                        logger.Debug("dt.Rows.Count = " + dt.Rows.Count);
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            strMinSampleYear = row[0].ToString();
+                        }
+                        logger.Debug("strMinSampleYear = " + strMinSampleYear);
+                        dt.Clear();
+
+
+                        // *** Get the top of the SampleYear range.
+                        query = "select max(SampleYear) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + newActivityId;
+                        logger.Debug("query (max) = " + query);
+                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        {
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.SelectCommand.CommandTimeout = 120;
+                            da.Fill(dt);
+                            da.Dispose();
+                            cmd.Dispose();
+                        }
+                        query = "";
+                        logger.Debug("Filled dt again...");
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            strMaxSampleYear = row[0].ToString();
+                        }
+                        logger.Debug("strMaxSampleYear = " + strMaxSampleYear);
+                        dt.Clear();
+
+                        // Set the range
+                        if (strMinSampleYear == strMaxSampleYear)
+                        {
+                            strSampleYearRange = strMinSampleYear;
+                        }
+                        else
+                        {
+                            strSampleYearRange = strMinSampleYear + " - " + strMaxSampleYear;
+                        }
+                        logger.Debug("strSampleYearRange = " + strSampleYearRange);
+
+                        // Set the query with the range.
+                        query = "update Activities set Description = '" + strSampleYearRange + "' where Id = " + newActivityId;
+                        logger.Debug("query (to update Activities) = " + query);
                         using (SqlCommand cmd = new SqlCommand(query, con))
                         {
                             logger.Debug(query);

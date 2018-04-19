@@ -184,9 +184,30 @@ namespace services.Controllers
             new_ds.DatastoreId = ds.Id;
             new_ds.Config = null;
 
+            // Non-WaterTemp datasets get these.
             QAStatus qa1 = db.QAStatuses.Find(5);
             QAStatus qa2 = db.QAStatuses.Find(6);
-            QAStatus qa3 = db.QAStatuses.Find(1);
+            QAStatus qa3 = db.QAStatuses.Find(1); // Default rowQA
+
+            // For WaterTemp, if necessary.
+            // WaterTemp datasets get more RowQA statuses.
+            QAStatus rqa2 = null;
+            QAStatus rqa3 = null;
+            QAStatus rqa4 = null;
+            QAStatus rqa5 = null;
+            QAStatus rqa6 = null;
+            QAStatus rqa7 = null;
+
+            if (ds.TablePrefix == "WaterTemp")
+            {
+                // OK, find the additional RowQA Statuses for WaterTemp.
+                rqa2 = db.QAStatuses.Find(12);
+                rqa3 = db.QAStatuses.Find(13);
+                rqa4 = db.QAStatuses.Find(14);
+                rqa5 = db.QAStatuses.Find(15);
+                rqa6 = db.QAStatuses.Find(16);
+                rqa7 = db.QAStatuses.Find(17);
+            }
 
             new_ds.QAStatuses = new List<QAStatus>();
             new_ds.QAStatuses.Add(qa1);
@@ -194,6 +215,17 @@ namespace services.Controllers
 
             new_ds.RowQAStatuses = new List<QAStatus>();
             new_ds.RowQAStatuses.Add(qa3);
+
+            if (ds.TablePrefix == "WaterTemp")
+            {
+                // Now, add the additional RowQA statuses to WaterTemp
+                new_ds.RowQAStatuses.Add(rqa2);
+                new_ds.RowQAStatuses.Add(rqa3);
+                new_ds.RowQAStatuses.Add(rqa4);
+                new_ds.RowQAStatuses.Add(rqa5);
+                new_ds.RowQAStatuses.Add(rqa6);
+                new_ds.RowQAStatuses.Add(rqa7);
+            }
 
             new_ds.Fields= new List<DatasetField>();
 
