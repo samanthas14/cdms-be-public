@@ -389,6 +389,10 @@
     <Compile Include="Migrations\201804162047154_GenUpdDescWiSampleYear.Designer.cs">
       <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.cs" />
+    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.Designer.cs">
+      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -723,6 +727,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804162047154_GenUpdDescWiSampleYear.resx">
       <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804272254369_AwUpdPassageTime.resx">
+      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
