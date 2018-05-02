@@ -393,6 +393,10 @@
     <Compile Include="Migrations\201804272254369_AwUpdPassageTime.Designer.cs">
       <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.cs" />
+    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.Designer.cs">
+      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -730,6 +734,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804272254369_AwUpdPassageTime.resx">
       <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805021712126_SnorkelAddFieldsToVw.resx">
+      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
