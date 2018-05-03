@@ -406,7 +406,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("rootUrl = " + rootUrl);
@@ -416,7 +416,7 @@ namespace services.Controllers
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             if (!dirInfo.Exists)
             {
-                logger.Debug("Director DOES NOT exist; creating it...");
+                logger.Debug("Directory DOES NOT exist; creating it...");
                 dirInfo.Create();
                 logger.Debug("...Created...");
             }
@@ -585,7 +585,7 @@ namespace services.Controllers
             }
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("rootUrl = " + rootUrl);
@@ -962,7 +962,7 @@ namespace services.Controllers
                 logger.Debug("The file exists.");
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
             string theFullPath = root + project.Id + "\\" + existing_file.Name;
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("Deleting files from location: " + root);
@@ -1030,7 +1030,7 @@ namespace services.Controllers
             logger.Debug("existing_file.Name = " + existing_file.Name);
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
             string theFullPath = root + project.Id + "\\D\\" + dataset.Id + "\\" + existing_file.Name;
             //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("Deleting files from: " + theFullPath);
