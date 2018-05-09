@@ -11,7 +11,7 @@ namespace services.Migrations
 update dbo.Fields
 set ControlType = 'time'
 where Id in (SELECT Id
-  FROM dbo.[Fields]
+  FROM [Fields]
   where DbColumnName = 'PassageTime'
   )
 
@@ -21,7 +21,7 @@ where Id in
 (
 select Id
 From dbo.[DatasetFields]
-where DatasetId in (select Id from dbo.Datasets where DatastoreId = 1 and Name like '%Weir%') and DbColumnName = 'PassageTime'
+where DatasetId in (select Id from Datasets where DatastoreId = 1 and Name like '%Weir%') and DbColumnName = 'PassageTime'
 )
 
             ");
