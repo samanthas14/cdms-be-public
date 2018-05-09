@@ -397,6 +397,10 @@
     <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.Designer.cs">
       <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.cs" />
+    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.Designer.cs">
+      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -737,6 +741,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805021712126_SnorkelAddFieldsToVw.resx">
       <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805081904185_FileTypeAddBmpToImage.resx">
+      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
