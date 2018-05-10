@@ -8,7 +8,7 @@ begin TRAN T1;
 DECLARE @datasetname nvarchar(max) = 'StreamNet_NOSA';
 DECLARE @datasetdesc nvarchar(max) = 'StreamNet NOSA Dataset';
 DECLARE @owneruserid int = 1; 
-DECLARE @projectid int = 1; 
+DECLARE @projectid int = 11041; 
 DECLARE @defaultrowqa int = 1;
 DECLARE @defaultactivityqa int = 6;
 DECLARE @defaultdatasetstatus int = 1;
@@ -22,7 +22,7 @@ DECLARE @datasetid int = 0;
 --  comment this out if your project/dataset will instead use an existing locationtype
 --  in either case, you'll need to change the config.js to link them (Bug to fix)
 --  The LocationTypeID is used when creating new Locations in the project.
-INSERT into LocationType (Name, Description)
+INSERT into LocationTypes (Name, Description)
   values (
 	@datasetname,
 	concat(@datasetname,' Location Type')

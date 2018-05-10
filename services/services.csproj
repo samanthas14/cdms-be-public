@@ -548,7 +548,9 @@
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
     <None Include="Properties\PublishProfiles\local-services-dev.pubxml" />
-    <None Include="Web.example.config" />
+    <None Include="Web.example.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="stdole">
