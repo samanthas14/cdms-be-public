@@ -119,7 +119,7 @@ namespace services.Controllers
                     else
                     {
                         logger.Debug("user.Inactive = " + user.Inactive);
-                        if (user.Inactive == null)
+                        if (user.Inactive == null || user.Inactive == 0) // 1 or anything "true" is inactive
                         {
                             logger.Debug("User is active...");
                             user.BumpLastLoginDate();

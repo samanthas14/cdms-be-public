@@ -149,9 +149,33 @@ namespace services.Controllers
             user.Inactive = in_user.Inactive;
             user.Roles = in_user.Roles;
 
+            //update password if there is one...
+            if(json.User.Password != null)
+            {
+                string str = json.User.Password;
+                byte[] data = Convert.FromBase64String(str);
+                string decodedString = System.Text.Encoding.UTF8.GetString(data);
+
+                var salt = System.Configuration.ConfigurationManager.AppSettings["PasswordSalt"]; //in web.config
+
+                UserPreference local_auth = user.UserPreferences.Where(o => o.Name == AccountController.LOCAL_USER_AUTH).SingleOrDefault();
+                if(local_auth == null) //doesn't exist (create)
+                {
+                    UserPreference up = new UserPreference();
+                    up.Name = AccountController.LOCAL_USER_AUTH;
+                    up.Value = MD5Util.GetMd5Hash(decodedString + salt);
+                    user.UserPreferences.Add(up);
+                }
+                else //exists (edit)
+                {
+                    local_auth.Value = MD5Util.GetMd5Hash(decodedString + salt);
+                    db.Entry(local_auth).State = EntityState.Modified;
+                }
+            }
+
             db.SaveChanges();
-            logger.Debug("Saved the changes for user: "+user.Id);
-            
+            logger.Debug("Saved the changes for user: " + user.Id);
+
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, user);
             return response;
         }
