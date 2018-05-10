@@ -130,6 +130,7 @@ namespace services.Controllers
             {
                 user = new User();
                 user.OrganizationId = services.Models.User.DEFAULT_ORGANIZATIONID;
+                user.UserPreferences = new List<UserPreference>();
                 db.User.Add(user);
                 user.BumpLastLoginDate();
             }
@@ -159,6 +160,7 @@ namespace services.Controllers
                 var salt = System.Configuration.ConfigurationManager.AppSettings["PasswordSalt"]; //in web.config
 
                 UserPreference local_auth = user.UserPreferences.Where(o => o.Name == AccountController.LOCAL_USER_AUTH).SingleOrDefault();
+                
                 if(local_auth == null) //doesn't exist (create)
                 {
                     UserPreference up = new UserPreference();
