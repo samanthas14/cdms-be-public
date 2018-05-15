@@ -59,6 +59,7 @@ namespace services.Models.Data
         public string Age9PropLowerLimit { get; set; }
         public string Age9PropUpperLimit { get; set; }
         public string AgePropAlpha { get; set; }
+        public string BestValue { get; set; }
         public string CBFWApopName { get; set; }
         public string Comments { get; set; }
         public string CommonPopName { get; set; }
@@ -85,6 +86,7 @@ namespace services.Models.Data
         public string NOSJFAlpha { get; set; }
         public string NOSJFLowerLimit { get; set; }
         public string NOSJFUpperLimit { get; set; }
+        public string OtherDataSources { get; set; }
         public string PopFitNotes { get; set; }
         public string PopID { get; set; }
         public string ProtMethDocumentation { get; set; }

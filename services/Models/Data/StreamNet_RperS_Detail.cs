@@ -90,6 +90,9 @@ namespace services.Models.Data
         public string TribHarvest { get; set; }
         public string UpdDate { get; set; }
         public string YOY { get; set; }
+        public string RecruitDef { get; set; }
+        public string BestValue { get; set; }
+        public string OtherDataSources { get; set; }
 
         public string ShadowId { get; set; }
     }

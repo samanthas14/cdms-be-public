@@ -76,7 +76,9 @@ namespace services.Models.Data
         public string TSOUpperLimit { get; set; }
         public string TribHarvest { get; set; }
         public string UpdDate { get; set; }
-
+        public string SmoltDef { get; set; }
+        public string BestValue { get; set; }
+        public string OtherDataSources { get; set; }
         public String ShadowId { get; set; }
     }
 }

@@ -19,6 +19,8 @@ namespace services.Controllers
             logger.Debug("Inside SyncToStreamNet...");
             var pathToStreamNetSyncScript = System.Configuration.ConfigurationManager.AppSettings["PathToStreamNetSyncScript"];
 
+            logger.Debug(pathToStreamNetSyncScript);
+
             if (pathToStreamNetSyncScript.IsEmpty())
                 return new List<string>() { "Need to specify path to StreamNet sync script in your web.config!" };
 
@@ -31,7 +33,7 @@ namespace services.Controllers
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "python.exe",
+                    FileName = "c:\\python3\\python.exe",
                     Arguments = pathToStreamNetSyncScript,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -44,7 +46,7 @@ namespace services.Controllers
             if (strPath.IndexOf("python") < 0)
             {
                 logger.Debug("The system environment variable Path does not include python...correcting.");
-                strPath = strPath + ";C:\\python35\\Scripts\\;C:\\python35\\";
+                strPath = strPath + ";C:\\python3\\Scripts\\;C:\\python3\\";
                 Environment.SetEnvironmentVariable("Path", strPath);
             }
 
@@ -68,24 +70,34 @@ namespace services.Controllers
                 strWebException = "Had a problem creating the connection to the website api.streamnet.org";
             }
 
+
             logger.Debug("About to start Python process...");
-            proc.Start();
-            logger.Debug("Python process started...");
 
             var outputLines = new List<string>();
 
-
-            while (!proc.StandardOutput.EndOfStream)
-                outputLines.Add(proc.StandardOutput.ReadLine());
-
-            while (!proc.StandardError.EndOfStream)
+            try
             {
-                outputLines.Add(proc.StandardError.ReadLine());
-            }
-            if (strWebException.Length > 0)
-                outputLines.Add(strWebException);
+                proc.Start();
+                logger.Debug("Python process started...");
 
-            logger.Debug("Finished sync process.  Result will be displayed on screen...");
+                while (!proc.StandardOutput.EndOfStream)
+                    outputLines.Add(proc.StandardOutput.ReadLine());
+
+                while (!proc.StandardError.EndOfStream)
+                {
+                    outputLines.Add(proc.StandardError.ReadLine());
+                }
+                if (strWebException.Length > 0)
+                    outputLines.Add(strWebException);
+
+                logger.Debug("Finished sync process.  Result will be displayed on screen...");
+
+            }
+            catch(Exception e)
+            {
+                logger.Debug(e);
+            }
+
 
             return outputLines;
         }
