@@ -1,3 +1,5 @@
+
+
 --creates the new nosa, rpers and sar fields for NPT streamnet
 use CDMS_NPT;
 begin TRAN T1;
@@ -216,3 +218,16 @@ UNION ALL SELECT
 drop table #NewFieldInfo
 
 COMMIT TRAN T1;
+
+--some other cleanup things
+update fields set 
+		PossibleValues = replace(PossibleValues,'CTUIR','NPT'),
+		[Rule] = replace([Rule], 'CTUIR','NPT') 
+	where possiblevalues like '%CTUIR%' or [Rule] like '%CTUIR%';
+    
+update datasetfields set 
+		[Rule] = replace([Rule], 'CTUIR','NPT') 
+	where [Rule] like '%CTUIR%';
+	
+
+    
