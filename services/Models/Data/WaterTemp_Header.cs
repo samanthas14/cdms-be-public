@@ -5,7 +5,7 @@
         public string Technicians { get; set; }
         public string Comments { get; set; }
         public string CollectionType { get; set; }
-        public double? DepthToWater { get; set; }
+        //public double? DepthToWater { get; set; }
         public double? PSI { get; set; }
         public double? StaticWaterLevel { get; set; }
         public string WeatherConditions { get; set; }
