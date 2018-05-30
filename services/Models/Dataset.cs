@@ -121,12 +121,14 @@ namespace services.Models
                     logger.Debug("getExportSelectString called by:  Query...");
                     //system_fields = "CreateDate,QAStatusId,QAStatusName, ActivityQAComments, LocationId,ActivityQAStatusId,DatasetId,ActivityId,RowId, RowStatusId";
                     //system_fields = "CreateDate,QAStatusId,QAStatusName, ActivityQAComments, LocationId,ActivityQAStatusId,ActivityId,RowId, RowStatusId";
-                    system_fields = "QAStatusId,QAStatusName,ActivityQAComments,LocationId,ActivityQAStatusId";
+                    //system_fields = "QAStatusId,QAStatusName,ActivityQAComments,LocationId,ActivityQAStatusId";
+                    system_fields = "RowQAStatusId,ActivityQAStatusName,ActivityQAComments,LocationId,ActivityQAStatusId";
                 }
                 else // productTarget == "Export"
                 {
                     logger.Debug("getExportSelectString called by:  Export");
-                    system_fields = "QAStatusId,QAStatusName,ActivityQAComments,Label";
+                    //system_fields = "QAStatusId,QAStatusName,ActivityQAComments,Label";
+                    system_fields = "RowQAStatusName,ActivityQAStatusName,ActivityQAComments,Label";
                 }
             }
             else if (this.Datastore.TablePrefix == "Metrics")
@@ -294,7 +296,8 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationName" }));
-                      .Concat(new List<string>(new string[] { "QAStatusId","QAStatus","ActivityQAComments","LocationName" }));
+                      //.Concat(new List<string>(new string[] { "QAStatusId","QAStatus","ActivityQAComments","LocationName" }));
+                      .Concat(new List<string>(new string[] { "RowQAStatus", "ActivityQAStatus", "ActivityQAComments", "LocationName" }));
 
                 }
                 else if (this.Datastore.TablePrefix == "CreelSurvey")
