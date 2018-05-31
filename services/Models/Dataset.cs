@@ -297,7 +297,7 @@ namespace services.Models
                       .Concat(this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.Label + " " + o.Field.Units))
                       //.Concat(new List<string>(new string[] { "CreateDate", "QAStatusId", "QAStatus", "ActivityQAComments", "LocationName" }));
                       //.Concat(new List<string>(new string[] { "QAStatusId","QAStatus","ActivityQAComments","LocationName" }));
-                      .Concat(new List<string>(new string[] { "RowQAStatus", "ActivityQAStatus", "ActivityQAComments", "LocationName" }));
+                      .Concat(new List<string>(new string[] { "RowQA", "ActivityQA", "ActivityQAComments", "LocationName" }));
 
                 }
                 else if (this.Datastore.TablePrefix == "CreelSurvey")
