@@ -19,5 +19,6 @@ namespace services.Models.Data
         public double? Conductivity { get; set; }
         public double? PSI { get; set; }
         public double? AbsolutePressure { get; set; }
+        public double? Depth { get; set; }
     }
 }
