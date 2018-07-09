@@ -2018,7 +2018,7 @@ namespace services.Controllers
             DataTable datatable = new DataTable();
 
             dynamic json = jsonData;
-            logger.Debug("json = " + json);
+            //logger.Debug("json = " + json);
 
             int DatasetId = json.DatasetId.ToObject<int>();
             logger.Debug("DatasetId = " + DatasetId);
