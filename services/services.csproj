@@ -195,6 +195,34 @@
     <Compile Include="Migrations\201805151804028_AddStreamnetFields.Designer.cs">
       <DependentUpon>201805151804028_AddStreamnetFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804162047154_GenUpdDescWiSampleYear.cs" />
+    <Compile Include="Migrations\201804162047154_GenUpdDescWiSampleYear.Designer.cs">
+      <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.cs" />
+    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.Designer.cs">
+      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.cs" />
+    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.Designer.cs">
+      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.cs" />
+    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.Designer.cs">
+      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805291740075_WtReviseDepthTbls.cs" />
+    <Compile Include="Migrations\201805291740075_WtReviseDepthTbls.Designer.cs">
+      <DependentUpon>201805291740075_WtReviseDepthTbls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805291741598_WtReviseDepthViews.cs" />
+    <Compile Include="Migrations\201805291741598_WtReviseDepthViews.Designer.cs">
+      <DependentUpon>201805291741598_WtReviseDepthViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805291839390_WbReviseDepthData.cs" />
+    <Compile Include="Migrations\201805291839390_WbReviseDepthData.Designer.cs">
+      <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -368,6 +396,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805151804028_AddStreamnetFields.resx">
       <DependentUpon>201805151804028_AddStreamnetFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804162047154_GenUpdDescWiSampleYear.resx">
+      <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804272254369_AwUpdPassageTime.resx">
+      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805021712126_SnorkelAddFieldsToVw.resx">
+      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805081904185_FileTypeAddBmpToImage.resx">
+      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805291740075_WtReviseDepthTbls.resx">
+      <DependentUpon>201805291740075_WtReviseDepthTbls.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805291741598_WtReviseDepthViews.resx">
+      <DependentUpon>201805291741598_WtReviseDepthViews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805291839390_WbReviseDepthData.resx">
+      <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
