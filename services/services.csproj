@@ -187,9 +187,9 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
-    <Compile Include="Migrations\201805151802038_initial.cs" />
-    <Compile Include="Migrations\201805151802038_initial.Designer.cs">
-      <DependentUpon>201805151802038_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201803151802038_initial.cs" />
+    <Compile Include="Migrations\201803151802038_initial.Designer.cs">
+      <DependentUpon>201803151802038_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201805151804028_AddStreamnetFields.cs" />
     <Compile Include="Migrations\201805151804028_AddStreamnetFields.Designer.cs">
@@ -222,6 +222,10 @@
     <Compile Include="Migrations\201805291839390_WbReviseDepthData.cs" />
     <Compile Include="Migrations\201805291839390_WbReviseDepthData.Designer.cs">
       <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807171641140_AlreadyRemovedTables.cs" />
+    <Compile Include="Migrations\201807171641140_AlreadyRemovedTables.Designer.cs">
+      <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -391,8 +395,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201805151802038_initial.resx">
-      <DependentUpon>201805151802038_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803151802038_initial.resx">
+      <DependentUpon>201803151802038_initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805151804028_AddStreamnetFields.resx">
       <DependentUpon>201805151804028_AddStreamnetFields.cs</DependentUpon>
@@ -417,6 +421,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805291839390_WbReviseDepthData.resx">
       <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807171641140_AlreadyRemovedTables.resx">
+      <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
