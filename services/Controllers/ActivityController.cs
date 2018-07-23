@@ -2168,7 +2168,7 @@ namespace services.Controllers
             */
         }
 
-        //QuerySpecificCreelSurveyActivities
+        //QuerySpecificScrewTrapActivities
         // POST /api/v1/activity/queryspecificscrewtrapactivities
         [HttpPost]
         public DataTable QuerySpecificScrewTrapActivities(JObject jsonData)
@@ -2177,6 +2177,7 @@ namespace services.Controllers
             var db = ServicesContext.Current;
             //DataTable datatable = null;
             DataTable datatable = new DataTable();
+            bool blnArrivalTimePresent = false;
 
             dynamic json = jsonData;
             logger.Debug("json = " + json);
@@ -2260,25 +2261,37 @@ namespace services.Controllers
             }
             logger.Debug("strDtList = " + strDtList);
 
-            //*** Time Start ***
-            string strArrivalTime = json.ArrivalTime.ToObject<string>();
-            /*string strArrivalTimeList = "";
 
-            JArray jaryArrivalTimeList = (JArray)json.ArrivalTime;
+            string strCounty = (string)jsonData["Subproject"]["CountyAry"].ToString();
+            logger.Debug("strCounty = " + strCounty);
+            if ((!String.IsNullOrEmpty(strCounty)) || (strCounty.Length < 3)) // < 3 means "[]"
+            { }
 
-            count = 0;
-            foreach (var item in jaryArrivalTimeList)
+            //*** ArrivalTime ***
+            string strArrivalTime = (string)jsonData["ArrivalTime"].ToString();
+
+            if (!String.IsNullOrEmpty(strArrivalTime))
             {
-                //logger.Debug("item = " + item);
-                if (count == 0)
-                    strArrivalTimeList = item.ToString();
-                else
-                    strArrivalTimeList += "," + item.ToString();
-            }
-            logger.Debug("strArrivalTimeList = " + strArrivalTimeList);
-            */
-            logger.Debug("strArrivalTime = " + strArrivalTime);
+                blnArrivalTimePresent = true;
+                strArrivalTime = json.ArrivalTime.ToObject<string>();
 
+                /*
+                JArray jaryArrivalTimeList = (JArray)json.ArrivalTime;
+
+                string strArrivalTimeList = "";
+                count = 0;
+                foreach (var item in jaryArrivalTimeList)
+                {
+                    //logger.Debug("item = " + item);
+                    if (count == 0)
+                        strArrivalTimeList = item.ToString();
+                    else
+                        strArrivalTimeList += "," + item.ToString();
+                }
+                logger.Debug("strArrivalTimeList = " + strArrivalTimeList);
+                */
+                logger.Debug("strArrivalTime = " + strArrivalTime);
+            }
 
             string query = "";
             query += "SELECT a.Id FROM dbo.Activities AS a ";
@@ -2289,7 +2302,9 @@ namespace services.Controllers
             //query += " AND ActivityDate < '" + strActivityDate2 + "'";
             query += " AND a.LocationId in (" + string.Join(",", jaryLocationIdList) + ")";
             query += " AND CONVERT(date, a.ActivityDate) in (" + string.Join(",", dtList2.ToArray()) + ")";
-            query += " AND CONVERT(time, h.ArrivalTime) in ('" + strArrivalTime + "')";
+
+            if (blnArrivalTimePresent)
+                query += " AND CONVERT(time, h.ArrivalTime) in ('" + strArrivalTime + "')";
 
             logger.Debug("query = " + query);
 
