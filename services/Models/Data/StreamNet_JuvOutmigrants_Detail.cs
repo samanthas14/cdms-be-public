@@ -2,9 +2,9 @@
 
 namespace services.Models.Data
 {
-    public class StreamNet_JuvOut_Detail : DataDetail
+    public class StreamNet_JuvOutmigrants_Detail : DataDetail
     {
-        public StreamNet_JuvOut_Detail()
+        public StreamNet_JuvOutmigrants_Detail()
         {
             ShadowId = Guid.NewGuid().ToString();
         }

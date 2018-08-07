@@ -11,47 +11,47 @@ using services.ExtensionMethods;
  */
 namespace services.ExtensionMethods
 {
-    public static class StreamNet_JuvOutExtensions
+    public static class StreamNet_JuvOutmigrantsExtensions
     {
         //Extension method to give ServicesContext this property.
-        public static DbSet<StreamNet_JuvOut_Header> StreamNet_JuvOut_Header(this ServicesContext ctx)
+        public static DbSet<StreamNet_JuvOutmigrants_Header> StreamNet_JuvOutmigrants_Header(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("StreamNet_JuvOut_Header").Cast<StreamNet_JuvOut_Header>();
+            return ctx.GetDbSet("StreamNet_JuvOutmigrants_Header").Cast<StreamNet_JuvOutmigrants_Header>();
         }
 
-        public static DbSet<StreamNet_JuvOut_Detail> StreamNet_JuvOut_Detail(this ServicesContext ctx)
+        public static DbSet<StreamNet_JuvOutmigrants_Detail> StreamNet_JuvOutmigrants_Detail(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("StreamNet_JuvOut_Detail").Cast<StreamNet_JuvOut_Detail>();
+            return ctx.GetDbSet("StreamNet_JuvOutmigrants_Detail").Cast<StreamNet_JuvOutmigrants_Detail>();
         }
     }
 }
 
 namespace services.Models.Data
 {
-    public class StreamNet_JuvOut : DatasetData
+    public class StreamNet_JuvOutmigrants : DatasetData
     {
         public Dataset Dataset { get; set; }
-        public StreamNet_JuvOut_Header Header { get; set; }
-        public List<StreamNet_JuvOut_Detail> Details { get; set; }
+        public StreamNet_JuvOutmigrants_Header Header { get; set; }
+        public List<StreamNet_JuvOutmigrants_Detail> Details { get; set; }
 
-        public StreamNet_JuvOut()
+        public StreamNet_JuvOutmigrants()
         {
-            Details = new List<StreamNet_JuvOut_Detail>();
+            Details = new List<StreamNet_JuvOutmigrants_Detail>();
         }
 
 
         // load an existing one
-        public StreamNet_JuvOut(int ActivityId)
+        public StreamNet_JuvOutmigrants(int ActivityId)
         {
             var ndb = ServicesContext.Current;
-            Details = new List<StreamNet_JuvOut_Detail>();
+            Details = new List<StreamNet_JuvOutmigrants_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.StreamNet_JuvOut_Header()
+            var headers_q = from h in ndb.StreamNet_JuvOutmigrants_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in ndb.StreamNet_JuvOut_Header()
+                                    from hh in ndb.StreamNet_JuvOutmigrants_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -66,12 +66,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.StreamNet_JuvOut_Detail()
+            var details_q = from h in ndb.StreamNet_JuvOutmigrants_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.StreamNet_JuvOut_Detail()
+                                    from hh in ndb.StreamNet_JuvOutmigrants_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig
