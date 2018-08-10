@@ -75,6 +75,19 @@ namespace services.Controllers
         }
 
         /*
+         * get list of seasons for this datasetid (returns an empty list if none)
+         */
+        //GET /api/v1/activity/getdatasetseasons/5
+        [HttpGet]
+        public IEnumerable<Seasons> GetDatasetSeasons(int id)
+        {
+            logger.Debug("Inside GetDatasetSeasons...");
+            logger.Debug("id = " + id);
+            var ndb = ServicesContext.Current;
+            return ndb.Seasons.Where(o => o.DatasetId == id).ToList();
+        }
+
+        /*
          * This queries just the information we need for showing the Activities on the
          * Data tab on CDMS front-end (for performance).
          */

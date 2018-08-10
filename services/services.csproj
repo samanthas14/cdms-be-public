@@ -417,6 +417,14 @@
     <Compile Include="Migrations\201808082310110_StUpdConrolTypeForGrAndWw.Designer.cs">
       <DependentUpon>201808082310110_StUpdConrolTypeForGrAndWw.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808101859122_CsAddTblSeasons.cs" />
+    <Compile Include="Migrations\201808101859122_CsAddTblSeasons.Designer.cs">
+      <DependentUpon>201808101859122_CsAddTblSeasons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808102016141_CsAddSeasonsData.cs" />
+    <Compile Include="Migrations\201808102016141_CsAddSeasonsData.Designer.cs">
+      <DependentUpon>201808102016141_CsAddSeasonsData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -773,6 +781,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808082310110_StUpdConrolTypeForGrAndWw.resx">
       <DependentUpon>201808082310110_StUpdConrolTypeForGrAndWw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808101859122_CsAddTblSeasons.resx">
+      <DependentUpon>201808101859122_CsAddTblSeasons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808102016141_CsAddSeasonsData.resx">
+      <DependentUpon>201808102016141_CsAddSeasonsData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
