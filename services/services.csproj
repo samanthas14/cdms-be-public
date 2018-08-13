@@ -227,6 +227,10 @@
     <Compile Include="Migrations\201807171641140_AlreadyRemovedTables.Designer.cs">
       <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808070228184_JuvOut_migration.cs" />
+    <Compile Include="Migrations\201808070228184_JuvOut_migration.Designer.cs">
+      <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -237,6 +241,9 @@
     <Compile Include="Models\Data\BSample.cs" />
     <Compile Include="Models\Data\BSample_Detail.cs" />
     <Compile Include="Models\Data\BSample_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
     <Compile Include="Models\Data\Subproject.cs" />
     <Compile Include="Models\Data\Drift.cs" />
     <Compile Include="Models\Data\Drift_Detail.cs" />
@@ -424,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807171641140_AlreadyRemovedTables.resx">
       <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808070228184_JuvOut_migration.resx">
+      <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
