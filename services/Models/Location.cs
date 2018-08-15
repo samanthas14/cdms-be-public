@@ -76,6 +76,8 @@ namespace services.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string StreamName { get; set; }
+        public string TribToName { get; set; }
         public string Description { get; set; }
 //        public int? SdeObjectId { get; set; }
         public string GNIS_ID { get; set; }
