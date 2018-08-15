@@ -231,13 +231,68 @@
     <Compile Include="Migrations\201808070228184_JuvOut_migration.Designer.cs">
       <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808151643208_alter_waterbodies.cs" />
+    <Compile Include="Migrations\201808151643208_alter_waterbodies.Designer.cs">
+      <DependentUpon>201808151643208_alter_waterbodies.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\Data\ArtificialProduction.cs" />
+    <Compile Include="Models\Data\ArtificialProduction_Detail.cs" />
+    <Compile Include="Models\Data\ArtificialProduction_Header.cs" />
+    <Compile Include="Models\Data\Benthic.cs" />
+    <Compile Include="Models\Data\Benthic_Detail.cs" />
+    <Compile Include="Models\Data\Benthic_Header.cs" />
+    <Compile Include="Models\Data\BSample.cs" />
+    <Compile Include="Models\Data\BSample_Detail.cs" />
+    <Compile Include="Models\Data\BSample_Header.cs" />
+    <Compile Include="Models\Data\CreelSurvey.cs" />
+    <Compile Include="Models\Data\CreelSurvey_Detail.cs" />
+    <Compile Include="Models\Data\CreelSurvey_Header.cs" />
+    <Compile Include="Models\Data\Drift.cs" />
+    <Compile Include="Models\Data\Drift_Detail.cs" />
+    <Compile Include="Models\Data\Drift_Header.cs" />
+    <Compile Include="Models\Data\Electrofishing.cs" />
+    <Compile Include="Models\Data\Electrofishing_Detail.cs" />
+    <Compile Include="Models\Data\Electrofishing_Header.cs" />
+    <Compile Include="Models\Data\FishScales.cs" />
+    <Compile Include="Models\Data\FishScales_Detail.cs" />
+    <Compile Include="Models\Data\FishScales_Header.cs" />
+    <Compile Include="Models\Data\FishTransport.cs" />
+    <Compile Include="Models\Data\FishTransport_Detail.cs" />
+    <Compile Include="Models\Data\FishTransport_Header.cs" />
+    <Compile Include="Models\Data\Genetic.cs" />
+    <Compile Include="Models\Data\Genetic_Detail.cs" />
+    <Compile Include="Models\Data\Genetic_Header.cs" />
+    <Compile Include="Models\Data\JvRearing.cs" />
+    <Compile Include="Models\Data\JvRearing_Detail.cs" />
+    <Compile Include="Models\Data\JvRearing_Header.cs" />
+    <Compile Include="Models\Data\Metrics.cs" />
+    <Compile Include="Models\Data\Metrics_Detail.cs" />
+    <Compile Include="Models\Data\Metrics_Header.cs" />
+    <Compile Include="Models\Data\ScrewTrap.cs" />
+    <Compile Include="Models\Data\ScrewTrap_Detail.cs" />
+    <Compile Include="Models\Data\ScrewTrap_Header.cs" />
+    <Compile Include="Models\Data\SnorkelFish.cs" />
+    <Compile Include="Models\Data\SnorkelFish_Detail.cs" />
+    <Compile Include="Models\Data\SnorkelFish_Header.cs" />
+    <Compile Include="Models\Data\SpawningGroundSurvey.cs" />
+    <Compile Include="Models\Data\SpawningGroundSurvey_Detail.cs" />
+    <Compile Include="Models\Data\SpawningGroundSurvey_Header.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_NOSA.cs" />
+    <Compile Include="Models\Data\StreamNet_NOSA_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_NOSA_Header .cs" />
+    <Compile Include="Models\Data\StreamNet_RperS.cs" />
+    <Compile Include="Models\Data\StreamNet_RperS_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_RperS_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_SAR.cs" />
+    <Compile Include="Models\Data\StreamNet_SAR_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_SAR_Header.cs" />
     <Compile Include="Models\Data\Subproject.cs" />
     <Compile Include="Models\DatasetField.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
@@ -246,6 +301,12 @@
     <Compile Include="Models\Data\DataDetail.cs" />
     <Compile Include="Models\Data\DataHeader.cs" />
     <Compile Include="Models\Data\DatasetData.cs" />
+    <Compile Include="Models\Data\WaterQuality.cs" />
+    <Compile Include="Models\Data\WaterQuality_Detail.cs" />
+    <Compile Include="Models\Data\WaterQuality_Header.cs" />
+    <Compile Include="Models\Data\WaterTemp.cs" />
+    <Compile Include="Models\Data\WaterTemp_Detail.cs" />
+    <Compile Include="Models\Data\WaterTemp_Header.cs" />
     <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Dataset.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -374,6 +435,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808070228184_JuvOut_migration.resx">
       <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808151643208_alter_waterbodies.resx">
+      <DependentUpon>201808151643208_alter_waterbodies.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

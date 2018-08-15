@@ -76,6 +76,7 @@ namespace services.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } // concatenated StreamName : TribToName
+        public int StreamFull_Id { get; set; }
         public string StreamName { get; set; }
         public string TribToName { get; set; }
         public string Description { get; set; }
