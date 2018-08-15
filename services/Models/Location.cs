@@ -75,7 +75,7 @@ namespace services.Models
     public class WaterBody
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } // concatenated StreamName : TribToName
         public string StreamName { get; set; }
         public string TribToName { get; set; }
         public string Description { get; set; }
