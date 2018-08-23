@@ -169,9 +169,9 @@ namespace services.Models
                 else
                     system_fields = "QAStatusName,LocationLabel";
             }
-            else if (this.Datastore.TablePrefix == "SpawningGroundSurvey")
+            else if (this.Datastore.TablePrefix == "NPT_SGS_carcass")
             {
-                logger.Debug("This dataset is SpawningGroundSurvey-related...");
+                logger.Debug("This dataset is NPT_SGS_carcass-related...");
                 if (productTarget == "Query")
                     system_fields = "ActivityQAStatusId,LocationId";
                 else
@@ -314,7 +314,7 @@ namespace services.Models
                         (this.Datastore.TablePrefix == "Benthic") ||
                         (this.Datastore.TablePrefix == "Drift") ||
                         (this.Datastore.TablePrefix == "AdultWeir") ||
-                        (this.Datastore.TablePrefix == "SpawningGroundSurvey")
+                        (this.Datastore.TablePrefix == "NPT_SGS_carcass")
                         )
                 {
                     labels = labels

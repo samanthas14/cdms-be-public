@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class SnorkAddProtocol : IMigrationMetadata
+    public sealed partial class sgs_datasets_added : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SnorkAddProtocol));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(sgs_datasets_added));
         
         string IMigrationMetadata.Id
         {
-            get { return "201802211744273_SnorkAddProtocol"; }
+            get { return "201808232043274_sgs_datasets_added"; }
         }
         
         string IMigrationMetadata.Source

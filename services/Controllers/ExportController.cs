@@ -74,7 +74,7 @@ namespace services.Controllers
                     {
                         //logger.Debug("header = " + header);
                         intFieldHeaderLength = header.Length;
-                        if (dataset.Datastore.TablePrefix == "SpawningGroundSurvey")
+                        if (dataset.Datastore.TablePrefix == "NPT_SGS_carcass")
                         {
                             if ((intFieldHeaderLength >= intHeaderLength) && (header.IndexOf(strHeader) > -1))
                             {

@@ -187,58 +187,21 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
-    <Compile Include="Migrations\201803151802038_initial.cs" />
-    <Compile Include="Migrations\201803151802038_initial.Designer.cs">
-      <DependentUpon>201803151802038_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201808152215425_all_datasets.cs" />
+    <Compile Include="Migrations\201808152215425_all_datasets.Designer.cs">
+      <DependentUpon>201808152215425_all_datasets.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201805151804028_AddStreamnetFields.cs" />
-    <Compile Include="Migrations\201805151804028_AddStreamnetFields.Designer.cs">
-      <DependentUpon>201805151804028_AddStreamnetFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804162047154_GenUpdDescWiSampleYear.cs" />
-    <Compile Include="Migrations\201804162047154_GenUpdDescWiSampleYear.Designer.cs">
-      <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.cs" />
-    <Compile Include="Migrations\201804272254369_AwUpdPassageTime.Designer.cs">
-      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.cs" />
-    <Compile Include="Migrations\201805021712126_SnorkelAddFieldsToVw.Designer.cs">
-      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.cs" />
-    <Compile Include="Migrations\201805081904185_FileTypeAddBmpToImage.Designer.cs">
-      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805291740075_WtReviseDepthTbls.cs" />
-    <Compile Include="Migrations\201805291740075_WtReviseDepthTbls.Designer.cs">
-      <DependentUpon>201805291740075_WtReviseDepthTbls.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805291741598_WtReviseDepthViews.cs" />
-    <Compile Include="Migrations\201805291741598_WtReviseDepthViews.Designer.cs">
-      <DependentUpon>201805291741598_WtReviseDepthViews.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201805291839390_WbReviseDepthData.cs" />
-    <Compile Include="Migrations\201805291839390_WbReviseDepthData.Designer.cs">
-      <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807171641140_AlreadyRemovedTables.cs" />
-    <Compile Include="Migrations\201807171641140_AlreadyRemovedTables.Designer.cs">
-      <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808070228184_JuvOut_migration.cs" />
-    <Compile Include="Migrations\201808070228184_JuvOut_migration.Designer.cs">
-      <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808151643208_alter_waterbodies.cs" />
-    <Compile Include="Migrations\201808151643208_alter_waterbodies.Designer.cs">
-      <DependentUpon>201808151643208_alter_waterbodies.cs</DependentUpon>
+    <Compile Include="Migrations\201808232043274_sgs_datasets_added.cs" />
+    <Compile Include="Migrations\201808232043274_sgs_datasets_added.Designer.cs">
+      <DependentUpon>201808232043274_sgs_datasets_added.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\Data\AdultWeir.cs" />
+    <Compile Include="Models\Data\AdultWeir_Detail.cs" />
+    <Compile Include="Models\Data\AdultWeir_Header.cs" />
     <Compile Include="Models\Data\ArtificialProduction.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Detail.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Header.cs" />
@@ -275,6 +238,12 @@
     <Compile Include="Models\Data\ScrewTrap.cs" />
     <Compile Include="Models\Data\ScrewTrap_Detail.cs" />
     <Compile Include="Models\Data\ScrewTrap_Header.cs" />
+    <Compile Include="Models\Data\SGS_Carcass.cs" />
+    <Compile Include="Models\Data\SGS_Carcass_Detail.cs" />
+    <Compile Include="Models\Data\SGS_Carcass_Header.cs" />
+    <Compile Include="Models\Data\SGS_Redd.cs" />
+    <Compile Include="Models\Data\SGS_Redd_Detail.cs" />
+    <Compile Include="Models\Data\SGS_Redd_Header.cs" />
     <Compile Include="Models\Data\SnorkelFish.cs" />
     <Compile Include="Models\Data\SnorkelFish_Detail.cs" />
     <Compile Include="Models\Data\SnorkelFish_Header.cs" />
@@ -403,41 +372,11 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803151802038_initial.resx">
-      <DependentUpon>201803151802038_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808152215425_all_datasets.resx">
+      <DependentUpon>201808152215425_all_datasets.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805151804028_AddStreamnetFields.resx">
-      <DependentUpon>201805151804028_AddStreamnetFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804162047154_GenUpdDescWiSampleYear.resx">
-      <DependentUpon>201804162047154_GenUpdDescWiSampleYear.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804272254369_AwUpdPassageTime.resx">
-      <DependentUpon>201804272254369_AwUpdPassageTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805021712126_SnorkelAddFieldsToVw.resx">
-      <DependentUpon>201805021712126_SnorkelAddFieldsToVw.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805081904185_FileTypeAddBmpToImage.resx">
-      <DependentUpon>201805081904185_FileTypeAddBmpToImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805291740075_WtReviseDepthTbls.resx">
-      <DependentUpon>201805291740075_WtReviseDepthTbls.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805291741598_WtReviseDepthViews.resx">
-      <DependentUpon>201805291741598_WtReviseDepthViews.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201805291839390_WbReviseDepthData.resx">
-      <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807171641140_AlreadyRemovedTables.resx">
-      <DependentUpon>201807171641140_AlreadyRemovedTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808070228184_JuvOut_migration.resx">
-      <DependentUpon>201808070228184_JuvOut_migration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808151643208_alter_waterbodies.resx">
-      <DependentUpon>201808151643208_alter_waterbodies.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201808232043274_sgs_datasets_added.resx">
+      <DependentUpon>201808232043274_sgs_datasets_added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

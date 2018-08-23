@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class JuvOut_migration : IMigrationMetadata
+    public sealed partial class all_datasets : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(JuvOut_migration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(all_datasets));
         
         string IMigrationMetadata.Id
         {
-            get { return "201808070228184_JuvOut_migration"; }
+            get { return "201808152215425_all_datasets"; }
         }
         
         string IMigrationMetadata.Source
