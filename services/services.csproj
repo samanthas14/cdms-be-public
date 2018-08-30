@@ -413,8 +413,13 @@
     <Compile Include="Migrations\201805291839390_WbReviseDepthData.Designer.cs">
       <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808082310110_StUpdConrolTypeForGrAndWw.cs" />
+    <Compile Include="Migrations\201808082310110_StUpdConrolTypeForGrAndWw.Designer.cs">
+      <DependentUpon>201808082310110_StUpdConrolTypeForGrAndWw.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Seasons.cs" />
     <Compile Include="Models\Collaborator.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\Data\Benthic.cs" />
@@ -765,6 +770,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805291839390_WbReviseDepthData.resx">
       <DependentUpon>201805291839390_WbReviseDepthData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808082310110_StUpdConrolTypeForGrAndWw.resx">
+      <DependentUpon>201808082310110_StUpdConrolTypeForGrAndWw.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
