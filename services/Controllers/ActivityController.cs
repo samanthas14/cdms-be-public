@@ -78,7 +78,7 @@ namespace services.Controllers
          * get list of seasons for this datasetid (returns an empty list if none)
          */
         //GET /api/v1/activity/getdatasetseasons/5
-        [HttpGet]
+        /*[HttpGet]
         public IEnumerable<Seasons> GetDatasetSeasons(int id)
         {
             logger.Debug("Inside GetDatasetSeasons...");
@@ -86,6 +86,7 @@ namespace services.Controllers
             var ndb = ServicesContext.Current;
             return ndb.Seasons.Where(o => o.DatasetId == id).ToList();
         }
+        */
 
         /*
          * This queries just the information we need for showing the Activities on the
@@ -1393,10 +1394,84 @@ namespace services.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        // POST /api/v1/activity/savedatasetseason
+        public HttpResponseMessage SaveDatasetSeason(JObject jsonData)
+        {
+            logger.Debug("Inside SaveDatasetSeason...");
+            var db = ServicesContext.Current;
+            logger.Debug("db = " + db);
+
+            dynamic json = jsonData;
+            logger.Debug("json = " + json);
+
+            //string strJson = "[" + json + "]";
+
+            User me = AuthorizationManager.getCurrentUser();
+            logger.Debug("me = " + me);
+
+            int pId = json.ProjectId.ToObject<int>();
+            logger.Debug("pId = " + pId);
+
+            Project p = db.Projects.Find(pId);
+            logger.Debug("p = " + p);
+            if (p == null)
+                throw new System.Exception("Configuration error.  Please try again.");
+
+            logger.Debug("p.isOwnerOrEditor(me) = " + p.isOwnerOrEditor(me));
+            if (!p.isOwnerOrEditor(me))
+                throw new System.Exception("Authorization error.");
+
+            logger.Debug("About to check incoming data for Season...");
+            Seasons s = new Seasons();
+
+            s.Id = json.Id.ToObject<int>();
+            s.Species = json.Species.ToObject<string>();
+            s.Season = json.Season.ToObject<int>();
+            s.OpenDate = json.OpenDate.ToObject<DateTime>();
+            s.CloseDate = json.CloseDate.ToObject<DateTime>();
+            s.TotalDays = json.TotalDays.ToObject<int>();
+
+
+            logger.Debug(
+                "s.Id = " + s.Id + "\n" +
+                "s.Species = " + s.Species + "\n" +
+                "s.Season = " + s.Season + "\n" +
+                "s.OpenDate = " + s.OpenDate + "\n" +
+                "s.CloseDate = " + s.CloseDate + "\n" +
+                "s.TotalDays = " + s.TotalDays + "\n"
+                );
+
+            if (s.Id == 0)
+            {
+                logger.Debug("About to add new season...");
+                db.Seasons.Add(s);
+                logger.Debug("created new season...");
+
+                db.SaveChanges();
+            }
+            else
+            {
+                logger.Debug("About to update season...");
+                db.Entry(s).State = EntityState.Modified;
+
+                db.SaveChanges();
+                logger.Debug("updated existing season...");
+
+            }
+            db.SaveChanges();
+
+            int newId = s.Id;
+            logger.Debug("newId = " + s.Id);
+
+            //return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, s);
+            return response;
+        }
+
         //QuerySpecificActivities
         // POST /api/v1/activity/queryspecificactivities
-        [HttpPost]
-        /*public DataTable QuerySpecificActivities(JObject jsonData)
+        /*[HttpPost]
+        public DataTable QuerySpecificActivities(JObject jsonData)
         {
             logger.Debug("Inside ActivityController.cs, QuerySpecificActivities...");
             var db = ServicesContext.Current;

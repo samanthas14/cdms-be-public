@@ -181,6 +181,7 @@
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\CDMSController.cs" />
+    <Compile Include="Controllers\SeasonController.cs" />
     <Compile Include="Controllers\SyslogController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -425,6 +426,10 @@
     <Compile Include="Migrations\201808102016141_CsAddSeasonsData.Designer.cs">
       <DependentUpon>201808102016141_CsAddSeasonsData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808301730494_CsUpdDatasetsConfig.cs" />
+    <Compile Include="Migrations\201808301730494_CsUpdDatasetsConfig.Designer.cs">
+      <DependentUpon>201808301730494_CsUpdDatasetsConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -585,6 +590,7 @@
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
     <Folder Include="Views\CrppDataset\" />
+    <Folder Include="Views\Season\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -787,6 +793,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808102016141_CsAddSeasonsData.resx">
       <DependentUpon>201808102016141_CsAddSeasonsData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808301730494_CsUpdDatasetsConfig.resx">
+      <DependentUpon>201808301730494_CsUpdDatasetsConfig.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
