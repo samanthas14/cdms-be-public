@@ -16,7 +16,7 @@ namespace services.Models.Data
         //Carcass data
         public string SampleNumber { get; set; }
         public string HistoricSampleNumber { get; set; }
-        //public string IDFGNumber { get; set; }
+        //public string IDFGNumber { get; set; } //not needed with carcasses, but will be needed with the Fins/scales age data
         public string CarcassSpecies { get; set; }
         public string Sex { get; set; }
         public int? ForkLength { get; set; }
@@ -28,8 +28,9 @@ namespace services.Models.Data
         public string PITCode { get; set; }
         public string AdiposeFinClipped { get; set; }
         public string CWTScanned { get; set; }
+        public string CWTCode { get; set; }
         public string SnoutCollected { get; set; }
-        public string DNACollecetd { get; set; }
+        public string DNAColleceted { get; set; }
         public string Fins { get; set; }
         public string Scales { get; set; }
         public string Otolith { get; set; }
@@ -58,17 +59,17 @@ namespace services.Models.Data
         public string TagsJaw { get; set; }
         public string TagsStaple { get; set; }
         public string TagsSpaghetti { get; set; }
-        public string TagsStreamer { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string TagsPetersonDisc { get; set; }
-        public string MarksAnalFin { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksCaudalFin { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksPectoralFin { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string TagsStreamer { get; set; } //no associated records in SGS db, suggest omitting altogether
+        public string TagsPetersonDisk { get; set; }
+        //public string MarksAnalFin { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksCaudalFin { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksPectoralFin { get; set; } //no associated records in SGS db, suggest omitting altogether
         public string MarksVentralFin { get; set; }
-        public string MarksMaxillary { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksFreezeBrand { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksGRIT { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksOTC { get; set; } //no associated records in SGS db, suggest omitting altogether
-        public string MarksDorsalScar { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksMaxillary { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksFreezeBrand { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksGRIT { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksOTC { get; set; } //no associated records in SGS db, suggest omitting altogether
+        //public string MarksDorsalScar { get; set; } //no associated records in SGS db, suggest omitting altogether
         public string Notes { get; set; } 
 
         //User Defined Fields
