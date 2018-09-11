@@ -11,13 +11,6 @@ namespace services.Models
     {
         private static Logger logger = LogManager.GetCurrentClassLogger(); 
 
-        private const int SUPERUSER_KEN = 1;
-        private const int SUPERUSER_COLETTE = 2;
-        private const int SUPERUSER_GEORGE = 1081;
-        private const int SUPERUSER_STACY = 9;
-        private const int SUPERUSER_BETHY = 3122; // Prod
-        //private const int SUPERUSER_BETHY = 3103;  // Dev
-
         public int Id { get; set; }
         
         public int ProjectTypeId { get; set; }
@@ -54,15 +47,8 @@ namespace services.Models
                     return true;
             }
 
-            //superusers
-            if (user.Id == SUPERUSER_KEN || 
-                user.Id == SUPERUSER_COLETTE || 
-                user.Id == SUPERUSER_GEORGE ||
-                user.Id == SUPERUSER_STACY ||
-                user.Id == SUPERUSER_BETHY
-                )
+            if (user.Roles.Contains("Admin"))
                 return true;
-
 
             return false;
         }
