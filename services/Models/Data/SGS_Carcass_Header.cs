@@ -17,6 +17,7 @@ namespace services.Models.Data
         public string SurveyType { get; set; }
         public string SurveyMethod { get; set; }
         public string GPSUnit { get; set; }
+        public string Datum { get; set; }
         public string Weather { get; set; }
         public string Visibility { get; set; }
         public string SurveyComments { get; set; }

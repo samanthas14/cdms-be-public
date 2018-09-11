@@ -42,8 +42,7 @@ namespace services.Models.Data
         public string CarcassComments { get; set; }
 
         //WPT data - coalesced from CarcassWPT and ReddWPT tables
-        public string WPTName { get; set; }
-        public string Datum { get; set; }
+        public string CarcassWPT { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
 
