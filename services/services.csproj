@@ -195,6 +195,10 @@
     <Compile Include="Migrations\201808232043274_sgs_datasets_added.Designer.cs">
       <DependentUpon>201808232043274_sgs_datasets_added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809072138465_edited_carcass_detail.cs" />
+    <Compile Include="Migrations\201809072138465_edited_carcass_detail.Designer.cs">
+      <DependentUpon>201809072138465_edited_carcass_detail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -377,6 +381,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808232043274_sgs_datasets_added.resx">
       <DependentUpon>201808232043274_sgs_datasets_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809072138465_edited_carcass_detail.resx">
+      <DependentUpon>201809072138465_edited_carcass_detail.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

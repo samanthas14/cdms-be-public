@@ -20,5 +20,7 @@ namespace services.Models.Data
         public string Weather { get; set; }
         public string Visibility { get; set; }
         public string SurveyComments { get; set; }
+        public int PreviousRedds { get; set; }
+        public int NewRedds { get; set; }
     }
 }
