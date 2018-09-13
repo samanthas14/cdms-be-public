@@ -30,7 +30,7 @@ namespace services.Models.Data
         public string CWTScanned { get; set; }
         public string CWTCode { get; set; }
         public string SnoutCollected { get; set; }
-        public string DNAColleceted { get; set; }
+        public string DNACollected { get; set; }
         public string Fins { get; set; }
         public string Scales { get; set; }
         public string Otolith { get; set; }
