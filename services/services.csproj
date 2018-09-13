@@ -199,6 +199,10 @@
     <Compile Include="Migrations\201809072138465_edited_carcass_detail.Designer.cs">
       <DependentUpon>201809072138465_edited_carcass_detail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809111711271_redd_dataset_fix.cs" />
+    <Compile Include="Migrations\201809111711271_redd_dataset_fix.Designer.cs">
+      <DependentUpon>201809111711271_redd_dataset_fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -384,6 +388,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809072138465_edited_carcass_detail.resx">
       <DependentUpon>201809072138465_edited_carcass_detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809111711271_redd_dataset_fix.resx">
+      <DependentUpon>201809111711271_redd_dataset_fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

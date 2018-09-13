@@ -1,0 +1,4 @@
+CFLAGS = -O2 $(DEBUGFLAG) -std=gnu99 -mtune=core2
+CXXFLAGS = -O2 $(DEBUGFLAG) -mtune=core2
+CXX1XFLAGS = -O2 $(DEBUGFLAG) -mtune=core2
+PKG_CPPFLAGS += -DSUPPORT_OPENMP
