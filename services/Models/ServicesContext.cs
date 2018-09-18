@@ -94,6 +94,7 @@ namespace services.Models
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<Funding> Funding { get; set; }
         public DbSet<County> Counties { get; set; }
+        public DbSet<Seasons> Seasons { get; set; }
 
         //get the dbset by name
         public DbSet GetDbSet(string entityName)
