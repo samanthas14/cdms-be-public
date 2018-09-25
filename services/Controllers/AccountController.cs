@@ -100,6 +100,7 @@ namespace services.Controllers
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
+                // Membership Provider is located in the web.config
                     if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
                     (isValidLocalUser(user, model.Password)) || (Membership.Provider.Name == "ADMembershipProvider" && Membership.ValidateUser(model.Username, model.Password))
                     )
