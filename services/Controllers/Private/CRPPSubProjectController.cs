@@ -42,7 +42,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string prefix = @"";
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             //string root = System.IO.Path.Combine(prefix, strPath);
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
@@ -362,7 +362,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             string theFullPath = root + project.Id + "\\S\\" + subprojectId + "\\" + existing_file.Name;
             //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             //logger.Debug("Deleting files from location: " + root + "\\" + subprojectId);
@@ -431,7 +431,7 @@ namespace services.Controllers
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             logger.Debug("root = " + root);
 
             string strSubprojectsPath = root + p.Id + "\\S\\" + crppSubproject.Id;
@@ -656,7 +656,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\" + p.Id + "\\S\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\" + p.Id + "\\S\\";
             logger.Debug("root = " + root);
 
             //string strSubprojectsPath = root + "\\" + s.Id;
@@ -1033,7 +1033,7 @@ namespace services.Controllers
 
                     //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
                     //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCrppProjectDocuments"] + ("\\uploads\\subprojects");
-                    string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+                    string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
                     logger.Debug("root = " + root);
 
                     string strSubprojectsFolder = root + p.Id + "\\S\\" + spId + "\\";

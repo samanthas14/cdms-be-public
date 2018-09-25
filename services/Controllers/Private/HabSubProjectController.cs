@@ -123,7 +123,7 @@ namespace services.Controllers
             }
 
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
 
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
@@ -619,7 +619,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + ("\\uploads\\subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             //string theFullPath = root + "\\" + subprojectId + "\\" + existing_file.Name;
             string theFullPath = root + project.Id + "\\S\\" + subprojectId + "\\" + existing_file.Name;
             //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
@@ -814,7 +814,7 @@ namespace services.Controllers
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/");
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             logger.Debug("root = " + root);
 
             string strSubprojectsPath = root + p.Id + "\\S\\" + habSubproject.Id;
@@ -1287,7 +1287,7 @@ namespace services.Controllers
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + ("uploads\\subprojects");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"];
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"];
             logger.Debug("root = " + root);
 
             //string strSubprojectsPath = root + "\\" + s.Id;
@@ -1518,7 +1518,7 @@ namespace services.Controllers
                     //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads/subprojects");
                     //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + ("uploads\\subprojects");
                     //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"];
-                    string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\";
+                    string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
                     logger.Debug("root = " + root);
                     string strCleanupFolder = root;
 
