@@ -32,7 +32,7 @@ namespace services.Controllers
             }
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             logger.Debug("root location = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("root Url = " + rootUrl);

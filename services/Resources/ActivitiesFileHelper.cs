@@ -131,7 +131,7 @@ namespace services.Resources
         {
             var db = ServicesContext.Current;
 
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             string theFullPath = root + projectId + "\\D\\" + datasetId + "\\" + existing_file.Name;
             
             var provider = new MultipartFormDataStreamProvider(theFullPath);

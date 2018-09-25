@@ -21,7 +21,7 @@ namespace services.Resources
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Configuration.ConfigurationManager.AppSettings["PathToHabitatProjectDocuments"] + ("\\uploads\\subprojects");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToServices"] + "\\uploads\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             string theFullPath = root + projectId + "\\S\\" + subprojectId + "\\" + existing_file.Name;
             //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             //logger.Debug("Deleting files from location: " + root + "\\" + subprojectId);
