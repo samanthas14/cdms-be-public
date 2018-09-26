@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class CsAddSeasonsData : IMigrationMetadata
+    public sealed partial class reset_migrations : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CsAddSeasonsData));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(reset_migrations));
         
         string IMigrationMetadata.Id
         {
-            get { return "201808102016141_CsAddSeasonsData"; }
+            get { return "201809261452407_reset_migrations"; }
         }
         
         string IMigrationMetadata.Source
