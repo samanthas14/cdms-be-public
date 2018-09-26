@@ -156,6 +156,34 @@ namespace services.Controllers
             return dt;
         }
 
+        // GET /api/v1/dataset/getdatasetview/5
+        public DataTable GetDatasetView(int id)
+        {
+            logger.Debug("Inside DatasetController.cs, GetDatasetView...");
+            var db = ServicesContext.Current;
+            Dataset dataset = db.Datasets.Find(id);
+            if (dataset == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            string query = "SELECT * FROM " + dataset.Datastore.TablePrefix + "_VW WHERE a.DatasetId = " + dataset.Id;
+            //logger.Debug("query = " + query);
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
         //api/v1/dataset/adddatasettoproject
         [HttpPost]
         public HttpResponseMessage AddDatasetToProject(JObject jsonData)
