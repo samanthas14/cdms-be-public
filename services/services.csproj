@@ -335,6 +335,7 @@
     <Content Include="App_Readme\Elmah.SqlServer.sql" />
     <Content Include="App_Readme\Elmah.SqlServer.txt" />
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="db-scripts\to-run\2018-09-26_WTAddDischargeField.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -344,6 +345,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
+    <Folder Include="db-scripts\archive\" />
     <Folder Include="Views\CrppDataset\" />
     <Folder Include="Views\Season\" />
   </ItemGroup>
