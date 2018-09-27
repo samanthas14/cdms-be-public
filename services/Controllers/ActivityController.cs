@@ -1124,7 +1124,15 @@ namespace services.Controllers
         }
 
 
-        //sql version of saving - faster but doesn't currently actually work... :/
+        // POST /api/v1/activity/SaveDatasetActivitiesConnector
+        [HttpPost]
+        public HttpResponseMessage SaveDatasetActivitiesConnector(JObject jsonData)
+        {
+            return SaveDatasetActivitiesSQL(jsonData);
+        }
+
+
+        //sql version of saving - used for connectors inserting new activities
         private HttpResponseMessage SaveDatasetActivitiesSQL(JObject jsonData)
         {
             var db = ServicesContext.Current;
@@ -1158,58 +1166,65 @@ namespace services.Controllers
                 {
                     int newActivityId = 0;
 
-                    //each activity in its own scope...
+                    //each activity in its own transaction - maybe usually only one
 
                     var trans = con.BeginTransaction();
                     if (item is JProperty)
                     {
-
                         var prop = item as JProperty;
                         dynamic activity_json = prop.Value;
 
+                        //mapping to our activity object verifies all of the types
+
                         Activity activity = new Activity();
                         activity.LocationId = activity_json.LocationId;
-
-                        try
-                        {
-                            activity.ActivityDate = activity_json.ActivityDate;
-                        }
-                        catch (Exception e)
-                        {
-                            //TODO -- this is a very bad idea if the date is wrong...
-                            logger.Debug("Ooops had an error converting date: " + activity_json.ActivityDate);
-                            logger.Debug(e.ToString());
-
-                            throw e;
-
-                        }
-
+                        activity.ActivityDate = (activity_json.ActivityDate != null) ? activity_json.ActivityDate : DateTime.Now;
                         activity.DatasetId = json.DatasetId;
                         activity.UserId = me.Id;
-                        activity.SourceId = 1;                                                                  // TODO 
+                        activity.SourceId = (activity_json.SourceId != null) ? activity_json.SourceId : 3; //3=stream
                         activity.ActivityTypeId = 1;
                         activity.CreateDate = DateTime.Now;
-                        activity.InstrumentId = activity_json.InstrumentId;
-                        activity.AccuracyCheckId = activity_json.AccuracyCheckId;
-                        activity.PostAccuracyCheckId = activity_json.PostAccuracyCheckId;
+                        activity.InstrumentId = (activity_json.InstrumentId != null) ? (activity_json.InstrumentId) : null;
+                        activity.AccuracyCheckId = (activity_json.AccuracyCheckId != null) ? activity_json.AccuracyCheckId : null;
+                        activity.PostAccuracyCheckId = (activity_json.PostAccuracyCheckId != null) ? activity_json.PostAccuracyCheckId : null;
                         activity.Timezone = (activity_json.Timezone != null) ? activity_json.Timezone.Replace("'", "''") : "";
 
-                        var activity_query = "INSERT INTO Activities (LocationId, ActivityDate, DatasetId, UserId, SourceId, ActivityTypeId, CreateDate, Timezone) VALUES (";
-                        activity_query +=
+                        var activity_query = "INSERT INTO Activities (LocationId, ActivityDate, DatasetId, UserId, SourceId, ActivityTypeId, CreateDate, ";
+
+
+                        var activity_query_values =
                             activity.LocationId + ",'" +
                             activity.ActivityDate + "'," +
                             activity.DatasetId + "," +
                             activity.UserId + "," +
                             activity.SourceId + "," +
                             activity.ActivityTypeId + "," +
-                            "'" + activity.CreateDate + "'," +
-                            //activity.InstrumentId + "," +
-                            //activity.AccuracyCheckId + "," +
-                            //activity.PostAccuracyCheckId + "," +
-                            "'" + activity.Timezone + "');";
-                        activity_query += "SELECT SCOPE_IDENTITY();";
+                            "'" + activity.CreateDate + "',";
+
+                        if (activity.InstrumentId != null)
+                        {
+                            activity_query += "InstrumentId, ";
+                            activity_query_values += activity.InstrumentId + ",";
+                        }
+
+                        if (activity.AccuracyCheckId != null)
+                        {
+                            activity_query += "AccuracyCheckId, ";
+                            activity_query_values += activity.AccuracyCheckId + ",";
+                        }
+
+                        if (activity.PostAccuracyCheckId != null)
+                        {
+                            activity_query += "PostAccuracyCheckId, ";
+                            activity_query_values += activity.PostAccuracyCheckId + ",";
+                        }
+
+                        activity_query += "Timezone) VALUES(";
+                        activity_query_values += "'" + activity.Timezone + "');";
+                        activity_query += activity_query_values + "SELECT SCOPE_IDENTITY();";
 
                         logger.Debug(activity_query);
+                        logger.Debug(activity_query_values);
 
                         using (SqlCommand cmd = new SqlCommand(activity_query, con, trans))
                         {
@@ -1218,20 +1233,18 @@ namespace services.Controllers
                             newActivityId = Convert.ToInt32(result.ToString());
                         }
 
-                        //db.Activities.Add(activity);
-                        //db.SaveChanges();
-
+                        //this element is optional. if not included, we'll default to "6" and "initial import"
                         dynamic activityqastatus = activity_json.ActivityQAStatus;
 
                         activity.Id = newActivityId;
-                        logger.Debug("Hey!  we have a new activity id the ol' fashioned way: " + activity.Id);
+                        logger.Debug("Hey!  we have a new activity id: " + activity.Id);
 
                         var newQA_query = "INSERT INTO ActivityQAs (ActivityId, QAStatusId, Comments, EffDt, UserId) VALUES (";
 
                         ActivityQA newQA = new ActivityQA();
                         newQA.ActivityId = newActivityId;
-                        newQA.QAStatusId = activityqastatus.QAStatusID.ToObject<int>();
-                        newQA.Comments = activityqastatus.Comments.Replace("'", "''");
+                        newQA.QAStatusId = (activityqastatus != null) ? activityqastatus.QAStatusID : 6; //6=readyforqa
+                        newQA.Comments = (activityqastatus != null) ? activityqastatus.Comments.Replace("'", "''") : "Initial Import";
                         newQA.EffDt = DateTime.Now;
                         newQA.UserId = activity.UserId;
 
@@ -1251,9 +1264,6 @@ namespace services.Controllers
                                 throw new Exception("Failed to execute qa query.  See log.");
                             }
                         }
-
-                        //db.ActivityQAs.Add(newQA);
-                        //db.SaveChanges();
 
                         //get these ready for a new set of values
                         var query_header_values = " VALUES (";
@@ -1334,12 +1344,14 @@ namespace services.Controllers
                                 }
                             }
 
+                            var QAStatusId = (detail.GetValue("QAStatusId") != null) ? detail.GetValue("QAStatusId") : "1"; //1=ok
+
                             detailValues.Add(activity.Id.ToString());
                             detailValues.Add(activity.UserId.ToString());
                             detailValues.Add("'" + DateTime.Now.ToString() + "'");
                             detailValues.Add(DataDetail.ROWSTATUS_ACTIVE.ToString());
                             detailValues.Add(rowid.ToString());
-                            detailValues.Add(detail.GetValue("QAStatusId").ToString());
+                            detailValues.Add(QAStatusId.ToString());
 
                             //now populate detail values 
                             foreach (var prop_field in detailFields)
@@ -1359,7 +1371,7 @@ namespace services.Controllers
                             }
                             rowid++;
                             var the_detail_query = query_detail + string.Join(",", detailFields) + ") " + query_detail_values + string.Join(",", detailValues) + ")";
-                            //logger.Debug(the_detail_query);
+                            logger.Debug(the_detail_query);
                             using (SqlCommand cmd = new SqlCommand(the_detail_query, con, trans))
                             {
                                 if (cmd.ExecuteNonQuery() == 0)
@@ -1376,7 +1388,7 @@ namespace services.Controllers
                         {
                             var query = "update Activities set Description = (select concat(convert(varchar,min(ReadingDateTime),111), ' - ', convert(varchar,max(ReadingDateTime),111)) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + newActivityId + ") where Id = " + newActivityId;
 
-                            using (SqlCommand cmd = new SqlCommand(query, con))
+                            using (SqlCommand cmd = new SqlCommand(query, con, trans))
                             {
                                 logger.Debug(query);
                                 cmd.ExecuteNonQuery();
