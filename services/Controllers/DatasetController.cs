@@ -167,7 +167,7 @@ namespace services.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            string query = "SELECT * FROM " + dataset.Datastore.TablePrefix + "_VW";
+            string query = "SELECT * FROM " + dataset.Datastore.TablePrefix + "_VW WHERE DatasetId = " + id;
             //logger.Debug("query = " + query);
 
             DataTable dt = new DataTable();
@@ -195,24 +195,21 @@ namespace services.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            string query = null;
+            //string query = "SELECT * FROM " + datastore.TablePrefix + "_VW";
 
-            if (SurveyYear != null & StreamName != null)
+            var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW");
+
+            if (SurveyYear != null)
             {
-                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear + " AND StreamName = " + StreamName;
+                sb.Append("AND SurveyYear = " + SurveyYear);
             }
-            else if (SurveyYear == null & StreamName != null)
+
+            if (StreamName != null)
             {
-                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE StreamName = " + StreamName + " AND SurveyYear = Any(Select SurveyYear FROM " + datastore.TablePrefix + "_VW WHERE StreamName = " + StreamName;
+                sb.Append("AND StreamName = " + StreamName);
             }
-            else if (SurveyYear != null & StreamName == null)
-            {
-                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear + " AND StreamName = Any(Select StreamName FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear;
-            }
-            else if (SurveyYear == null & StreamName == null)
-            {
-                query = "SELECT * FROM " + datastore.TablePrefix;
-            }
+
+            string query = sb.ToString();
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
