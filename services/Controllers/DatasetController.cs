@@ -167,8 +167,52 @@ namespace services.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            string query = "SELECT * FROM " + dataset.Datastore.TablePrefix + "_VW WHERE a.DatasetId = " + dataset.Id;
+            string query = "SELECT * FROM " + dataset.Datastore.TablePrefix + "_VW";
             //logger.Debug("query = " + query);
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
+        // GET /api/v1/dataset/getfulldatasetview/5
+        public DataTable GetFullDatasetView(int id, int? SurveyYear=null, string StreamName=null)
+        {
+            logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
+            var db = ServicesContext.Current;
+            Datastore datastore = db.Datastores.Find(id); //change Datasets to Datastores; returns the entire record
+            if (datastore == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            string query = null;
+
+            if (SurveyYear != null & StreamName != null)
+            {
+                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear + " AND StreamName = " + StreamName;
+            }
+            else if (SurveyYear == null & StreamName != null)
+            {
+                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE StreamName = " + StreamName + " AND SurveyYear = Any(Select SurveyYear FROM " + datastore.TablePrefix + "_VW WHERE StreamName = " + StreamName;
+            }
+            else if (SurveyYear != null & StreamName == null)
+            {
+                query = "SELECT * FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear + " AND StreamName = Any(Select StreamName FROM " + datastore.TablePrefix + "_VW WHERE SurveyYear = " + SurveyYear;
+            }
+            else if (SurveyYear == null & StreamName == null)
+            {
+                query = "SELECT * FROM " + datastore.TablePrefix;
+            }
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
