@@ -185,7 +185,7 @@ namespace services.Controllers
         }
 
         // GET /api/v1/dataset/getfulldatasetview/5
-        public DataTable GetFullDatasetView(int id, string Species=null, string Run=null, string MPG=null, string POP=null, string StreamName=null, string SurveyYear=null)
+        public DataTable GetFullDatasetView(int id, string Species, string Run, string StartYear, string EndYear, string MPG=null, string POP=null, string StreamName=null)
         {
             logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
             var db = ServicesContext.Current;
@@ -197,9 +197,9 @@ namespace services.Controllers
 
            /* string query = "SELECT * FROM " + datastore.TablePrefix + "_VW"; */
 
-            var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW WHERE 1=1");
+            var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW WHERE 1=1 AND Species = " + Species + " AND Run = " + Run + " AND SurveyYear BETWEEN " + StartYear + " AND " + EndYear);
 
-            if (Species != null)
+           /* if (Species != null)
             {
                 sb.Append(" AND Species = " + Species);
             }
@@ -208,6 +208,11 @@ namespace services.Controllers
             {
                 sb.Append(" AND Run = " + Run);
             }
+
+            if (SurveyYear != null)
+            {
+                sb.Append(" AND SurveyYear = " + SurveyYear);
+            } */
 
             if (MPG != null)
             {
@@ -222,11 +227,6 @@ namespace services.Controllers
             if (StreamName != null)
             {
                 sb.Append(" AND StreamName = " + StreamName);
-            }
-            
-            if (SurveyYear != null)
-            {
-                sb.Append(" AND SurveyYear = " + SurveyYear);
             }
 
             string query = sb.ToString();
