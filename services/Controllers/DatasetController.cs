@@ -185,7 +185,7 @@ namespace services.Controllers
         }
 
         // GET /api/v1/dataset/getfulldatasetview/5
-        public DataTable GetFullDatasetView(int id, string SurveyYear=null, string StreamName=null)
+        public DataTable GetFullDatasetView(int id, string MPG=null, string POP=null, string StreamName=null, string SurveyYear=null)
         {
             logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
             var db = ServicesContext.Current;
@@ -195,21 +195,31 @@ namespace services.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            //string query = "SELECT * FROM " + datastore.TablePrefix + "_VW";
+            string query = "SELECT * FROM " + datastore.TablePrefix + "_VW";
 
-            var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW");
+            /*var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW");
 
-            if (SurveyYear != null)
+            if (MPG != null)
             {
-                sb.Append("AND SurveyYear = " + SurveyYear);
+                sb.Append("AND MPG = " + MPG);
+            }
+
+            if (POP != null)
+            {
+                sb.Append("AND POP = " + POP);
             }
 
             if (StreamName != null)
             {
                 sb.Append("AND StreamName = " + StreamName);
             }
+            
+            if (SurveyYear != null)
+            {
+                sb.Append("AND SurveyYear = " + SurveyYear);
+            }
 
-            string query = sb.ToString();
+            string query = sb.ToString(); */
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
