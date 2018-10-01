@@ -156,10 +156,10 @@ namespace services.Controllers
             return dt;
         }
 
-        // GET /api/v1/dataset/getdatasetview/5
-        public DataTable GetDatasetView(int id)
+        // GET /api/v1/dataset/getprojectdata/5
+        public DataTable GetProjectData(int id)
         {
-            logger.Debug("Inside DatasetController.cs, GetDatasetView...");
+            logger.Debug("Inside DatasetController.cs, GetProjectData...");
             var db = ServicesContext.Current;
             Dataset dataset = db.Datasets.Find(id);
             if (dataset == null)
@@ -185,7 +185,7 @@ namespace services.Controllers
         }
 
         // GET /api/v1/dataset/getfulldatasetview/5
-        public DataTable GetFullDatasetView(int id, int? SurveyYear=null, string StreamName=null)
+        public DataTable GetFullDatasetView(int id, string SurveyYear=null, string StreamName=null)
         {
             logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
             var db = ServicesContext.Current;
