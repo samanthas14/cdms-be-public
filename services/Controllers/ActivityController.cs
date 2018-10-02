@@ -1244,7 +1244,7 @@ namespace services.Controllers
                         ActivityQA newQA = new ActivityQA();
                         newQA.ActivityId = newActivityId;
                         newQA.QAStatusId = (activityqastatus != null) ? activityqastatus.QAStatusID : 6; //6=readyforqa
-                        newQA.Comments = (activityqastatus != null) ? activityqastatus.Comments.Replace("'", "''") : "Initial Import";
+                        newQA.Comments = (activityqastatus != null) ? activityqastatus.Comments.ToString().Replace("'", "''") : "Initial Import"; //required if you are specifying a activityqastatus
                         newQA.EffDt = DateTime.Now;
                         newQA.UserId = activity.UserId;
 
