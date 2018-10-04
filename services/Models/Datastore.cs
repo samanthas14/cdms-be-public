@@ -17,9 +17,9 @@ namespace services.Models
             public string Name { get; set; }
             public string Description { get; set; }
             public string TablePrefix { get; set; }
-            public string DatastoreDatasetId { get; set; } //the DatasetId to use for the "full bucket" or global query tool
+            public string LocationTypeId { get; set; } 
             public int OwnerUserId { get; set; }
-            public int? FieldCategoryId { get; set; }  //the field category this datastore relates to.
+            public int? FieldCategoryId { get; set; }  
 
             private static Logger logger = LogManager.GetCurrentClassLogger();
 
