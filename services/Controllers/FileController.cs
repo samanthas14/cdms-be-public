@@ -405,8 +405,8 @@ namespace services.Controllers
             // If the save fails, a file with a GUID-looking name remains in the root location.
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            //string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"];
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            //string root = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"];
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("rootUrl = " + rootUrl);
@@ -416,7 +416,7 @@ namespace services.Controllers
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             if (!dirInfo.Exists)
             {
-                logger.Debug("Director DOES NOT exist; creating it...");
+                logger.Debug("Directory DOES NOT exist; creating it...");
                 dirInfo.Create();
                 logger.Debug("...Created...");
             }
@@ -530,7 +530,7 @@ namespace services.Controllers
 
                             //newFile.Link = rootUrl + "/services/uploads/" + ProjectId + "/" + info.Name; //file.LocalFileName;
                             //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/" + ProjectId + "/" + info.Name;
-                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\" + info.Name;
+                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\" + ProjectId + "\\" + info.Name;
 
                             newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                             newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
@@ -585,7 +585,7 @@ namespace services.Controllers
             }
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             logger.Debug("root = " + root);
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("rootUrl = " + rootUrl);
@@ -757,8 +757,8 @@ namespace services.Controllers
                             newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
 
                             //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["ExecutingEnvironment"] + "uploads/" + ProjectId + "/" + info.Name;
-                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\D\\" + DatasetId + "\\" + info.Name;
-                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\" + ProjectId + "\\D\\" + DatasetId + "\\" + info.Name;
+                            //newFile.Link = rootUrl + "/" + System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\" + ProjectId + "\\D\\" + DatasetId + "\\" + info.Name;
+                            newFile.Link = System.Configuration.ConfigurationManager.AppSettings["UploadsLinkPrefix"] + "\\P\\" + ProjectId + "\\D\\" + DatasetId + "\\" + info.Name;
 
                             newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                             newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
@@ -962,7 +962,7 @@ namespace services.Controllers
                 logger.Debug("The file exists.");
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             string theFullPath = root + project.Id + "\\" + existing_file.Name;
             string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("Deleting files from location: " + root);
@@ -1030,7 +1030,7 @@ namespace services.Controllers
             logger.Debug("existing_file.Name = " + existing_file.Name);
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
-            string root = System.Configuration.ConfigurationManager.AppSettings["PathToCdmsShare"] + "\\P\\";
+            string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";
             string theFullPath = root + project.Id + "\\D\\" + dataset.Id + "\\" + existing_file.Name;
             //string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
             logger.Debug("Deleting files from: " + theFullPath);
