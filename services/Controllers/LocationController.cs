@@ -22,6 +22,14 @@ namespace services.Controllers
             return db.LocationType.AsEnumerable();
         }
 
+        // GET /api/v1/location/getlocations
+        [HttpGet]
+        public IEnumerable<Location> GetLocations()
+        {
+            var db = ServicesContext.Current;
+            return db.Location.AsEnumerable();
+        }
+
         // POST /api/v1/location/saveprojectlocation
         [HttpPost]
         public HttpResponseMessage SaveProjectLocation(JObject jsonData)
