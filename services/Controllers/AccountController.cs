@@ -73,6 +73,101 @@ namespace services.Controllers
             return result;
         }
 
+        /* [HttpPost]
+         public AccountResult Login(LoginModel model)
+         {
+             logger.Debug("in Login");
+
+             //string result = "{\"message\": \"Failure'\"}";
+             AccountResult result = new AccountResult();
+
+             //NOTE:  This is necessary because IE doesn't handle json returning from a POST properly.
+             var resp = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.OK);
+
+             logger.Debug("Hit: Login - " + model.Username + " / <SECRET>");
+
+             var db = ServicesContext.Current;
+
+             if (ModelState.IsValid)
+             {
+                 var user = db.User.SingleOrDefault(x => x.Username == model.Username);
+                 logger.Debug("User = " + user);
+                 logger.Debug("model.Username = " + model.Username);
+
+                 CipherHelper ciphHelper = new CipherHelper();
+                 model.Password = ciphHelper.DecriptPassword(model.Password);
+                 //logger.Debug("model.Password = " + model.Password);
+
+                 //***************
+                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
+                     if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
+                     (isValidLocalUser(user, model.Password)) || (Membership.Provider.Name == "ADMembershipProvider" && Membership.ValidateUser(model.Username, model.Password))
+                     )
+                 {
+                     FormsAuthentication.SetAuthCookie(model.Username, true);
+                     logger.Debug("User authenticated : " + model.Username);
+                     logger.Debug("--> " + System.Web.HttpContext.Current.Request.LogonUserIdentity.Name);
+
+                     if (user == null) //If user doesn't exist in our system, create it.
+                     {
+                         logger.Debug("New user.  Adding...");
+                         user = new User(model.Username);
+                         user.BumpLastLoginDate();
+                         db.User.Add(user);
+                         db.SaveChanges();
+                     }
+                     else
+                     {
+                         logger.Debug("user.Inactive = " + user.Inactive);
+                         if (user.Inactive == null || user.Inactive == 0) // 1 or anything "true" is inactive
+                         {
+                             logger.Debug("User is active...");
+                             user.BumpLastLoginDate();
+                             db.Entry(user).State = EntityState.Modified;
+                             db.SaveChanges();
+                         }
+                         else
+                         {
+                             logger.Debug("User is INACTIVE...");
+                             result.Success = false;
+                             result.Message = "Username is inactive.";
+
+                             return result;
+                         }
+                     }
+
+                     var identity = new GenericIdentity(user.Username, "Basic");
+                     string[] roles = (!String.IsNullOrEmpty(user.Roles)) ? user.Roles.Split(":".ToCharArray()) : new string[0];
+
+                     logger.Debug("Roles == " + roles.ToString());
+
+                     var principal = new GenericPrincipal(identity, roles);
+                     Thread.CurrentPrincipal = principal;
+                     System.Web.HttpContext.Current.User = principal;
+
+                     result.Success = true;
+                     result.User = user;
+                     result.Message = "Successfully logged in.";
+
+                 }
+                 else
+                 {
+                     logger.Debug("Authentication Failed from Membership provider.  Attempted username: " + model.Username);
+                     result.Success = false;
+                     result.Message = "Username or password were invalid.";
+                 }
+             }
+             else
+             {
+                 logger.Debug("model state invalid.");
+             }
+
+             logger.Debug("Result = " + result);
+
+             return result;
+         }
+ */
+ // New login controller from Ken that by-passes the encription for API calls
         [HttpPost]
         public AccountResult Login(LoginModel model)
         {
@@ -94,14 +189,18 @@ namespace services.Controllers
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
 
-                CipherHelper ciphHelper = new CipherHelper();
-                model.Password = ciphHelper.DecriptPassword(model.Password);
-                //logger.Debug("model.Password = " + model.Password);
+                //do a preliminary check on the password.
+                if (!isValidLocalUser(user, model.Password))
+                {
+                    CipherHelper ciphHelper = new CipherHelper();
+                    model.Password = ciphHelper.DecriptPassword(model.Password);
+                }
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
-                    if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
-                    (isValidLocalUser(user, model.Password)) || (Membership.Provider.Name == "ADMembershipProvider" && Membership.ValidateUser(model.Username, model.Password))
+                if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
+                    (isValidLocalUser(user, model.Password)) ||
+                    (Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -119,7 +218,7 @@ namespace services.Controllers
                     else
                     {
                         logger.Debug("user.Inactive = " + user.Inactive);
-                        if (user.Inactive == null || user.Inactive == 0) // 1 or anything "true" is inactive
+                        if (user.Inactive == null)
                         {
                             logger.Debug("User is active...");
                             user.BumpLastLoginDate();
