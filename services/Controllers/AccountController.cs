@@ -94,14 +94,17 @@ namespace services.Controllers
                 logger.Debug("User = " + user);
                 logger.Debug("model.Username = " + model.Username);
 
-                CipherHelper ciphHelper = new CipherHelper();
-                model.Password = ciphHelper.DecriptPassword(model.Password);
-                //logger.Debug("model.Password = " + model.Password);
+                //do a preliminary check on the password.
+                if(!isValidLocalUser(user, model.Password)){
+                    CipherHelper ciphHelper = new CipherHelper();
+                    model.Password = ciphHelper.DecriptPassword(model.Password);
+                }
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
                 if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
-                    (isValidLocalUser(user, model.Password)) || (Membership.ValidateUser(model.Username, model.Password))
+                    (isValidLocalUser(user, model.Password)) || 
+                    (Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -166,6 +169,8 @@ namespace services.Controllers
 
             return result;
         }
+
+        
 
         private bool isValidLocalUser(Models.User user, string password)
         {

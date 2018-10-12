@@ -13,10 +13,12 @@ using NLog;
 using System.Web.Mvc;
 using services.Resources.Filters;
 using Newtonsoft.Json.Linq;
+using System.Data.SqlClient;
+using System.Configuration;
 
 /**
  * Project Controller
- */ 
+ */
 
 namespace services.Controllers
 {
@@ -27,13 +29,13 @@ namespace services.Controllers
         //[ProjectAuth]
         [System.Web.Http.HttpGet]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
-        public IEnumerable<dynamic> GetProjects()
+        public dynamic GetProjects()
         {
-            var db = ServicesContext.Current;
+            //var db = ServicesContext.Current;
             //logger.Info("GetProjects called!");
 
             //this is one way to neck down what gets returned... loading all the files is very time consuming for the big list...
-            
+
             /*
             var results = db.Projects.Select(p => new
             {
@@ -47,9 +49,39 @@ namespace services.Controllers
             });
             
             return results.OrderBy(o => o.Name).AsEnumerable();
-            */ 
+            */
 
-            return db.Projects.OrderBy(o => o.Name).AsEnumerable();
+            /*
+            var results = (from p in db.Projects
+                           join pt in db.ProjectType on p.ProjectTypeId equals pt.Id
+                           let ProjectType = pt.Name
+                           select new { p.Id, p.Name, p.Description, ProjectType });
+
+            return results.OrderBy(o => o.Name).AsEnumerable();
+            */
+
+            var sql = @"select p.Id, p.OrganizationId, p.Name, p.Description, pt.Name as ProjectType, mv_pro.[values] as Program, mv_sub.[values] as SubProgram from projects p
+            join projectTypes pt on pt.Id = p.ProjectTypeId
+            join metadatavalues_vw mv_pro on mv_pro.RelationId = p.Id
+            join metadatavalues_vw mv_sub on mv_sub.RelationId = p.Id
+            where mv_pro.metadatapropertyid = 23
+            and mv_sub.metadatapropertyid = 24";
+
+            DataTable projects = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(projects);
+                }
+            }
+
+            return projects;
+
+
         }
 
         // GET api/v1/project/getproject/5

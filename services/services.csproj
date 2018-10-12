@@ -336,6 +336,7 @@
     <Content Include="App_Readme\Elmah.SqlServer.txt" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="db-scripts\2018-10-03_AddLocationTypeIdToDatastore.sql" />
+    <Content Include="db-scripts\2018-10-12_AddLastDatasetUpdatedView.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">

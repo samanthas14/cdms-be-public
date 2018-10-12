@@ -12,6 +12,8 @@ using services.Models;
 using Newtonsoft.Json.Linq;
 using services.Resources;
 using Newtonsoft.Json;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace services.Controllers
 {
@@ -285,6 +287,28 @@ namespace services.Controllers
 
             //return userAsEnumerable();
             return userList.AsEnumerable();
+        }
+
+        public dynamic GetMyLastUpdatedDatasets() {
+
+            User me = AuthorizationManager.getCurrentUser();
+
+            var sql = @"select * from LastUpdatedDatasets_VW where UserId = " + me.Id + " order by CreateDate DESC";
+
+            DataTable datasets = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(datasets);
+                }
+            }
+
+            return datasets;
+
         }
     }
 }
