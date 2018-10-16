@@ -18,11 +18,12 @@ namespace services.Models
         public string Description { get; set; }
         public string Units { get; set; }
         public string DataSource { get; set; } //SQL query used by lookup and multilookup type fields to populate the possiblevalues auto-magically
+                                               // needs to have an Id and Label, e.g.: "select Id, fullname as Label from fishermen"
         public string PossibleValues
         {
             get
             {
-                if (ControlType == "lookup" || ControlType == "multilookup")
+                if (DataSource != null)
                 {
                     return LookupFieldHelper.getPossibleValues(DataSource);
                 }
@@ -32,10 +33,10 @@ namespace services.Models
 
             set
             {
-                if (ControlType != "lookup" && ControlType != "multilookup")
+                if (DataSource == null)
                     _possibleValues = value;
                 //otherwise -- we won't set it... we don't want to set possible values
-                //  for lookup and multilookup since they are populated from a query.
+                //  since they are populated from a query.
             }
         }
         public string Validation { get; set; }

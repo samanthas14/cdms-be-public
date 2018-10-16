@@ -21,9 +21,9 @@ namespace services.Resources
                 return null;
 
             string pv_value = raw_query.ToUpper();
-            string query = pv_value.Replace("DROP", "").Replace("DELETE", "");
+            string query = pv_value.Replace("DROP", "").Replace("DELETE", "").Replace(";","").Replace("UPDATE","").Replace("CREATE","");
 
-            List<string> values = new List<string>();
+            DataTable possibleValues = new DataTable();
 
             //open a raw database connection...
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -31,16 +31,12 @@ namespace services.Resources
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     con.Open();
-                    var rdr = cmd.ExecuteReader();
-
-                    while(rdr.Read())
-                    {
-                        values.Add(rdr["Label"].ToString());
-                    }
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(possibleValues);
                 }
             }
 
-            return JsonConvert.SerializeObject(values); // "[\"ABC\",\"123\"]";
+            return JsonConvert.SerializeObject(possibleValues); 
         }
 
         //returns the first item in a list no matter what kind of thing it is
