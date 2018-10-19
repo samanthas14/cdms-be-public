@@ -414,315 +414,243 @@ namespace services.Controllers
             var dbset_header_type = db.GetTypeFor(data_header_name);
             var dbset_detail_type = db.GetTypeFor(data_detail_name);
 
-            //get a list of the fields that are GRID types (relations)
-            var grid_fields = dataset.Fields.Where(o => o.ControlType == "grid");
+            //update the Activity with all of the incoming values
+            dynamic activity_json = json.Activity;
 
-            foreach (var item in json.activities)
+            logger.Debug("Updating activity id: " + activity_json.Id);
+
+            Activity activity = db.Activities.Find(activity_json.Id.ToObject<int>());
+            if (activity == null)
             {
+                throw new Exception("Invalid Activity.");
+            }
 
-                if (item is JProperty)
+            activity.LocationId = activity_json.LocationId;
+            try
+            {
+                activity.ActivityDate = activity_json.ActivityDate;
+            }
+            catch (Exception e)
+            {
+                logger.Debug("Ooops had an error converting date: " + activity_json.ActivityDate);
+                logger.Debug(e.ToString());
+                throw (e);
+            }
+
+            //activity.DatasetId = json.DatasetId;
+            activity.UserId = me.Id;
+            activity.SourceId = activity_json.SourceId;
+            activity.ActivityTypeId = activity_json.ActivityTypeId;
+            activity.InstrumentId = activity_json.InstrumentId;
+            activity.AccuracyCheckId = activity_json.AccuracyCheckId;
+            activity.PostAccuracyCheckId = activity_json.PostAccuracyCheckId;
+            activity.Timezone = activity_json.Timezone;
+
+            db.Entry(activity).State = EntityState.Modified;
+            db.SaveChanges();
+
+            logger.Debug("Updated an activity: ");
+            logger.Debug(" LocationID = " + activity_json.LocationId);
+            logger.Debug(" ActivityDate = " + activity_json.ActivityDate);
+            logger.Debug("  ID = " + activity.Id);
+
+            //now check our activity status -- update it if we've changed.
+            dynamic activityqastatus = activity_json.ActivityQAStatus;
+
+            if (activity.ActivityQAStatus.QAStatusId != activityqastatus.QAStatusId.ToObject<int>() || activity.ActivityQAStatus.Comments != activityqastatus.Comments.ToString())
+            {
+                QAStatus new_qastatus = db.QAStatuses.Find(activityqastatus.QAStatusId.ToObject<int>());
+
+                //logger.Debug(activity_json.ActivityQAStatus);
+                //logger.Debug(activityqastatus.QAStatusId.ToObject<int>());
+
+                ActivityQA newQA = new ActivityQA();
+                newQA.ActivityId = activity.Id;
+                newQA.QAStatusId = activityqastatus.QAStatusId.ToObject<int>();
+                newQA.Comments = (activityqastatus.Comments != null) ? activityqastatus.Comments.ToString() : null;
+                newQA.EffDt = DateTime.Now;
+                newQA.UserId = activity.UserId;
+                newQA.QAStatusName = new_qastatus.Name;
+                newQA.QAStatusDescription = new_qastatus.Description;
+
+                db.ActivityQAs.Add(newQA);
+                db.SaveChanges();
+
+            }
+
+
+
+            //get our last header and then check against incoming header field values to see if anything has changed.
+            var last_header_list = dbset_header.SqlQuery("SELECT * FROM " + data_header_name + " WHERE ActivityId = " + activity.Id + " ORDER BY EffDt DESC");
+            //.SqlQuery("SELECT * FROM " + data_header_name + " WHERE ActivityId = " + activity.Id + " ORDER BY EffDt DESC").AsQueryable().f; 
+            //db.AdultWeir_Header.Where(o => o.ActivityId == activity.Id).OrderByDescending(d => d.EffDt).FirstOrDefault();
+
+            var last_header = LookupFieldHelper.getFirstItem(last_header_list);
+
+            logger.Debug("Ok -- here we are with our lastheader:");
+            logger.Debug(last_header);
+
+
+            if (last_header == null)
+                throw new Exception("Somehow there is no previous header even though we are trying to update.");
+
+            bool header_updated = false;
+
+            //spin through and check the header fields for changes...
+            foreach (JProperty header_field in json.header)
+            {
+                logger.Debug("Checking last header value of field : '" + header_field.Name + "' with incoming value + '" + header_field.Value + "'");
+
+                var objval = last_header.GetType().GetProperty(header_field.Name).GetValue(last_header, null);
+                logger.Debug("Got the value from the header field.");
+
+                if (objval != null)
                 {
-                    var prop = item as JProperty;
-                    dynamic activity_json = prop.Value;
+                    logger.Debug("objval not null. header_field.Name: " + header_field.Name + ", value: " + objval + ", with incoming value: " + header_field.Value);
 
-                    logger.Debug("Updating activity id: " + json.ActivityId);
-
-                    Activity activity = db.Activities.Find(json.ActivityId.ToObject<int>());
-                    if (activity == null)
+                    if (objval.ToString() != header_field.Value.ToString())
                     {
-                        throw new Exception("Invalid Activity.");
-                    }
-
-                    activity.LocationId = activity_json.LocationId;
-                    try
-                    {
-                        activity.ActivityDate = activity_json.ActivityDate;
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Debug("Ooops had an error converting date: " + activity_json.ActivityDate);
-                        logger.Debug(e.ToString());
-                        throw (e);
-                    }
-
-                    //activity.DatasetId = json.DatasetId;
-                    activity.UserId = me.Id;
-                    activity.SourceId = 1;                                          // TODO get from data
-                    activity.ActivityTypeId = 1;
-                    activity.InstrumentId = activity_json.InstrumentId;
-                    activity.AccuracyCheckId = activity_json.AccuracyCheckId;
-                    activity.PostAccuracyCheckId = activity_json.PostAccuracyCheckId;
-                    activity.Timezone = activity_json.Timezone;
-                    //activity.LaboratoryId = activity_json.LaboratoryId;
-
-                    //activity.CreateDate = DateTime.Now;
-
-                    db.Entry(activity).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    //updated the activity
-
-                    logger.Debug("Updated an activity: ");
-                    logger.Debug(" LocationID = " + activity_json.LocationId);
-                    logger.Debug(" ActivityDate = " + activity_json.ActivityDate);
-                    logger.Debug("  ID = " + activity.Id);
-
-                    //now check our activity status -- update it if we've changed.
-                    //if(activity.ActivityQAStatus.ActivityId != )
-
-                    dynamic activityqastatus = activity_json.ActivityQAStatus;
-
-                    //logger.Debug(activity_json.ActivityQAStatus);
-
-                    //logger.Debug(activityqastatus.QAStatusId.ToObject<int>());
-
-                    ActivityQA newQA = new ActivityQA();
-                    newQA.ActivityId = activity.Id;
-                    newQA.QAStatusId = activityqastatus.QAStatusID.ToObject<int>();
-                    newQA.Comments = activityqastatus.Comments;
-                    newQA.EffDt = DateTime.Now;
-                    newQA.UserId = activity.UserId;
-                    newQA.QAStatusName = activityqastatus.Name;
-                    newQA.QAStatusDescription = activityqastatus.Description;
-
-                    db.ActivityQAs.Add(newQA);
-                    db.SaveChanges();
-
-
-                    //get our last header and then check against incoming header field values to see if anything has changed.
-                    var last_header_list = dbset_header.SqlQuery("SELECT * FROM " + data_header_name + " WHERE ActivityId = " + activity.Id + " ORDER BY EffDt DESC");
-                    //.SqlQuery("SELECT * FROM " + data_header_name + " WHERE ActivityId = " + activity.Id + " ORDER BY EffDt DESC").AsQueryable().f; 
-                    //db.AdultWeir_Header.Where(o => o.ActivityId == activity.Id).OrderByDescending(d => d.EffDt).FirstOrDefault();
-
-                    var last_header = LookupFieldHelper.getFirstItem(last_header_list);
-
-                    logger.Debug("Ok -- here we are with our lastheader:");
-                    logger.Debug(last_header);
-
-
-                    if (last_header == null)
-                        throw new Exception("Somehow there is no previous header even though we are trying to update.");
-
-                    bool header_updated = false;
-
-                    //spin through and check the header fields for changes...
-                    foreach (JProperty header_field in activity_json.Header)
-                    {
-                        logger.Debug("Checking last header value of field : '" + header_field.Name + "' with incoming value + '" + header_field.Value + "'");
-
-                        var objval = last_header.GetType().GetProperty(header_field.Name).GetValue(last_header, null);
-                        logger.Debug("Got the value from the header field.");
-
-                        if (objval != null)
-                        {
-                            logger.Debug("objval not null. header_field.Name: " + header_field.Name + ", value: " + objval + ", with incoming value: " + header_field.Value);
-
-                            if (objval.ToString() != header_field.Value.ToString())
-                            {
-                                logger.Debug("a different value! we'll save a header then...");
-                                header_updated = true;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            if (header_field.Value.ToString() != "")
-                            {
-                                logger.Debug("Dunno why, but objval was null." + header_field + " we are going to save a new one.");
-                                header_updated = true;
-                                break;
-                            }
-                            else
-                                logger.Debug("objval is empty ''");
-                        }
-                    }
-
-                    if (header_updated)
-                    {
-                        logger.Debug("Saving a new header then");
-                        var header = activity_json.Header.ToObject(dbset_header_type);
-
-                        //now do the saving! -- this works the exact same way for update as it does for new
-                        header.ActivityId = activity.Id;
-                        header.ByUserId = activity.UserId;
-                        header.EffDt = DateTime.Now;
-                        dbset_header.Add(header);
-                        db.SaveChanges();
-                    }
-
-                    //there are three possible cases of changes:
-                    //  1) updated row (has ID and is in "updatedRowIds" list)
-                    //  2) new row (has no ID)
-                    //  3) deleted row (is not in the list, ID is in "deletedRowIds" list)
-
-                    //we ALWAYS make such indication by INSERTING a new row with a matching rowid + activityid + new current effective date.
-                    //  exception is NEW row which gets and incremented rowid
-
-                    //first, lets lookup our last row id so we have a place to start if we add rows.                    
-                    int rowid = 1;
-
-                    var last_row_list = dbset_detail.SqlQuery("SELECT * FROM " + data_detail_name + " WHERE ActivityId = " + activity.Id + " AND RowStatusId = " + DataDetail.ROWSTATUS_ACTIVE + " ORDER BY RowId DESC");
-                    //db.AdultWeir_Detail.Where(o => o.ActivityId == activity.Id).Where(o => o.RowStatusId == DataDetail.ROWSTATUS_ACTIVE).OrderByDescending(d => d.RowId).FirstOrDefault();
-
-                    var last_row = LookupFieldHelper.getFirstItem(last_row_list);
-                    if (last_row != null)
-                    {
-                        rowid = last_row.RowId + 1;
-                    }
-                    else
-                        logger.Debug("Hmm there were no previous details rows for activity : " + activity.Id + " so we are starting at 1.");
-
-                    //now lets iterate our incoming rows and see what we've got.
-                    var details = new List<DataDetail>();
-                    Dictionary<string, JArray> grids = new Dictionary<string, JArray>();
-
-                    List<int> updated_rows = new List<int>();
-                    foreach (var updated_row in json.updatedRowIds)
-                    {
-                        logger.Debug("Found an updated row: " + updated_row);
-                        updated_rows.Add(updated_row.ToObject<int>());
-                    }
-
-                    List<int> deleted_rows = new List<int>();
-                    foreach (var deleted_row in json.deletedRowIds)
-                    {
-                        logger.Debug("Found a deleted row: " + deleted_row);
-                        deleted_rows.Add(deleted_row.ToObject<int>());
-                        if (updated_rows.Contains(deleted_row.ToObject<int>()))
-                            updated_rows.Remove(deleted_row.ToObject<int>());
-                    }
-
-
-                    foreach (var detailitem in activity_json.Details)
-                    {
-                        var adw = detailitem.ToObject(dbset_detail_type);
-
-                        //does this field have a relation/grid field?  If so then save those, too.
-                        if (grid_fields != null)
-                        {
-                            foreach (var grid_field in grid_fields)
-                            {
-                                logger.Debug("Found a grid field: " + grid_field.DbColumnName);
-                                grids.Add(grid_field.DbColumnName, detailitem[grid_field.DbColumnName]);
-                            }
-                        }
-
-                        //logger.Debug("spinning through incoming details: " + adw.Id);
-
-                        if (adw.Id == 0)
-                        {
-                            //new record
-                            adw.RowId = rowid; rowid++;
-                            details.Add(adw);
-                        }
-                        else
-                        {
-                            //deleted or updated?
-                            if (updated_rows.Contains(adw.Id))
-                            {
-                                //updated
-                                adw.Id = 0;
-                                details.Add(adw);
-                            }
-                            else if (deleted_rows.Contains(adw.Id))
-                            {
-                                //deleted
-                                adw.Id = 0;
-                                adw.RowStatusId = DataDetail.ROWSTATUS_DELETED;
-                                details.Add(adw);
-
-                                //delete any files associated with this detail item
-                                Resources.ActivitiesFileHelper.DeleteAllFilesForDetail(adw, dataset);
-                            }
-                            //otherwise nothing.
-                        }
-
-                    }
-
-                    //logger.Debug(JsonConvert.SerializeObject(grids, Formatting.Indented));
-                    //logger.Debug(JsonConvert.SerializeObject(details, Formatting.Indented));
-
-                    foreach (var detail in details)
-                    {
-                        detail.ActivityId = activity.Id;
-                        detail.ByUserId = activity.UserId;
-                        detail.EffDt = DateTime.Now;
-
-                        dbset_detail.Add(detail);
-
-                        //any relation grids?
-                        if (grids.Count > 0)
-                        {
-                            logger.Debug("We have grids in our data to update...");
-                            foreach (KeyValuePair<string, JArray> grid_item in grids)
-                            {
-                                int grid_rowid = 1; //new grid field
-
-                                var grid_type = dataset.Datastore.TablePrefix + "_" + grid_item.Key;
-                                logger.Debug(" Hey we have a relation of type: " + grid_type);
-
-                                //get objecttype of this type
-                                var dbset_grid_type = db.GetTypeFor(grid_type);
-                                var dbset_relation = db.GetDbSet(grid_type);
-
-                                //logger.Debug("updating items in : " + grid_item.Key );
-
-                                //get the count of relationrows:
-                                grid_rowid = grid_item.Value.Count() + 1;
-
-                                foreach (dynamic relation_row in grid_item.Value)
-                                {
-                                    //logger.Debug("Relationrow: " + relation_row);
-                                    var relationObj = relation_row.ToObject(dbset_grid_type);
-
-                                    //is it a new row?
-                                    if (relationObj.Id == 0)
-                                    {
-                                        relationObj.EffDt = DateTime.Now;
-                                        relationObj.ParentRowId = detail.RowId;
-                                        relationObj.RowId = grid_rowid; grid_rowid++;
-                                        relationObj.RowStatusId = DataDetail.ROWSTATUS_ACTIVE;
-                                        relationObj.ByUserId = activity.UserId;
-                                        relationObj.ActivityId = activity.Id;
-                                        relationObj.QAStatusId = dataset.DefaultRowQAStatusId; //TODO?
-                                        dbset_relation.Add(relationObj);
-                                    }
-                                    else //or are we updating...  (what about DELETE?)
-                                    {
-                                        relationObj.EffDt = DateTime.Now;
-                                        relationObj.Id = 0;
-                                        dbset_relation.Add(relationObj);
-                                        logger.Debug("woot updated a grid row!");
-                                    }
-
-                                    //logger.Debug(JsonConvert.SerializeObject( relationObj, Formatting.Indented));
-
-                                }
-                            }
-                        }
-
-                    }
-
-                    db.SaveChanges();
-
-                    //If there is a ReadingDateTime field in use, set the activity description to be the range of reading dates for this activity.
-                    if (dataset.Datastore.TablePrefix == "WaterTemp") // others with readingdatetime?
-                    {
-                        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
-                        {
-                            con.Open();
-                            var query = "update Activities set Description = (select concat(convert(varchar,min(ReadingDateTime),111), ' - ', convert(varchar,max(ReadingDateTime),111)) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + activity.Id + ") where Id = " + activity.Id;
-
-                            using (SqlCommand cmd = new SqlCommand(query, con))
-                            {
-                                logger.Debug(query);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                        }
+                        logger.Debug("a different value! we'll save a header then...");
+                        header_updated = true;
+                        break;
                     }
                 }
+                else
+                {
+                    if (header_field.Value.ToString() != "")
+                    {
+                        logger.Debug("Dunno why, but objval was null." + header_field + " we are going to save a new one.");
+                        header_updated = true;
+                        break;
+                    }
+                    else
+                        logger.Debug("objval is empty ''");
+                }
             }
+
+            if (header_updated)
+            {
+                logger.Debug("Saving a new header then");
+                var header = json.header.ToObject(dbset_header_type);
+
+                //now do the saving! -- this works the exact same way for update as it does for new
+                header.ActivityId = activity.Id;
+                header.ByUserId = activity.UserId;
+                header.EffDt = DateTime.Now;
+                dbset_header.Add(header);
+                db.SaveChanges();
+            }
+
+            //there are three possible cases of changes:
+            //  1) updated row (has ID and is in "editedRowIds" list)
+            //  2) new row (has no ID)
+            //  3) deleted row (is not in the list, ID is in "deletedRowIds" list)
+
+            //we ALWAYS make such indication by INSERTING a new row with a matching rowid + activityid + new current effective date.
+            //  exception is NEW row which gets and incremented rowid
+
+            //first, lets lookup our last row id so we have a place to start if we add rows.                    
+            int rowid = 1;
+
+            var last_row_list = dbset_detail.SqlQuery("SELECT * FROM " + data_detail_name + " WHERE ActivityId = " + activity.Id + " AND RowStatusId = " + DataDetail.ROWSTATUS_ACTIVE + " ORDER BY RowId DESC");
+            //db.AdultWeir_Detail.Where(o => o.ActivityId == activity.Id).Where(o => o.RowStatusId == DataDetail.ROWSTATUS_ACTIVE).OrderByDescending(d => d.RowId).FirstOrDefault();
+
+            var last_row = LookupFieldHelper.getFirstItem(last_row_list);
+            if (last_row != null)
+            {
+                rowid = last_row.RowId + 1;
+            }
+            else
+                logger.Debug("Hmm there were no previous details rows for activity : " + activity.Id + " so we are starting at 1.");
+
+            //now lets iterate our incoming rows and see what we've got.
+            var details = new List<DataDetail>();
+
+            List<int> updated_rows = new List<int>();
+            foreach (var updated_row in json.editedRowIds)
+            {
+                logger.Debug("Found an updated row: " + updated_row);
+                updated_rows.Add(updated_row.ToObject<int>());
+            }
+
+            List<int> deleted_rows = new List<int>();
+            foreach (var deleted_row in json.deletedRowIds)
+            {
+                logger.Debug("Found a deleted row: " + deleted_row);
+                deleted_rows.Add(deleted_row.ToObject<int>());
+                if (updated_rows.Contains(deleted_row.ToObject<int>()))
+                    updated_rows.Remove(deleted_row.ToObject<int>());
+            }
+
+
+            foreach (var detailitem in json.details)
+            {
+                var adw = detailitem.ToObject(dbset_detail_type);
+
+                //logger.Debug("spinning through incoming details: " + adw.Id);
+
+                if (adw.Id == 0)
+                {
+                    //new record
+                    adw.RowId = rowid; rowid++;
+                    details.Add(adw);
+                }
+                else
+                {
+                    //deleted or updated?
+                    if (updated_rows.Contains(adw.Id))
+                    {
+                        //updated
+                        adw.Id = 0;
+                        details.Add(adw);
+                    }
+                    else if (deleted_rows.Contains(adw.Id))
+                    {
+                        //deleted
+                        adw.Id = 0;
+                        adw.RowStatusId = DataDetail.ROWSTATUS_DELETED;
+                        details.Add(adw);
+
+                        //delete any files associated with this detail item
+                        Resources.ActivitiesFileHelper.DeleteAllFilesForDetail(adw, dataset);
+                    }
+                    //otherwise nothing.
+                }
+
+            }
+
+            //logger.Debug(JsonConvert.SerializeObject(grids, Formatting.Indented));
+            //logger.Debug(JsonConvert.SerializeObject(details, Formatting.Indented));
+
+            foreach (var detail in details)
+            {
+                detail.ActivityId = activity.Id;
+                detail.ByUserId = activity.UserId;
+                detail.EffDt = DateTime.Now;
+
+                dbset_detail.Add(detail);
+
+            }
+
+            db.SaveChanges();
+
+            //If there is a ReadingDateTime field in use, set the activity description to be the range of reading dates for this activity.
+            if (dataset.Datastore.TablePrefix == "WaterTemp") // others with readingdatetime?
+            {
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+                {
+                    con.Open();
+                    var query = "update Activities set Description = (select concat(convert(varchar,min(ReadingDateTime),111), ' - ', convert(varchar,max(ReadingDateTime),111)) from " + dataset.Datastore.TablePrefix + "_Detail_VW where ActivityId = " + activity.Id + ") where Id = " + activity.Id;
+
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        logger.Debug(query);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
@@ -857,7 +785,7 @@ namespace services.Controllers
 
                     ActivityQA newQA = new ActivityQA();
                     newQA.ActivityId = activity.Id;
-                    newQA.QAStatusId = activityqastatus.QAStatusID.ToObject<int>();
+                    newQA.QAStatusId = activityqastatus.QAStatusId.ToObject<int>();
                     newQA.Comments = activityqastatus.Comments;
                     newQA.EffDt = DateTime.Now;
                     newQA.UserId = activity.UserId;
@@ -1230,7 +1158,7 @@ namespace services.Controllers
 
                         ActivityQA newQA = new ActivityQA();
                         newQA.ActivityId = newActivityId;
-                        newQA.QAStatusId = activityqastatus.QAStatusID.ToObject<int>();
+                        newQA.QAStatusId = activityqastatus.QAStatusId.ToObject<int>();
                         newQA.Comments = activityqastatus.Comments.Replace("'", "''");
                         newQA.EffDt = DateTime.Now;
                         newQA.UserId = activity.UserId;
