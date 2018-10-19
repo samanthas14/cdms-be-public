@@ -39,16 +39,32 @@ namespace services.Controllers
         [HttpGet]
         public IEnumerable<Field> GetFieldCategoryFields(int Id)
         {
+            throw new Exception("Not implemented. You probably mean GetDatastoreFields");
+/*
             var db = ServicesContext.Current;
             logger.Info("Getting all fields...where FieldCategoryId = " + Id);
             return db.Fields.Where(o => o.FieldCategoryId == Id).OrderBy(o => o.Name).AsEnumerable();
+*/
         }
+
+        /*
+           * Get list of all fields for a datastore (master fields)
+        */
+        //GET /api/v1/datastore/getdatastorefields/5
+        [HttpGet]
+        public IEnumerable<Field> GetDatastoreFields(int Id)
+        {
+            var db = ServicesContext.Current;
+            logger.Info("Getting all fields...where DatastoreId = " + Id);
+            return db.Fields.Where(o => o.DatastoreId == Id).OrderBy(o => o.Name).AsEnumerable();
+        }
+
 
 
         /*
          * Get a datastore by id
-         */ 
-         // GET /api/v1/datastore/getdatastore/5
+         */
+        // GET /api/v1/datastore/getdatastore/5
         [HttpGet]
         public Datastore GetDatastore(int Id)
         {
@@ -92,6 +108,7 @@ namespace services.Controllers
          * Think of this as the list of master fields for the master dataset
          */ 
          // GET /api/v1/datastore/getdatastorefields/5
+/* -- can get this directly since fields have a datastoreid 
         [HttpGet]
         public IEnumerable<Field> GetDatastoreFields(int Id)
         {
@@ -103,7 +120,7 @@ namespace services.Controllers
 
             return datastore.Fields;
         }
-
+*/
         /*
          * Returns list of projects associated with a datastore id
          */ 

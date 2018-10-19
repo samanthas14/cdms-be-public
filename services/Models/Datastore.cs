@@ -18,8 +18,9 @@ namespace services.Models
             public string Description { get; set; }
             public string TablePrefix { get; set; }
             public string LocationTypeId { get; set; } 
+            public string DefaultConfig { get; set; }
             public int OwnerUserId { get; set; }
-            public int? FieldCategoryId { get; set; }  
+            //public int? FieldCategoryId { get; set; }  
 
             private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -63,12 +64,11 @@ namespace services.Models
                 {
                     var db = ServicesContext.Current;
 
-                    return db.Fields.SqlQuery("select distinct ff.* from Fields ff join DatasetFields df on df.FieldId = ff.Id join Datasets d on d.Id = df.DatasetId where d.DatastoreId =" +
+                    return db.Fields.SqlQuery("select * from Fields where d.DatastoreId =" +
                         this.Id + " ORDER BY ff.Name ASC");
-
-
                 }
             }
+
 
             // returns all of the projects that are related to any dataset with this datastore
             [NotMapped]

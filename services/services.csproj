@@ -190,13 +190,13 @@
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
-    <Compile Include="Migrations\201810042049102_reset.cs" />
-    <Compile Include="Migrations\201810042049102_reset.Designer.cs">
-      <DependentUpon>201810042049102_reset.cs</DependentUpon>
+    <Compile Include="Migrations\201810192226233_reset.cs" />
+    <Compile Include="Migrations\201810192226233_reset.Designer.cs">
+      <DependentUpon>201810192226233_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201810042052519_add_locationtypeid_to_datastore.cs" />
-    <Compile Include="Migrations\201810042052519_add_locationtypeid_to_datastore.Designer.cs">
-      <DependentUpon>201810042052519_add_locationtypeid_to_datastore.cs</DependentUpon>
+    <Compile Include="Migrations\201810192237467_RemoveFieldCategoryId.cs" />
+    <Compile Include="Migrations\201810192237467_RemoveFieldCategoryId.Designer.cs">
+      <DependentUpon>201810192237467_RemoveFieldCategoryId.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -338,6 +338,7 @@
     <Content Include="db-scripts\2018-10-03_AddLocationTypeIdToDatastore.sql" />
     <Content Include="db-scripts\2018-10-12_AddLastDatasetUpdatedView.sql" />
     <Content Include="db-scripts\2018-10-16_CTUIRFixes.sql" />
+    <Content Include="db-scripts\2018-10-19_SystemFields.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -376,11 +377,11 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201810042049102_reset.resx">
-      <DependentUpon>201810042049102_reset.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810192226233_reset.resx">
+      <DependentUpon>201810192226233_reset.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201810042052519_add_locationtypeid_to_datastore.resx">
-      <DependentUpon>201810042052519_add_locationtypeid_to_datastore.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201810192237467_RemoveFieldCategoryId.resx">
+      <DependentUpon>201810192237467_RemoveFieldCategoryId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

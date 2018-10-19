@@ -11,7 +11,9 @@ namespace services.Models
         private string _possibleValues;
 
         public int Id { get; set; }
-        public int FieldCategoryId { get; set; }
+        //public int FieldCategoryId { get; set; }
+        public int DatastoreId { get; set; }
+        public int FieldRoleId { get; set; }
         public string TechnicalName { get; set; }
         public string DbColumnName { get; set; }
         public string Name { get; set; }
@@ -44,16 +46,21 @@ namespace services.Models
         public string DataType { get; set; }
         public string ControlType { get; set; }
 
-        public virtual FieldCategory FieldCategory { get; set; }
+        //public virtual FieldCategory FieldCategory { get; set; } //going away
+        public virtual FieldRole FieldRole { get; set; }
+        public virtual Datastore Datastore { get; set; }
 
     }
 
+/*
     public class FieldCategory {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
     }
+*/
+
 
     //FieldRole == Header, Detail, Summary, Statistic, ...
     public class FieldRole {

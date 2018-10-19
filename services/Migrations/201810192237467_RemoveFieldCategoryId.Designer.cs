@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class add_locationtypeid_to_datastore : IMigrationMetadata
+    public sealed partial class RemoveFieldCategoryId : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(add_locationtypeid_to_datastore));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RemoveFieldCategoryId));
         
         string IMigrationMetadata.Id
         {
-            get { return "201810042052519_add_locationtypeid_to_datastore"; }
+            get { return "201810192237467_RemoveFieldCategoryId"; }
         }
         
         string IMigrationMetadata.Source

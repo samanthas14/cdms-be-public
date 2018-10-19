@@ -76,7 +76,7 @@ namespace services.Models
         public DbSet<Datastore> Datastores { get; set; }
         public DbSet<DatasetField> DatasetFields { get; set; }
         public DbSet<Field> Fields { get; set; }
-        public DbSet<FieldCategory> FieldCategories { get; set; }
+        //public DbSet<FieldCategory> FieldCategories { get; set; }
         public DbSet<FieldRole> FieldRoles { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
 
