@@ -32,21 +32,7 @@ namespace services.Controllers
             return db.Datastores.AsEnumerable();
         }
 
-        /*
-         * Get list of all fields in a field category
-         */
-         //GET /api/v1/datastore/getfieldcategoryfields/5
-        [HttpGet]
-        public IEnumerable<Field> GetFieldCategoryFields(int Id)
-        {
-            throw new Exception("Not implemented. You probably mean GetDatastoreFields");
-/*
-            var db = ServicesContext.Current;
-            logger.Info("Getting all fields...where FieldCategoryId = " + Id);
-            return db.Fields.Where(o => o.FieldCategoryId == Id).OrderBy(o => o.Name).AsEnumerable();
-*/
-        }
-
+        
         /*
            * Get list of all fields for a datastore (master fields)
         */
@@ -189,7 +175,9 @@ namespace services.Controllers
             db.SaveChanges();
             logger.Debug("Added/saved the field: " + field.DbColumnName);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, df);
+            return response;
+
         }
 
         

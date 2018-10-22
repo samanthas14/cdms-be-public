@@ -338,7 +338,8 @@
     <Content Include="db-scripts\2018-10-03_AddLocationTypeIdToDatastore.sql" />
     <Content Include="db-scripts\2018-10-12_AddLastDatasetUpdatedView.sql" />
     <Content Include="db-scripts\2018-10-16_CTUIRFixes.sql" />
-    <Content Include="db-scripts\2018-10-19_SystemFields.sql" />
+    <Content Include="db-scripts\2018-10-19_RemoveFieldCategory.sql" />
+    <Content Include="db-scripts\2018-10-22_ActivitySystemFields.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
