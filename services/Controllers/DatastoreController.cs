@@ -164,7 +164,7 @@ namespace services.Controllers
 
             df.DatasetId = dataset.Id;
             df.FieldId = field.Id;
-            df.FieldRoleId = FieldRole.DETAIL;
+            df.FieldRoleId = field.FieldRoleId;
             df.CreateDateTime = DateTime.Now;
             df.Label = field.Name;
             df.DbColumnName = field.DbColumnName;
@@ -213,11 +213,11 @@ namespace services.Controllers
 
             db.SaveChanges();
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.Created, df);
         }
 
-        
 
-       
+
+
     }
 }
