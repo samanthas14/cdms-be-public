@@ -100,8 +100,9 @@ namespace services.Controllers
 
                 //***************
                 // Check masquerade password first so masquerade password will work even if ActiveDirectory isn't set up
-                if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
-                    (isValidLocalUser(user, model.Password)) || (Membership.ValidateUser(model.Username, model.Password))
+                // Membership Provider is located in the web.config
+                    if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
+                    (isValidLocalUser(user, model.Password)) || (Membership.Provider.Name == "ADMembershipProvider" && Membership.ValidateUser(model.Username, model.Password))
                     )
                 {
                     FormsAuthentication.SetAuthCookie(model.Username, true);
@@ -119,7 +120,7 @@ namespace services.Controllers
                     else
                     {
                         logger.Debug("user.Inactive = " + user.Inactive);
-                        if (user.Inactive == null)
+                        if (user.Inactive == null || user.Inactive == 0) // 1 or anything "true" is inactive
                         {
                             logger.Debug("User is active...");
                             user.BumpLastLoginDate();
