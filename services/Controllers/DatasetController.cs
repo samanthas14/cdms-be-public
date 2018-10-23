@@ -351,8 +351,7 @@ namespace services.Controllers
 
             db.SaveChanges();
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
-
+            return Request.CreateResponse(HttpStatusCode.OK, df);
 
         }
 
