@@ -194,10 +194,6 @@
     <Compile Include="Migrations\201809261452407_reset_migrations.Designer.cs">
       <DependentUpon>201809261452407_reset_migrations.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201809261457343_WaterTemp_AddDischargeField.cs" />
-    <Compile Include="Migrations\201809261457343_WaterTemp_AddDischargeField.Designer.cs">
-      <DependentUpon>201809261457343_WaterTemp_AddDischargeField.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -376,9 +372,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201809261452407_reset_migrations.resx">
       <DependentUpon>201809261452407_reset_migrations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201809261457343_WaterTemp_AddDischargeField.resx">
-      <DependentUpon>201809261457343_WaterTemp_AddDischargeField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
