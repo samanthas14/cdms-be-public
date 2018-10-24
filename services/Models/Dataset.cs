@@ -76,7 +76,7 @@ namespace services.Models
             logger.Debug("Inside Dataset.cs, getExportSelectString...");
             logger.Debug("productTarget = " + productTarget);
 
-            var header_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER && o.DbColumnName != "").OrderBy(o => o.Label).Select(o => o.DbColumnName));
+            var header_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.HEADER && o.DbColumnName != "").OrderBy(o => o.Label).Select(o => o.DbColumnName).Except(QueryHelper.ActivityFieldsToIgnore));
             //logger.Debug("header_fields1 = " + header_fields);
             header_fields += (header_fields == "") ? "" : ","; //add on the ending comma if applicable
             //logger.Debug("header_fields2 = " + header_fields);
@@ -87,12 +87,12 @@ namespace services.Models
                 (this.Datastore.TablePrefix == "StreamNet_SAR"))
             {
                 // Note no comma at the end.
-                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName));
+                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName).Except(QueryHelper.ActivityFieldsToIgnore));
             }
             else
             {
                 // Note comma at the end.
-                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName)) + ",";
+                detail_fields = string.Join(",", this.Fields.Where(o => o.FieldRoleId == FieldRole.DETAIL).OrderBy(o => o.Label).Select(o => o.DbColumnName).Except(QueryHelper.ActivityFieldsToIgnore)) + ",";
             }
 
             // ReadingDate and ReadingTime are fields from old data.  We do not use these fields in CDMS; however, they are in the DatasetFields table.

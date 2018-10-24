@@ -1330,6 +1330,51 @@ namespace services.Controllers
             return response;
         }
 
+
+        // POST /api/v1/activity/HasExistingActivity
+        // checks for existing activities with matching keys
+        [HttpPost]
+        public HttpResponseMessage HasExistingActivity(JObject jsonData)
+        {
+            var db = ServicesContext.Current;
+
+            dynamic json = jsonData;
+            logger.Debug("json = " + json);
+
+            int DatasetId = json.DatasetId.ToObject<int>();
+            logger.Debug("HasExistingActivity running for DatasetId = " + DatasetId);
+            var dataset = db.Datasets.Find(DatasetId);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + DatasetId);
+
+            var data_header_name = dataset.Datastore.TablePrefix + "_Header_VW";
+
+            var sql = "SELECT COUNT(*) FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE 1=1";
+
+            var conditions = QueryHelper.getQueryConditions(dataset.Fields, json.Fields);
+            var criteria_string = string.Join(" AND ", conditions.ToArray());
+            logger.Debug(criteria_string);
+            sql = sql + " AND " + criteria_string;
+            logger.Debug(sql);
+            Int32 count = -1;
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, con);
+                count = (Int32) cmd.ExecuteScalar();
+
+            }
+
+
+            
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, new JObject( new JProperty("count",count)));
+
+        }
+
         //QuerySpecificActivities
         // POST /api/v1/activity/queryspecificactivities
         /*[HttpPost]

@@ -14,12 +14,14 @@ namespace services.Resources
     public class QueryHelper
     {
         public static Logger logger = LogManager.GetCurrentClassLogger();
-
+        public static List<string>ActivityFieldsToIgnore = new List<string>(){ "AccuracyCheckId", "PostAccuracyCheckId", "QAComments", "QAStatusId", "Timezone" };
         /*
          * Executes a query from the given criteria in our json object on the given dataset 
          * datafieldsource can be a dataset or a datastore
          * returns: DataTable of results
          */
+
+        
 
         //private DataTable getQueryResults(dynamic datafieldsource, dynamic json)
         public static DataTable getQueryResults(dynamic datafieldsource, dynamic json, string productTarget) // productTarget is set by the calling method.
@@ -27,97 +29,9 @@ namespace services.Resources
             logger.Debug("Inside getQueryResults...");
             logger.Debug("productTarget = " + productTarget);
 
-            var fields = datafieldsource.Fields;
 
-            var conditions = new List<string>();
+            var conditions = getQueryConditions(datafieldsource.Fields, json.Fields);
 
-            //logger.Debug(json.Fields);
-            //logger.Debug(json.Fields.ToString());
-            //logger.Debug("json = " + json);
-
-            //fields in the criteria
-            foreach (var item in json.Fields)
-            {
-                logger.Debug(item);
-                logger.Debug("Colname!: " + item.DbColumnName);
-
-                //spin through each of our dataset/datastore fields and find a match, adding it to our criteria...
-                foreach (var field in fields)
-                {
-                    //logger.Debug(" -- alright now I think we're looking up field with id: " + item.Id);
-
-                    if (field.Id != item.Id.ToObject<int>())
-                        continue;
-
-                    //logger.Debug("Looked up field: " + field.DbColumnName);
-
-                    //if (field == null)
-                    //    throw new Exception("Field not configured properly: " + item.Value);
-
-                    string ControlType = field.ControlType.ToString(); //hmm, can't use directly in a switch.
-
-                    //now add field criteria to our list...
-                    switch (ControlType)
-                    {
-                        case "number":
-                        case "currency":
-                        case "time":
-                        case "easting":
-                        case "northing":
-                            logger.Debug("A number, currency, time, northing, or easting");
-                            conditions.Add(field.DbColumnName + filterForSQL(item.Value)); //>100
-                            break;
-
-                        case "text":
-                        case "textarea":
-                            logger.Debug("A txt");
-                            var conditional = " = ";
-                            if (item.Value.ToString().Contains("%"))
-                                conditional = " LIKE ";
-
-                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value) + "'");
-                            break;
-
-                        case "multiselect":
-                            logger.Debug("A MULTIselect:" + item.Value);
-                            if (item.Value == null)
-                                break;
-
-                            dynamic mselect_val = item.Value; //array
-
-                            //iterate and construct strings.
-                            List<string> ms_condition = new List<string>();
-                            foreach (var ms_item in mselect_val)
-                            {
-                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); //changed from LIKE
-                            }
-
-                            conditions.Add("(" + string.Join(" OR ", ms_condition) + ")");
-
-                            break;
-                        case "select":
-                            logger.Debug("A select:" + item.Value);
-                            if (item.Value == null)
-                                break;
-
-                            dynamic select_val = item.Value; //array
-
-                            conditions.Add(field.DbColumnName + " in('" + string.Join("','", select_val) + "')");
-                            break;
-                        case "date":
-                        case "datetime":
-                            logger.Debug("A date!: ");
-                            if (item.Value.ParamFieldDateType == "between") //otherwise, do nothing with this criteria
-                            {
-                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate, true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate, true) + "'");
-                            }
-
-
-                            break;
-                    }
-                }
-
-            }
 
             //DATE criteria
             if (json.DateSearchType == "singleYear")
@@ -257,17 +171,17 @@ namespace services.Resources
                 con.Open();
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.CommandTimeout = 120; // 2 minutes in seconds.
-                try
-                {
+                //try
+                //{
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.SelectCommand.CommandTimeout = 120;
                     da.Fill(dt);
-                }
-                catch (SqlException e)
-                {
-                    logger.Debug("Query sql command timed out..." + e.Message);
-                    logger.Debug(e.InnerException);
-                }
+                //}
+                //catch (SqlException e)
+               // {
+                 //   logger.Debug("Query sql command timed out..." + e.Message);
+                 //   logger.Debug(e.InnerException);
+                //}
             }
 
             return dt;
@@ -326,5 +240,110 @@ namespace services.Resources
 
             return retval;
         }
+
+        //returns an SQL query with conditions for each of the fields in jsonFields
+        // list = getQueryConditions(dataset.Fields, json.Fields) where json.Fields is { DbColumnName: "FieldName", Value: "Value" }
+        // then you might say: var criteria_string = string.Join(" AND ", conditions.ToArray());
+        public static List<string> getQueryConditions(IEnumerable<DatasetField> fields, dynamic jsonFields)
+        {
+            //logger.Debug(json.Fields);
+            //logger.Debug(json.Fields.ToString());
+            //logger.Debug("json = " + json);
+
+            var conditions = new List<string>();
+
+            //fields in the criteria
+            foreach (var item in jsonFields)
+            {
+                logger.Debug(item);
+                logger.Debug("Colname!: " + item.DbColumnName);
+
+                //spin through each of our dataset/datastore fields and find a match, adding it to our criteria...
+                foreach (var field in fields)
+                {
+
+                    //if (field.DbColumnName != item.DbColumnName.ToString()) // this is probably necessary? kb10/22/18 && field.Id != item.Id.ToObject<int>())
+                    if (field.DbColumnName != item.DbColumnName.ToString())
+                        continue;
+
+                    if (item.Value == null)
+                        continue;
+
+                    logger.Debug("Have a field: " + field.DbColumnName);
+
+                    //if (field == null)
+                    //    throw new Exception("Field not configured properly: " + item.Value);
+
+                    string ControlType = field.ControlType.ToString(); //hmm, can't use directly in a switch.
+
+                    //now add field criteria to our list...
+                    switch (ControlType)
+                    {
+                        case "number":
+                        case "currency":
+                        case "time":
+                        case "easting":
+                        case "northing":
+                        case "instrument-select": 
+                        case "location-select":
+                            logger.Debug("A number, currency, time, northing, or easting");
+                            conditions.Add(field.DbColumnName + "=" + filterForSQL(item.Value)); //>100
+                            break;
+
+                        case "text":
+                        case "textarea":
+                            logger.Debug("A txt");
+                            var conditional = " = ";
+                            if (item.Value.ToString().Contains("%"))
+                                conditional = " LIKE ";
+
+                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value) + "'");
+                            break;
+
+                        case "multiselect":
+                            logger.Debug("A MULTIselect:" + item.Value);
+                            if (item.Value == null)
+                                break;
+
+                            dynamic mselect_val = item.Value; //array
+
+                            //iterate and construct strings.
+                            List<string> ms_condition = new List<string>();
+                            foreach (var ms_item in mselect_val)
+                            {
+                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); //changed from LIKE
+                            }
+
+                            conditions.Add("(" + string.Join(" OR ", ms_condition) + ")");
+
+                            break;
+                        case "select":
+                            logger.Debug("A select:" + item.Value);
+                            if (item.Value == null)
+                                break;
+
+                            dynamic select_val = item.Value; //array
+
+                            conditions.Add(field.DbColumnName + " in('" + string.Join("','", select_val) + "')");
+                            break;
+                        case "date":
+                        case "datetime":
+                        case "activity-date":
+                            logger.Debug("A date!: ");
+                            if (item.Value.ParamFieldDateType == "between") //otherwise, do nothing with this criteria
+                            {
+                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate, true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate, true) + "'");
+                            }
+
+
+                            break;
+                    }
+                }
+
+            }
+
+            return conditions;
+        }
+
     }
 }
