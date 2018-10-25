@@ -1368,10 +1368,13 @@ namespace services.Controllers
             }
 
 
-            
+            var result = new JObject(
+                            new JProperty("count", count),
+                            new JProperty("query", criteria_string)
+                        );
 
 
-            return Request.CreateResponse(HttpStatusCode.OK, new JObject( new JProperty("count",count)));
+            return Request.CreateResponse(HttpStatusCode.OK, result);
 
         }
 

@@ -48,5 +48,6 @@ values
 ('Accuracy Check','Activity instrument accuracy check','AccuracyCheckId','accuracy-check-select',@activitydsid,1),
 ('Post Accuracy Check','Activity instrument post-accuracy check','PostAccuracyCheckId','post-accuracy-check-select',@activitydsid,1),
 ('Reading Timezone','Activity reading timezone','Timezone','timezone-select',@activitydsid,1),
-('Row QA Status','Activity row QA status','QAStatusId','select',@activitydsid,1);
+('Row QA Status','Activity row QA status','QAStatusId','select',@activitydsid,1),
+('Activity Description','Activity description field','Description','text', @activitydsid, 1);
 

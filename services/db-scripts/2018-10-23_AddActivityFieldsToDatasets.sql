@@ -48,3 +48,8 @@ from datasets where datastoreid in (3,6);
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
 select getdate(), id, 1753, 2, 'QA','QAStatusId',1,71,'select',null
 from datasets where datastoreid in (3);
+
+-- add description to all datasets that need it
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, 1763, 1, 'Description','Description',1,8,'activity-text',null
+from datasets where datastoreid in (3);

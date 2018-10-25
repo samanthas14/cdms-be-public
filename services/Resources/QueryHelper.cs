@@ -292,12 +292,13 @@ namespace services.Resources
 
                         case "text":
                         case "textarea":
+                        case "activity-text":
                             logger.Debug("A txt");
                             var conditional = " = ";
                             if (item.Value.ToString().Contains("%"))
                                 conditional = " LIKE ";
 
-                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value) + "'");
+                            conditions.Add(field.DbColumnName + conditional + "'" + filterForSQL(item.Value, true) + "'");
                             break;
 
                         case "multiselect":
