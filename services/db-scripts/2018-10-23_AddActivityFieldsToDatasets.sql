@@ -11,17 +11,17 @@ from datasets where datastoreid in (21,22);
 
 -- add location to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
-select getdate(), id, 1747, 1, 'Location','LocationId',1,0,'location-select',null
+select getdate(), id, 1747, 1, 'Location','LocationId',1,2,'location-select',null
 from datasets where datastoreid in (1,2,3,4,5,6,7,8,9,11,12,13,14,15,17,18,19,20,21,22);
 
 -- add qa status to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
-select getdate(), id, 1745, 1, 'QA Status','QAStatusId',1,2,'qa-status-select',null
+select getdate(), id, 1745, 1, 'QA Status','QAStatusId',1,97,'qa-status-select',null
 from datasets where datastoreid in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22);
 
 -- add qa comments to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
-select getdate(), id, 1746, 1, 'QA Comments','QAComments',1,3,'qa-status-comment',null
+select getdate(), id, 1746, 1, 'QA Comments','QAComments',1,98,'qa-status-comment',null
 from datasets where datastoreid in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22);
 
 -- add instruments to all datasets that need it
@@ -46,7 +46,7 @@ from datasets where datastoreid in (3,6);
 
 -- add rowqa to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
-select getdate(), id, 1753, 2, 'QA','QAStatusId',1,71,'select',null
+select getdate(), id, 1753, 2, 'QA','QAStatusId',1,99,'select',null
 from datasets where datastoreid in (3);
 
 -- add description to all datasets that need it
