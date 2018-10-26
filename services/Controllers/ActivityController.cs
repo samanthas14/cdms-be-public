@@ -21,7 +21,7 @@ namespace services.Controllers
      * 
      * Any data in a dataset will have belong to an "activity".
      * 
-     */ 
+     */
     public class ActivityController : CDMSController
     {
         /*
@@ -29,7 +29,7 @@ namespace services.Controllers
          * inserting a new row to indicate that the qa status has changed. Any queries/views must always fetch/join
          * the most recent QA Status for the activity to know its latest state. In this way you can always see all of the
          * states that an activity has gone through as it has changed.
-         */ 
+         */
 
         // POST /api/v1/activity/setqastatus
         [HttpPost]
@@ -89,12 +89,47 @@ namespace services.Controllers
         */
 
         /*
+        * This queries just the information we need for showing the Activities on the
+        * Data tab on CDMS front-end (for performance).
+        */
+        // GET /api/v1/activity/getdatasetactivitiesview/5
+        [HttpGet]
+        public dynamic GetDatasetActivitiesView(int Id)
+        {
+            var db = ServicesContext.Current;
+
+            var dataset = db.Datasets.Find(Id);
+            if (dataset == null)
+                throw new System.Exception("Dataset could not be found: " + Id);
+
+            var data_header_name = dataset.Datastore.TablePrefix + "_Header_VW";
+
+            var sql = "SELECT top 10 * FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE datasetid = "+Id;
+
+            DataTable activities = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(activities);
+                }
+            }
+
+            return activities;
+        }
+
+
+
+        /*
          * This queries just the information we need for showing the Activities on the
          * Data tab on CDMS front-end (for performance).
          */
         // GET /api/v1/activity/getdatasetactivitiesview/5
         [HttpGet]
-        public dynamic GetDatasetActivitiesView(int Id)
+        public dynamic GetDatasetActivitiesView_old(int Id)
         {
             var db = ServicesContext.Current;
 
