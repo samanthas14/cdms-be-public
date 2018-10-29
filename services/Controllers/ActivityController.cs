@@ -104,7 +104,24 @@ namespace services.Controllers
 
             var data_header_name = dataset.Datastore.TablePrefix + "_Header_VW";
 
-            var sql = "SELECT top 10 * FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE datasetid = "+Id;
+            //var sql = "SELECT * FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE a.datasetid = "+Id;
+
+            var sql = @"
+SELECT vw.*, 
+a.Id, a.Description, a.DatasetId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, 
+a.InstrumentId, a.AccuracyCheckId, a.PostAccuracyCheckId,  
+qv.QAStatusId, 
+loc.Label as LocationLabel, loc.LocationTypeId, loc.OtherAgencyId,
+wb.Name as WaterBodyName,
+u.Fullname as UserFullname
+FROM " + data_header_name + @" vw 
+JOIN Activities a ON a.Id = vw.ActivityId 
+JOIN ActivityQAs_VW qv ON a.Id = qv.ActivityId
+JOIN Locations loc ON a.LocationId = loc.Id
+JOIN WaterBodies wb ON loc.WaterBodyId = wb.Id
+JOIN Users u ON u.Id = a.UserId
+WHERE a.datasetid = " + Id;
+
 
             DataTable activities = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
