@@ -1,4 +1,5 @@
-﻿
+﻿using services.Resources.Attributes;
+
 namespace services.Models.Data
 {
     public class SnorkelFish_Detail : DataDetail
@@ -33,5 +34,9 @@ namespace services.Models.Data
         public int? AEMLength { get; set; }
 
         public string Unit { get; set; }
+        [DecimalPrecision(18, 8)]
+        public decimal? GPSEasting { get; set; }
+        [DecimalPrecision(18, 8)]
+        public decimal? GPSNorthing { get; set; }
     }
 }
