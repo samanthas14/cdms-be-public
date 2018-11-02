@@ -341,7 +341,8 @@
     <Content Include="db-scripts\2018-10-19_RemoveFieldCategory.sql" />
     <Content Include="db-scripts\2018-10-22_ActivitySystemFields.sql" />
     <Content Include="db-scripts\2018-10-23_AddActivityFieldsToDatasets.sql" />
-    <Content Include="db-scripts\2018-11-1_CorrespondenceAndHabitat.sql" />
+    <Content Include="db-scripts\2018-11-01_CorrespondenceAndHabitat.sql" />
+    <Content Include="db-scripts\2018-11-02_MetadataUpdates.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
