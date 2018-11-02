@@ -41,6 +41,8 @@ namespace services.Controllers
             Location location = json.Location.ToObject<Location>();
             location.UserId = me.Id;
             location.ProjectId = project.Id;
+
+/*
             string strLocation = "Id = " + location.Id + "\n" +
                 "Projection = " + location.Projection + "\n" +
                 "UTMZone = " + location.UTMZone + "\n" +
@@ -53,6 +55,7 @@ namespace services.Controllers
                 "StudyDesign = " + location.StudyDesign + "\n" +
                 "ProjectId = " + location.ProjectId;
             logger.Debug(strLocation);
+*/
 
             //IF the incoming location has an ID then we update, otherwise we create a new project location
             if (location.Id == 0)
@@ -69,17 +72,8 @@ namespace services.Controllers
                 logger.Debug("success updating EXISTING project location!");
             }
 
-            string result = JsonConvert.SerializeObject(location);
-
-            //TODO: actual error/success message handling
-            //string result = "{\"message\": \"Success\"}";
-
-            HttpResponseMessage resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-            resp.Content = new System.Net.Http.StringContent(result, System.Text.Encoding.UTF8, "text/plain");  //to stop IE from being stupid.
-
-            return resp;
-
-            //return new HttpResponseMessage(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.Created, location);
+            
 
         }
 

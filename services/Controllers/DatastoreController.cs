@@ -210,6 +210,7 @@ namespace services.Controllers
             df.ControlType = json.ControlType;
             df.PossibleValues = json.PossibleValues;
             df.Description = json.Description;
+            df.DataSource = json.DataSource;
 
             db.SaveChanges();
 

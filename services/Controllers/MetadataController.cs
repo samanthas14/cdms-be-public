@@ -11,6 +11,9 @@ using System.Web.Http;
 using services.Models;
 using Newtonsoft.Json.Linq;
 using services.Resources;
+using System.Data.SqlClient;
+using System.Configuration;
+using Newtonsoft.Json;
 
 namespace services.Controllers
 {
@@ -108,23 +111,39 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, metadataproperty);
         }
 
-        //TODO: not sure why this is a POST?
-
         // POST /api/v1/metadata/getmetadatafor
         [HttpPost]
-        public IEnumerable<MetadataValue> GetMetadataFor(JObject jsonData)
+        public dynamic GetMetadataFor(JObject jsonData)
         {
             var db = ServicesContext.Current;
             dynamic json = jsonData;
 
             User me = AuthorizationManager.getCurrentUser();
-            Project project = db.Projects.Find(json.ProjectId.ToObject<int>());
+            int RelationId = json.RelationId.ToObject<int>();
             int EntityTypeId = json.EntityTypeId.ToObject<int>();
 
-            if (project == null || me == null)
+            if (RelationId == 0 || EntityTypeId == 0 || me == null)
                 throw new Exception("GetMetadataFor: Configuration error. Please try again.");
 
-            return MetadataHelper.getMetadata(project.Id, EntityTypeId).AsEnumerable();
+            var sql = @"select * from metadataproperties p 
+left outer join metadatavalues_vw vw on vw.MetadataPropertyId = p.Id and vw.RelationId = " + RelationId + @"
+where p.MetadataEntityId = " + EntityTypeId;
+
+            DataTable metadata = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(metadata);
+                }
+            }
+            
+            return metadata;
+
+            //            return MetadataHelper.getMetadata(project.Id, EntityTypeId).AsEnumerable();
 
         }
 
