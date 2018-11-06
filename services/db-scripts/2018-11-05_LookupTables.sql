@@ -34,16 +34,16 @@ select @newdsid = scope_identity();
 
 insert into Fields (Name, Description, DbColumnName, ControlType, DatastoreId, FieldRoleId, DataSource, DataType,PossibleValues,Validation) 	
 values 
-('FirstName','FirstName','FirstName','text',@newdsid,1,null,'string',null,null),
+('First Name','FirstName','FirstName','text',@newdsid,1,null,'string',null,null),
 ('Aka','Aka','Aka','text',@newdsid,1,null,'string',null,null),
-('LastName','LastName','LastName','text',@newdsid,1,null,'string',null,null),
-('PhoneNumber','PhoneNumber','PhoneNumber','text',@newdsid,1,null,'string',null,null),
-('DateAdded','DateAdded','DateAdded','datetime',@newdsid,1,null,'datetime',null,null),
-('DateInactive','DateInactive','DateInactive','datetime',@newdsid,1,null,'datetime',null,null),
-('FullName','FullName','FullName','text',@newdsid,1,null,'string',null,null),
-('FishermanComments','FishermanComments','FishermanComments','text',@newdsid,1,null,'string',null,null),
-('StatusId','StatusId','StatusId','select-number',@newdsid,1,null,'int',null,null),
-('OkToCallId','OkToCallId','OkToCallId','select-number',@newdsid,1,null,'int',null,null);
+('Last Name','LastName','LastName','text',@newdsid,1,null,'string',null,null),
+('Phone Number','PhoneNumber','PhoneNumber','text',@newdsid,1,null,'string',null,null),
+('Date Added','DateAdded','DateAdded','date',@newdsid,1,null,'datetime',null,null),
+('Date Inactive','DateInactive','DateInactive','date',@newdsid,1,null,'datetime',null,null),
+('Fullname','FullName','FullName','text',@newdsid,1,null,'string',null,null),
+('Comments','FishermanComments','FishermanComments','text',@newdsid,1,null,'string',null,null),
+('Status','StatusId','StatusId','select-number',@newdsid,1,null,'int','{"0":"Active","1":"Inactive"}',null),
+('Ok To Call','OkToCallId','OkToCallId','select-number',@newdsid,1,null,'int','{"0":"Yes","1":"No"}',null);
 
 
 insert into datasets 
@@ -80,10 +80,10 @@ insert into Fields (Name, Description, DbColumnName, ControlType, DatastoreId, F
 values 
 ('Species','Species','Species','text',@newdsid,1,null,'string',null,null),
 ('Season','Season','Season','number',@newdsid,1,null,'int',null,null),
-('TotalDays','TotalDays','TotalDays','number',@newdsid,1,null,'int',null,null),
-('OpenDate','OpenDate','OpenDate','datetime',@newdsid,1,null,'datetime',null,null),
-('CloseDate','CloseDate','CloseDate','datetime',@newdsid,1,null,'datetime',null,null),
-('DatasetId','DatasetId','DatasetId','number',@newdsid,1,null,'int',null,null);
+('Total Days','TotalDays','TotalDays','number',@newdsid,1,null,'int',null,null),
+('Open Date','OpenDate','OpenDate','date',@newdsid,1,null,'datetime',null,null),
+('Close Date','CloseDate','CloseDate','date',@newdsid,1,null,'datetime',null,null),
+('Dataset','DatasetId','DatasetId','number',@newdsid,1,null,'int',null,null);
 
 
 insert into datasets 

@@ -26,17 +26,17 @@ namespace services.Controllers
         }
 
 
-        //GET /api/v1/lookuptable/items/5
+        //GET /api/v1/lookuptable/getitems/5
         [System.Web.Http.HttpGet]
-        public dynamic GetItems(int DatastoreId)
+        public dynamic GetItems(int Id)
         {
             var ndb = ServicesContext.Current;
-            Datastore lookuptable = ndb.Datastores.Find(DatastoreId);
+            LookupTable lookuptable = ndb.LookupTables.Find(Id);
     
             if(lookuptable == null)
-                throw new System.Exception("Configuration error.");
-
-            var sql = "SELECT * FROM " + lookuptable.TablePrefix;
+                throw new System.Exception("LookupTable not found.");
+    
+            var sql = "SELECT * FROM " + lookuptable.Dataset.Datastore.TablePrefix;
 
             DataTable items = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
