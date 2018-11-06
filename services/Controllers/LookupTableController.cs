@@ -65,18 +65,22 @@ namespace services.Controllers
             logger.Debug("Inside SaveItem...");
             var db = ServicesContext.Current;
             dynamic json = jsonData;
-            int DatastoreId = json.DatastoreId.ToObject<int>();
+            int LookupTableId = json.LookupTableId.ToObject<int>();
 
-            Datastore lookuptable = db.Datastores.Find(DatastoreId);
+            LookupTable lookuptable = db.LookupTables.Find(LookupTableId);
+
+            if (lookuptable == null)
+                throw new System.Exception("LookupTable not found.");
 
             if (lookuptable == null)
                 throw new System.Exception("Configuration error, no DatastoreId in payload.");
 
             User me = AuthorizationManager.getCurrentUser();
 
-            var dbset = db.GetDbSet(lookuptable.TablePrefix);
-            var lookuptable_type = db.GetTypeFor(lookuptable.TablePrefix);
-
+            var dbset = db.GetDbSet(lookuptable.Dataset.Datastore.TablePrefix, "services.Models"); //lookups are not in services.Models.Data namespace
+            logger.Debug("got dbset now getting type");
+            var lookuptable_type = db.GetTypeFor(lookuptable.Dataset.Datastore.TablePrefix, "services.Models"); //lookups are not in services.Models.Data namespace
+            logger.Debug("got type");
             var incoming_item = json.Item.ToObject(lookuptable_type);
 
             if (incoming_item.Id == 0)
@@ -101,7 +105,7 @@ namespace services.Controllers
 
             }
             
-            return Request.CreateResponse(HttpStatusCode.Created, (Object)incoming_item);
+            return Request.CreateResponse(HttpStatusCode.OK, (Object)incoming_item);
         }
 
         // POST /api/v1/season/removeseason

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace services.Models
 {
@@ -28,8 +29,14 @@ namespace services.Models
         public int? OrderIndex { get; set; }
 
         public virtual Field Field { get; set; }
+
+        [JsonIgnore]
         public virtual FieldRole FieldRole { get; set; }
+
+        [JsonIgnore]
         public virtual Source Source { get; set; }
+
+        [JsonIgnore]
         public virtual Instrument Instrument { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 using services.Resources;
 
 namespace services.Models
@@ -46,8 +47,9 @@ namespace services.Models
         public string DataType { get; set; }
         public string ControlType { get; set; }
 
-        //public virtual FieldCategory FieldCategory { get; set; } //going away
+        [JsonIgnore]
         public virtual FieldRole FieldRole { get; set; }
+
         public virtual Datastore Datastore { get; set; }
 
     }

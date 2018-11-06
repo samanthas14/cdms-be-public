@@ -100,21 +100,25 @@ namespace services.Models
         public DbSet<Seasons> Seasons { get; set; }
 
         //get the dbset by name
-        public DbSet GetDbSet(string entityName)
+        public DbSet GetDbSet(string entityName, string entityNamespace = "services.Models.Data")
         {
-            return this.Set(GetTypeFor(entityName));
+            return this.Set(GetTypeFor(entityName, entityNamespace));
         }
 
         //get the type for an entity by name
-        public System.Type GetTypeFor(string entityName)
+        public System.Type GetTypeFor(string entityName, string entityNamespace = "services.Models.Data")
         {
-            return GetObjectFor(entityName).GetType();
+            //we have to map "fishermen" to "fisherman" because it doesn't follow the convention
+            if (entityName == "Fishermen")
+                entityName = "Fisherman";
+
+            return GetObjectFor(entityName, entityNamespace).GetType();
         }
 
         //get an entity object by name
-        public dynamic GetObjectFor(string entityName)
+        public dynamic GetObjectFor(string entityName, string entityNamespace = "services.Models.Data")
         {
-            var datasource = "services.Models.Data." + entityName;
+            var datasource = entityNamespace + "." + entityName;
             var obj = System.Activator.CreateInstance("services", datasource).Unwrap();
             return obj;
         }
@@ -123,7 +127,7 @@ namespace services.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Load all "services.Models.Data.*" entities that are DataDetail, DataHeader or DatasetStandalone types.
-            IEnumerable typelist = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "services.Models.Data");
+            IEnumerable typelist = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "services.Models.Data"); //NOTE: we only hot-load header/detail type dataset entities
             foreach (Type type in typelist)
             {
                 //Debug.WriteLine("Found something: " + type.Name);
