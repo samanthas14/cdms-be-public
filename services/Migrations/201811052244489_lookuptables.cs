@@ -15,7 +15,7 @@ namespace services.Migrations
                         Name = c.String(),
                         Label = c.String(),
                         Description = c.String(),
-                        DatasetId = c.Int(nullable: false),
+                        DatasetId = c.Int(nullable: true),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Datasets", t => t.DatasetId)

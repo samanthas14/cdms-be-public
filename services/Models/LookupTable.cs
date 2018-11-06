@@ -12,7 +12,7 @@ namespace services.Models
         public string Name { get; set; }
         public string Label { get; set; }
         public string Description { get; set; }
-        public int DatasetId { get; set; } //dataset with the fields for the lookup table
+        public System.Nullable<int> DatasetId { get; set; } //dataset with the fields for the lookup table
 
         [JsonIgnore]
         public virtual List<Project> Projects { get; set; }

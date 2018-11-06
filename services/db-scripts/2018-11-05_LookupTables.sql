@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[LookupTables] (
     [Name] [nvarchar](max),
     [Label] [nvarchar](max),
     [Description] [nvarchar](max),
-    [DatasetId] [int] NOT NULL,
+    [DatasetId] [int],
     CONSTRAINT [PK_dbo.LookupTables] PRIMARY KEY ([Id])
 )
 CREATE INDEX [IX_DatasetId] ON [dbo].[LookupTables]([DatasetId])
@@ -19,6 +19,7 @@ CREATE INDEX [IX_Project_Id] ON [dbo].[LookupTableProjects]([Project_Id])
 ALTER TABLE [dbo].[LookupTables] ADD CONSTRAINT [FK_dbo.LookupTables_dbo.Datasets_DatasetId] FOREIGN KEY ([DatasetId]) REFERENCES [dbo].[Datasets] ([Id])
 ALTER TABLE [dbo].[LookupTableProjects] ADD CONSTRAINT [FK_dbo.LookupTableProjects_dbo.LookupTables_LookupTable_Id] FOREIGN KEY ([LookupTable_Id]) REFERENCES [dbo].[LookupTables] ([Id]) ON DELETE CASCADE
 ALTER TABLE [dbo].[LookupTableProjects] ADD CONSTRAINT [FK_dbo.LookupTableProjects_dbo.Projects_Project_Id] FOREIGN KEY ([Project_Id]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
+
 
 -- todo don't foret to associate projects
 
@@ -59,7 +60,7 @@ select
 @newdatasetid, Id, FieldRoleId, getDate(), Name, DbColumnName, ControlType, null ,1
 FROM Fields where DatastoreId = @newdsid;
 
-insert into LookupTable
+insert into LookupTables
 (Name, Label, Description, DatasetId)
 values
 ('Fishermen','Fishermen','Fishermen Lookup Table',@newdatasetid)
@@ -99,7 +100,7 @@ select
 @newdatasetid, Id, FieldRoleId, getDate(), Name, DbColumnName, ControlType, null ,1
 FROM Fields where DatastoreId = @newdsid;
 
-insert into LookupTable
+insert into LookupTables
 (Name, Label, Description, DatasetId)
 values
 ('Seasons','Seasons','Seasons Lookup Table',@newdatasetid)
