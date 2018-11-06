@@ -68,30 +68,59 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        public dynamic GetMetadataEntities() {
+            var db = ServicesContext.Current;
+    
+            //note: this is a slick way to return an object with its children as objects.
+
+            var entities = from entity in db.MetadataEntity
+                           select new 
+                           { 
+                                Id = entity.Id, 
+                                Name = entity.Name, 
+                                Description = entity.Description, 
+                                Properties = (from q in db.MetadataProperty where q.MetadataEntityId == entity.Id select q )
+                            }; 
+
+            return entities.AsEnumerable();
+        }
+
         // POST api/Metadata
-        public HttpResponseMessage PostMetadataProperty(MetadataProperty metadataproperty)
+        public HttpResponseMessage SaveMetadataProperty(MetadataProperty metadataproperty)
         {
             var db = ServicesContext.Current;
+
+            HttpResponseMessage response = null;
+
             if (ModelState.IsValid)
             {
-                db.MetadataProperty.Add(metadataproperty);
-                db.SaveChanges();
-
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, metadataproperty);
-                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = metadataproperty.Id }));
-                return response;
+                if (metadataproperty.Id == 0)
+                {
+                    db.MetadataProperty.Add(metadataproperty);
+                    response = Request.CreateResponse(HttpStatusCode.Created, metadataproperty);
+                }else{
+                    db.Entry(metadataproperty).State = EntityState.Modified;
+                    response = Request.CreateResponse(HttpStatusCode.OK, metadataproperty);
+                }
             }
             else
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
+
+            db.SaveChanges();
+            return response;
+
         }
 
-        // DELETE api/Metadata/5
-        public HttpResponseMessage DeleteMetadataProperty(int id)
+        //  api/Metadata/5
+        [HttpPost]
+        public HttpResponseMessage DeleteMetadataProperty(JObject jsonData)
         {
             var db = ServicesContext.Current;
-            MetadataProperty metadataproperty = db.MetadataProperty.Find(id);
+            dynamic json = jsonData;
+            int PropertyId = json.Id.ToObject<int>();
+            MetadataProperty metadataproperty = db.MetadataProperty.Find(PropertyId);
             if (metadataproperty == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);

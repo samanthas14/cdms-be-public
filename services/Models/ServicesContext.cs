@@ -90,6 +90,9 @@ namespace services.Models
         public DbSet<ActivityQA> ActivityQAs { get; set; }
         public DbSet<ActivityType> ActivityTypes { get; set; }
 
+        public DbSet<LookupTable> LookupTables { get; set; }
+
+        //lookup tables
         public DbSet<Fisherman> Fishermen { get; set; }
         public DbSet<Collaborator> Collaborators { get; set; }
         public DbSet<Funding> Funding { get; set; }

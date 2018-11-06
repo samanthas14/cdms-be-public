@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Newtonsoft.Json;
 using NLog;
 using services.Resources;
 
@@ -40,8 +41,13 @@ namespace services.Models
         public virtual List<User> Editors { get; set; }
 
         //[InverseProperty("ProjectInstruments")]
-        public virtual List<Instrument> Instruments { get; set; } // Project Instrument options
-        public virtual List<Fisherman> Fishermen { get; set; } // Project fisherman options
+        public virtual List<Instrument> Instruments { get; set; } 
+
+        [JsonIgnore]
+        public virtual List<Fisherman> Fishermen { get; set; } 
+
+        [JsonIgnore]
+        public virtual List<LookupTable> LookupTables { get; set; } 
 
         public bool isOwnerOrEditor(User user)
         {
