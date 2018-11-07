@@ -12,8 +12,8 @@ insert into metadataproperties (MetadataEntityId, Name, Description, DataType, P
 (@entityid, 'CorrespondenceType','Correspondence Type','string','[]','select'),
 (@entityid, 'ResponseType','Response Type','string','[]','select'),
 (@entityid, 'NumberOfDays','Number Of Days','number','[]','select'),
-(@entityid, 'StaffMember','Staff Member','string','[]','select'),
-(@entityid, 'ProjectLead','Project Lead','string','[]','number-select');
+(@entityid, 'StaffMember','Staff Member - These names must match the user''s name in Outlook, and the full name in table Users.','string','[]','select'),
+(@entityid, 'ProjectLead','Project Lead - These names must match the user''s name in Outlook, and the full name in table Users.','string','[]','select');
 
 update metadataproperties set PossibleValues = 
 '[

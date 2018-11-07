@@ -27,6 +27,15 @@ namespace services.Controllers
             return metadataproperty.AsEnumerable();
         }
 
+        // GET api/v1/metadata/GetMetadataPropertiesForEntity/id
+        public IEnumerable<MetadataProperty> GetMetadataPropertiesForEntity(int Id)
+        {
+            var db = ServicesContext.Current;
+            var metadataproperty = db.MetadataProperty.Where(o => o.MetadataEntityId == Id);
+            return metadataproperty.AsEnumerable();
+        }
+        
+
         // GET api/Metadata/5
         public MetadataProperty GetMetadataProperty(int id)
         {
