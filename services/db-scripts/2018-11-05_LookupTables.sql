@@ -107,3 +107,10 @@ values
 
 go
 
+insert into LookupTables
+(Name, Label, Description, DatasetId)
+values
+('Instruments','Instruments','Instruments Lookup Table',null)
+
+go
+
