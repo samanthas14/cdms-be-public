@@ -9,19 +9,11 @@ CREATE TABLE [dbo].[LookupTables] (
     CONSTRAINT [PK_dbo.LookupTables] PRIMARY KEY ([Id])
 )
 CREATE INDEX [IX_DatasetId] ON [dbo].[LookupTables]([DatasetId])
-CREATE TABLE [dbo].[LookupTableProjects] (
-    [LookupTable_Id] [int] NOT NULL,
-    [Project_Id] [int] NOT NULL,
-    CONSTRAINT [PK_dbo.LookupTableProjects] PRIMARY KEY ([LookupTable_Id], [Project_Id])
-)
-CREATE INDEX [IX_LookupTable_Id] ON [dbo].[LookupTableProjects]([LookupTable_Id])
-CREATE INDEX [IX_Project_Id] ON [dbo].[LookupTableProjects]([Project_Id])
 ALTER TABLE [dbo].[LookupTables] ADD CONSTRAINT [FK_dbo.LookupTables_dbo.Datasets_DatasetId] FOREIGN KEY ([DatasetId]) REFERENCES [dbo].[Datasets] ([Id])
-ALTER TABLE [dbo].[LookupTableProjects] ADD CONSTRAINT [FK_dbo.LookupTableProjects_dbo.LookupTables_LookupTable_Id] FOREIGN KEY ([LookupTable_Id]) REFERENCES [dbo].[LookupTables] ([Id]) ON DELETE CASCADE
-ALTER TABLE [dbo].[LookupTableProjects] ADD CONSTRAINT [FK_dbo.LookupTableProjects_dbo.Projects_Project_Id] FOREIGN KEY ([Project_Id]) REFERENCES [dbo].[Projects] ([Id]) ON DELETE CASCADE
 
+ALTER TABLE [dbo].[Projects] ADD [Config] [nvarchar](max)
 
--- todo don't foret to associate projects
+go
 
 -- setup our location table fields: fishermen
 DECLARE @newdsid int = 0;

@@ -16,16 +16,7 @@ namespace services.Controllers
 {
     public class LookupTableController : CDMSController
     {
-        //GET /api/v1/lookuptable/forproject/5
-        [System.Web.Http.HttpGet]
-        public dynamic ForProject(int Id)
-        {
-            var ndb = ServicesContext.Current;
-            return ndb.Projects.Find(Id).LookupTables.AsEnumerable();
-
-        }
-
-
+        
         //GET /api/v1/lookuptable/getitems/5
         [System.Web.Http.HttpGet]
         public dynamic GetItems(int Id)

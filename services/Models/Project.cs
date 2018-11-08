@@ -27,6 +27,7 @@ namespace services.Models
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Config { get; set; }
         public DateTime CreateDateTime { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -45,9 +46,6 @@ namespace services.Models
 
         [JsonIgnore]
         public virtual List<Fisherman> Fishermen { get; set; } 
-
-        [JsonIgnore]
-        public virtual List<LookupTable> LookupTables { get; set; } 
 
         public bool isOwnerOrEditor(User user)
         {

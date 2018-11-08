@@ -195,9 +195,9 @@
     <Compile Include="Migrations\201811052233480_reset.Designer.cs">
       <DependentUpon>201811052233480_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201811052244489_lookuptables.cs" />
-    <Compile Include="Migrations\201811052244489_lookuptables.Designer.cs">
-      <DependentUpon>201811052244489_lookuptables.cs</DependentUpon>
+    <Compile Include="Migrations\201811072237419_project_config.cs" />
+    <Compile Include="Migrations\201811072237419_project_config.Designer.cs">
+      <DependentUpon>201811072237419_project_config.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -388,8 +388,8 @@
     <EmbeddedResource Include="Migrations\201811052233480_reset.resx">
       <DependentUpon>201811052233480_reset.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811052244489_lookuptables.resx">
-      <DependentUpon>201811052244489_lookuptables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811072237419_project_config.resx">
+      <DependentUpon>201811072237419_project_config.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

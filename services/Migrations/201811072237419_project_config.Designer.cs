@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class lookuptables : IMigrationMetadata
+    public sealed partial class project_config : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(lookuptables));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(project_config));
         
         string IMigrationMetadata.Id
         {
-            get { return "201811052244489_lookuptables"; }
+            get { return "201811072237419_project_config"; }
         }
         
         string IMigrationMetadata.Source

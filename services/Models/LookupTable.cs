@@ -14,9 +14,6 @@ namespace services.Models
         public string Description { get; set; }
         public System.Nullable<int> DatasetId { get; set; } //dataset with the fields for the lookup table
 
-        [JsonIgnore]
-        public virtual List<Project> Projects { get; set; }
-
         public virtual Dataset Dataset { get; set; }
 
     }
