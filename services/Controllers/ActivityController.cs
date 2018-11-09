@@ -553,7 +553,12 @@ WHERE a.datasetid = " + Id;
             {
                 logger.Debug("Checking last header value of field : '" + header_field.Name + "' with incoming value + '" + header_field.Value + "'");
 
-                var objval = last_header.GetType().GetProperty(header_field.Name).GetValue(last_header, null);
+                var headerobj = last_header.GetType().GetProperty(header_field.Name);
+
+                if (headerobj == null)
+                    continue;
+
+                var objval = headerobj.GetValue(last_header, null);
                 logger.Debug("Got the value from the header field.");
 
                 if (objval != null)
@@ -1413,27 +1418,27 @@ WHERE a.datasetid = " + Id;
 
             var data_header_name = dataset.Datastore.TablePrefix + "_Header_VW";
 
-            var sql = "SELECT COUNT(*) FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE 1=1";
+            var sql = "SELECT a.Id FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE 1=1";
 
             var conditions = QueryHelper.getQueryConditions(dataset.Fields, json.Fields);
             var criteria_string = string.Join(" AND ", conditions.ToArray());
             logger.Debug(criteria_string);
             sql = sql + " AND " + criteria_string;
             logger.Debug(sql);
-            Int32 count = -1;
+            Int32? duplicate_id = 0;
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
                 con.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, con);
-                count = (Int32) cmd.ExecuteScalar();
+                duplicate_id = (Int32?)cmd.ExecuteScalar();
 
             }
 
 
             var result = new JObject(
-                            new JProperty("count", count),
+                            new JProperty("DuplicateActivityId", duplicate_id),
                             new JProperty("query", criteria_string)
                         );
 
