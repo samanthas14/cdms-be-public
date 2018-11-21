@@ -149,6 +149,7 @@ namespace services.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, metadataproperty);
         }
 
+        //Returns metadata properties of an entity for a relationid
         // POST /api/v1/metadata/getmetadatafor
         [HttpPost]
         public dynamic GetMetadataFor(JObject jsonData)
@@ -163,7 +164,8 @@ namespace services.Controllers
             if (RelationId == 0 || EntityTypeId == 0 || me == null)
                 throw new Exception("GetMetadataFor: Configuration error. Please try again.");
 
-            var sql = @"select * from metadataproperties p 
+            var sql = @"select p.Id as MetadataPropertyId, MetadataEntityId, Name, Description, DataType, PossibleValues, ControlType,
+vw.RelationId, vw.[Values], vw.UserId, vw.EffDt from metadataproperties p 
 left outer join metadatavalues_vw vw on vw.MetadataPropertyId = p.Id and vw.RelationId = " + RelationId + @"
 where p.MetadataEntityId = " + EntityTypeId;
 

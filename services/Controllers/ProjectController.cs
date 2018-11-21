@@ -208,6 +208,55 @@ namespace services.Controllers
             return datasets;
         }
 
+
+        // POST /api/v1/project/saveprojectconfig
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage SaveProjectConfig(JObject jsonData)
+        {
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+
+            var in_project = json.Project.ToObject<Project>();
+
+            if (in_project == null)
+            {
+                logger.Debug("Error:  in_project = null");
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            User me = AuthorizationManager.getCurrentUser();
+            logger.Debug("me.username = " + me.Username);
+
+            //find the existing project
+            Project project = db.Projects.Find(in_project.Id);
+            if (project == null)
+            {
+                logger.Debug("project = null");
+                throw new Exception("Configuration error.");
+            }
+
+            //ok if they are editing the project, they can only edit projects they own or are editors
+            if (!project.isOwnerOrEditor(me))
+            {
+                logger.Debug("me is not an owner or editor.");
+                throw new Exception("Authorization error.");
+            }
+
+            project.Config = in_project.Config;
+
+            db.Entry(project).State = EntityState.Modified;
+            db.SaveChanges();
+            logger.Debug("Saved property changes to project: " + project.Id);
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, project);
+
+            return response;
+
+        }
+
+
+
+
         // POST /api/v1/project/saveproject
         [System.Web.Http.HttpPost]
         public HttpResponseMessage SaveProject(JObject jsonData)
@@ -275,6 +324,7 @@ namespace services.Controllers
                 project.EndDate = in_project.EndDate;
                 project.StartDate = in_project.StartDate;
                 project.Name = in_project.Name;
+                project.Config = in_project.Config;
 
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
@@ -285,6 +335,8 @@ namespace services.Controllers
                 return_project = project;
 
             }
+
+            return_project = db.Projects.Find(in_project.Id);
 
             //HttpResponseMessage resp = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, return_project);
