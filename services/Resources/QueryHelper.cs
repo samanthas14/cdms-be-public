@@ -23,7 +23,7 @@ namespace services.Resources
 
         
 
-        //private DataTable getQueryResults(dynamic datafieldsource, dynamic json)
+        //dataset, json, "Query"
         public static DataTable getQueryResults(dynamic datafieldsource, dynamic json, string productTarget) // productTarget is set by the calling method.
         {
             logger.Debug("Inside getQueryResults...");
@@ -32,7 +32,10 @@ namespace services.Resources
 
             var conditions = getQueryConditions(datafieldsource.Fields, json.Fields);
 
+            logger.Debug("Conditions == ");
+            logger.Debug(conditions);
 
+/*
             //DATE criteria
             if (json.DateSearchType == "singleYear")
             {
@@ -66,7 +69,10 @@ namespace services.Resources
                 else
                     conditions.Add("ActivityDate BETWEEN CONVERT(Date, '" + filterForSQL(json.FromDate, true) + "') AND DATEADD(DAY,1,CONVERT(Date, '" + filterForSQL(json.ToDate, true) + "'))");
             }
+*/
 
+
+/*
             //LOCATION criteria
             if (json.Locations != "[\"all\"]")
             {
@@ -98,9 +104,9 @@ namespace services.Resources
                 }
                 conditions.Add("QAStatusId IN (" + string.Join(",", rowqas.ToArray()) + ")");
             }
+*/
 
-
-            /*
+            /* old stuff
 
             var all_details = from d in db.AdultWeir_Detail
                               join a in db.Activities on d.ActivityId equals a.Id
@@ -129,6 +135,8 @@ namespace services.Resources
             else
                 datatable_prefix = datafieldsource.TablePrefix;
 
+
+/*
             //string query = "SET QUOTED_IDENTIFIER OFF; SELECT " + datafieldsource.getExportSelectString() + " from " + datatable_prefix + "_VW WHERE 1=1";
             string query = "";
             if ((datatable_prefix == "WaterTemp") ||
@@ -142,6 +150,11 @@ namespace services.Resources
                 //query = "SET QUOTED_IDENTIFIER OFF; SELECT " + datafieldsource.getExportSelectString() + " from " + datatable_prefix + "_VW WHERE 1=1";
                 query = "SET QUOTED_IDENTIFIER OFF; SELECT " + datafieldsource.getExportSelectString(productTarget) + " from " + datatable_prefix + "_VW WHERE 1=1";
             }
+*/
+
+
+
+            string query = "SET QUOTED_IDENTIFIER OFF; SELECT * from " + datatable_prefix + "_VW WHERE 1=1";
 
             if (datafieldsource is Dataset)
                 query += " AND DatasetId = " + datafieldsource.Id;

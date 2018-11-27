@@ -347,6 +347,7 @@
     <Content Include="db-scripts\2018-11-01_CorrespondenceAndHabitat.sql" />
     <Content Include="db-scripts\2018-11-02_MetadataUpdates.sql" />
     <Content Include="db-scripts\2018-11-05_LookupTables.sql" />
+    <Content Include="db-scripts\2018-11-21_HabSitesUpdates.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">

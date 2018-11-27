@@ -118,7 +118,7 @@ FROM " + data_header_name + @" vw
 JOIN Activities a ON a.Id = vw.ActivityId 
 JOIN ActivityQAs_VW qv ON a.Id = qv.ActivityId
 JOIN Locations loc ON a.LocationId = loc.Id
-JOIN WaterBodies wb ON loc.WaterBodyId = wb.Id
+LEFT JOIN WaterBodies wb ON loc.WaterBodyId = wb.Id
 JOIN Users u ON u.Id = a.UserId
 WHERE a.datasetid = " + Id;
 
