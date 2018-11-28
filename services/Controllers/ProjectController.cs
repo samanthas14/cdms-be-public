@@ -62,10 +62,9 @@ namespace services.Controllers
 
             var sql = @"select p.Id, p.OrganizationId, p.Name, p.Description, pt.Name as ProjectType, mv_pro.[values] as Program, mv_sub.[values] as SubProgram from projects p
             join projectTypes pt on pt.Id = p.ProjectTypeId
-            join metadatavalues_vw mv_pro on mv_pro.RelationId = p.Id
-            join metadatavalues_vw mv_sub on mv_sub.RelationId = p.Id
-            where mv_pro.metadatapropertyid = 23
-            and mv_sub.metadatapropertyid = 24";
+            left join metadatavalues_vw mv_pro on mv_pro.RelationId = p.Id AND mv_pro.metadatapropertyid = 23
+            left join metadatavalues_vw mv_sub on mv_sub.RelationId = p.Id AND mv_sub.metadatapropertyid = 24
+            where p.ProjectTypeId != (select id from projecttypes where name = 'System')";
 
             DataTable projects = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))

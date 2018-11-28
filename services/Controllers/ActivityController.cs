@@ -375,7 +375,7 @@ WHERE a.datasetid = " + Id;
             foreach (var item in json.Activities)
             {
                 //make sure we can cast as an int otherwise it will throw an exception.
-                int test_int = item.Id.ToObject<int>();
+                int test_int = item.ActivityId.ToObject<int>();
                 Activities.Add("" + test_int);
 
                 //delete all the files for this activity

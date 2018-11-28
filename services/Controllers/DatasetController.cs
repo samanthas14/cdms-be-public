@@ -23,6 +23,28 @@ namespace services.Controllers
     public class DatasetController : CDMSController
     {
 
+        public dynamic GetDatasetsList() 
+        {
+            string query = @"
+select d.Id, d.ProjectId, d.CreateDateTime, d.Name, d.Description, d.Config, p.Name as ProjectName
+from datasets d
+join projects p on d.ProjectId = p.Id and p.ProjectTypeId not in (select id from ProjectTypes where Name = 'System')
+";
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
         public IEnumerable<Dataset> GetDatasets()
         {
             var db = ServicesContext.Current;
