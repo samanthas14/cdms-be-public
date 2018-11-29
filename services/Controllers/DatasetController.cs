@@ -26,9 +26,10 @@ namespace services.Controllers
         public dynamic GetDatasetsList() 
         {
             string query = @"
-select d.Id, d.ProjectId, d.CreateDateTime, d.Name, d.Description, d.Config, p.Name as ProjectName
+select d.Id, d.ProjectId, d.CreateDateTime, d.Name, d.Description, d.Config, p.Name as ProjectName, ds.Name as DatastoreName
 from datasets d
 join projects p on d.ProjectId = p.Id and p.ProjectTypeId not in (select id from ProjectTypes where Name = 'System')
+join datastores ds on d.DatastoreId = ds.Id
 ";
 
             DataTable dt = new DataTable();

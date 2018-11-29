@@ -288,26 +288,39 @@ namespace services.Resources
                     //    throw new Exception("Field not configured properly: " + item.Value);
 
                     string ControlType = field.ControlType.ToString(); //hmm, can't use directly in a switch.
+                    var conditional = " = ";
+                    var value = "";
 
                     //now add field criteria to our list...
                     switch (ControlType)
                     {
                         case "number":
+                            value = filterForSQL(item.Value);
+                            if (value.ToString().Contains(">") || value.ToString().Contains("<"))
+                                conditional = "";
+                            logger.Debug("A number");
+                            conditions.Add(field.DbColumnName + conditional + value); //>100
+                            break;
                         case "currency":
                         case "time":
                         case "easting":
                         case "northing":
+                            logger.Debug("A currency, time, northing, or easting");
+                            conditions.Add(field.DbColumnName + "=" + filterForSQL(item.Value)); //>100
+                            break;
                         case "instrument-select": 
                         case "location-select":
-                            logger.Debug("A number, currency, time, northing, or easting");
-                            conditions.Add(field.DbColumnName + "=" + filterForSQL(item.Value)); //>100
+                            logger.Debug("a location");
+                            value = filterForSQL(item.Value);
+                            if (value.ToString().Contains(","))
+                                conditional = " in ";
+                            conditions.Add(field.DbColumnName + conditional + filterForSQL(item.Value)); //>100
                             break;
 
                         case "text":
                         case "textarea":
                         case "activity-text":
                             logger.Debug("A txt");
-                            var conditional = " = ";
                             if (item.Value.ToString().Contains("%"))
                                 conditional = " LIKE ";
 
