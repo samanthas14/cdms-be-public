@@ -107,10 +107,10 @@ namespace services.Controllers
             //var sql = "SELECT * FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE a.datasetid = "+Id;
 
             var sql = @"
-SELECT vw.*, 
-a.Id, a.Description, a.DatasetId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, 
-a.InstrumentId, a.AccuracyCheckId, a.PostAccuracyCheckId,  
-qv.QAStatusId, 
+SELECT a.Id, a.Description, a.DatasetId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, 
+a.InstrumentId, a.AccuracyCheckId, a.PostAccuracyCheckId,
+vw.*, 
+qv.QAStatusId,
 loc.Label as LocationLabel, loc.LocationTypeId, loc.OtherAgencyId,
 wb.Name as WaterBodyName,
 u.Fullname as UserFullname
@@ -330,10 +330,11 @@ WHERE a.datasetid = " + Id;
             logger.Debug("Inside DatasetData.  Need data for this activity:  " + Id);
             var db = ServicesContext.Current;
             Activity activity = db.Activities.Find(Id);
-            logger.Debug("Did we find anything...?  activity.Id = " + activity.Id);
 
             if (activity == null)
                 throw new Exception("Configuration Error");
+
+            logger.Debug("activity.Id = " + activity.Id);
 
             /* The next commands gets the name of the dataset from the Datastore table prefix.
              * This is how we determine which dataset class we are working with.
@@ -372,13 +373,14 @@ WHERE a.datasetid = " + Id;
 
             var Activities = new List<string>();
 
-            foreach (var item in json.Activities)
+            foreach (var item in json.ActivityIds)
             {
                 //make sure we can cast as an int otherwise it will throw an exception.
-                int test_int = item.ActivityId.ToObject<int>();
+                int test_int = item.ToObject<int>();
                 Activities.Add("" + test_int);
 
                 //delete all the files for this activity
+                logger.Debug("deleting all files for : " + test_int);
                 Resources.ActivitiesFileHelper.DeleteAllFilesForActivity(GetDatasetActivityData(test_int), dataset);
             }
 
