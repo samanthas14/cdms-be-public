@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using services.Models;
 using System;
@@ -33,7 +34,7 @@ namespace services.Resources
             var conditions = getQueryConditions(datafieldsource.Fields, json.Fields);
 
             logger.Debug("Conditions == ");
-            logger.Debug(conditions);
+            logger.Debug(conditions.ToString());
 
 /*
             //DATE criteria
@@ -332,14 +333,19 @@ namespace services.Resources
                             if (item.Value == null)
                                 break;
 
-                            dynamic mselect_val = item.Value; //array
+                            //dynamic mselect_val = item.Value; //array
+                            var mselect_val = JArray.Parse(item.Value.ToObject<string>());
+
+                            logger.Debug(mselect_val);
 
                             //iterate and construct strings.
                             List<string> ms_condition = new List<string>();
+
                             foreach (var ms_item in mselect_val)
                             {
-                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); //changed from LIKE
+                                ms_condition.Add(field.DbColumnName + " = '" + filterForSQL(ms_item) + "'"); 
                             }
+                            //conditions.Add(field.DbColumnName + " in('" + string.Join("','", mselect_val) + "')");
 
                             conditions.Add("(" + string.Join(" OR ", ms_condition) + ")");
 
@@ -349,9 +355,11 @@ namespace services.Resources
                             if (item.Value == null)
                                 break;
 
-                            dynamic select_val = item.Value; //array
+                            //dynamic select_val = JsonConvert.DeserializeObject<string>(item.Value);
+                            logger.Debug(item.Value);
 
-                            conditions.Add(field.DbColumnName + " in('" + string.Join("','", select_val) + "')");
+                            //conditions.Add(field.DbColumnName + " in('" + string.Join("','", select_val) + "')");
+                            conditions.Add(field.DbColumnName + " = '" + item.Value + "'");
                             break;
                         case "date":
                         case "datetime":
