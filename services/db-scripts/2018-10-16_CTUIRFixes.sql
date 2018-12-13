@@ -2,7 +2,9 @@
 update fields set [Rule] = '{"OnChange":"activities.errors = undefined; removeRowErrorsBeforeRecheck(); checkForDuplicates();"}' where id = 1065;
 update datasetfields set [Rule] = '{"OnChange":"activities.errors = undefined; removeRowErrorsBeforeRecheck(); checkForDuplicates();"}'
 where id in (1241, 4468, 4518, 4541, 4615);
-
+go
+update datasetfields set [Rule] = null where [rule] like '%activities.errors%' and DbColumnName = 'ReadingDateTime';
+update fields set [Rule] = null where [rule] like '%activities.errors%' and DbColumnName = 'ReadingDateTime';
 go
 
 -- this adds a field to our creel dataset for fisherman to work with the datasource lookup
@@ -31,3 +33,4 @@ ALTER VIEW dbo.WaterTemp_VW
                                 dbo.WaterBodies AS w ON L.WaterBodyId = w.Id ON d.ActivityId = h.ActivityId
 
 go
+

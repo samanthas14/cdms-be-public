@@ -1,4 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
+using services.Models;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Web.Http;
 
 namespace services.Controllers
@@ -21,5 +25,29 @@ namespace services.Controllers
 
             return "{Message: 'Success'}";
         }
+
+
+        [HttpGet]
+        public dynamic GetAnalytics()
+        {
+            var db = ServicesContext.Current;
+
+            var sql = "SELECT * FROM Analytics_VW";
+
+            DataTable syslogs = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                //using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(syslogs);
+                }
+            }
+
+            return syslogs;
+        }
+
     }
 }
