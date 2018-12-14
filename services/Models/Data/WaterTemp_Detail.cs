@@ -20,5 +20,6 @@ namespace services.Models.Data
         public double? PSI { get; set; }
         public double? AbsolutePressure { get; set; }
         public double? Depth { get; set; }
+        public double? Discharge { get; set; }
     }
 }

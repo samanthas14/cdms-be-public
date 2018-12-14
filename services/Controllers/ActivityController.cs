@@ -2121,7 +2121,7 @@ WHERE a.datasetid = " + Id;
 
             //*** Activity Dates ***
             var dtList2 = new List<string>();
-            string strActivityDateList = "";
+            //string strActivityDateList = "";
 
             JArray jaryActivityDateList = (JArray)json.ActivityDate;
 

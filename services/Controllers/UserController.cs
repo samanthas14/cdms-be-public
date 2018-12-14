@@ -1,4 +1,5 @@
 ﻿using System;
+using services.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using services.Models;
 using Newtonsoft.Json.Linq;
 using services.Resources;
 using Newtonsoft.Json;
@@ -26,9 +26,22 @@ namespace services.Controllers
             var db = ServicesContext.Current;
             //var user = db.User.Include(u => u.Organization);
             List<User> userList = (from u in db.User
-                            where u.Inactive == null
+                            where u.Inactive != 1
                             orderby u.Fullname
                             select u).Include(u => u.Organization).ToList();
+
+            //return userAsEnumerable();
+            return userList.AsEnumerable();
+        }
+
+        // GET api/v1/user/getusers
+        public IEnumerable<User> GetAllUsers()
+        {
+            var db = ServicesContext.Current;
+            
+            List<User> userList = (from u in db.User
+                                   orderby u.Fullname
+                                   select u).ToList();
 
             //return userAsEnumerable();
             return userList.AsEnumerable();
@@ -46,77 +59,6 @@ namespace services.Controllers
             }
 
             return user;
-        }
-
-        // PUT api/Users/5
-        public HttpResponseMessage PutUser(int id, User user)
-        {
-            var db = ServicesContext.Current;
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-
-            if (id != user.Id)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-
-            db.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
-        // POST api/Users
-        public HttpResponseMessage PostUser(User user)
-        {
-            var db = ServicesContext.Current;
-            if (ModelState.IsValid)
-            {
-                db.User.Add(user);
-                db.SaveChanges();
-
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, user);
-                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = user.Id }));
-                return response;
-            }
-            else
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-        }
-
-        // DELETE api/Users/5
-        public HttpResponseMessage DeleteUser(int id)
-        {
-            var db = ServicesContext.Current;
-            User user = db.User.Find(id);
-            if (user == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            db.User.Remove(user);
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
 
@@ -170,6 +112,76 @@ namespace services.Controllers
             }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        // POST /api/v1/user/saveuser
+        public HttpResponseMessage SaveUser(JObject jsonData)
+        {
+            var db = ServicesContext.Current;
+            dynamic json = jsonData;
+            User in_user = json.User.ToObject<User>();
+
+            User me = AuthorizationManager.getCurrentUser();
+
+            if (in_user == null || !me.Roles.Contains("Admin"))
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable));
+
+            User user;
+
+            if(in_user.Id == 0) //new user (creating)
+            {
+                user = new User();
+                user.OrganizationId = services.Models.User.DEFAULT_ORGANIZATIONID;
+                user.UserPreferences = new List<UserPreference>();
+                db.User.Add(user);
+                user.BumpLastLoginDate();
+            }
+            else //existing user (editing)
+            {
+                user = db.User.Find(in_user.Id);
+                if (user == null)
+                    throw new Exception("Configuration Error UserID: " + in_user.Id);
+
+                db.Entry(user).State = EntityState.Modified;
+            }
+
+            user.DepartmentId = in_user.DepartmentId;
+            user.Username = in_user.Username;
+            user.Fullname = in_user.Fullname;
+            user.Description = in_user.Description;
+            user.Inactive = in_user.Inactive;
+            user.Roles = in_user.Roles;
+
+            //update password if there is one...
+            if(json.User.Password != null)
+            {
+                string str = json.User.Password;
+                byte[] data = Convert.FromBase64String(str);
+                string decodedString = System.Text.Encoding.UTF8.GetString(data);
+
+                var salt = System.Configuration.ConfigurationManager.AppSettings["PasswordSalt"]; //in web.config
+
+                UserPreference local_auth = user.UserPreferences.Where(o => o.Name == AccountController.LOCAL_USER_AUTH).SingleOrDefault();
+                
+                if(local_auth == null) //doesn't exist (create)
+                {
+                    UserPreference up = new UserPreference();
+                    up.Name = AccountController.LOCAL_USER_AUTH;
+                    up.Value = MD5Util.GetMd5Hash(decodedString + salt);
+                    user.UserPreferences.Add(up);
+                }
+                else //exists (edit)
+                {
+                    local_auth.Value = MD5Util.GetMd5Hash(decodedString + salt);
+                    db.Entry(local_auth).State = EntityState.Modified;
+                }
+            }
+
+            db.SaveChanges();
+            logger.Debug("Saved the changes for user: " + user.Id);
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, user);
+            return response;
         }
 
         // POST /api/v1/user/saveuserinfo
