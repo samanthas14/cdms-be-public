@@ -21,7 +21,7 @@ namespace services.Models.Data
         public string Sex { get; set; }
         public int? ForkLength { get; set; }
         public string SpawnedOut { get; set; }
-        public int PercentSpawned { get; set; }
+        public int? PercentSpawned { get; set; }
         public string OpercleLeft { get; set; }
         public string OpercleRight { get; set; }
         public string PITScanned { get; set; }
@@ -34,10 +34,10 @@ namespace services.Models.Data
         public string Fins { get; set; }
         public string Scales { get; set; }
         public string Otolith { get; set; }
-        public string TargetFish { get; set; }
-        public string Recapture { get; set; }
+        //public string TargetFish { get; set; }
+        //public string Recapture { get; set; }
         //public string FieldOrigin { get; set; } //calculated value based on presence of an ad clip and/or CWT
-        public string VerifiedOrigin { get; set; }
+        //public string VerifiedOrigin { get; set; }
         public int? Count { get; set; }
         public string CarcassComments { get; set; }
 
@@ -72,10 +72,10 @@ namespace services.Models.Data
         public string Notes { get; set; } 
 
         //User Defined Fields
-        public string UDF1 { get; set; }
-        public string UDF2 { get; set; }
-        public string UDF3 { get; set; }
-        public string UDF4 { get; set; }
-        public string UDF5 { get; set; }
+        //public string UDF1 { get; set; }
+        //public string UDF2 { get; set; }
+        //public string UDF3 { get; set; }
+        //public string UDF4 { get; set; }
+        //public string UDF5 { get; set; }
     }
 }

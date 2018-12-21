@@ -21,10 +21,10 @@ namespace services.Models.Data
         public string Latitude { get; set; } // string??
         public string Longitude { get; set; } // string??
         //User Defined Fields
-        public string UDF1 { get; set; }
-        public string UDF2 { get; set; }
-        public string UDF3 { get; set; }
-        public string UDF4 { get; set; }
-        public string UDF5 { get; set; }
+        //public string UDF1 { get; set; }
+        //public string UDF2 { get; set; }
+        //public string UDF3 { get; set; }
+        //public string UDF4 { get; set; }
+        //public string UDF5 { get; set; }
     }
 }

@@ -13,7 +13,7 @@ using services.ExtensionMethods;
  */
 namespace services.ExtensionMethods
 {
-    public static class NPT_SamplesExtensions
+    public static class NPT_AgeExtensions
     {
         //Extension method to give ServicesContext this property.
         public static DbSet<NPT_Age_Header> NPT_Age_Header(this ServicesContext ctx)
