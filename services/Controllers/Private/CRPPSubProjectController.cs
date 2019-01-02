@@ -93,8 +93,8 @@ namespace services.Controllers
                 Int32 SubprojectId = Convert.ToInt32(provider.FormData.Get("SubprojectId"));
                 logger.Debug("And we think the Subprojectid === " + SubprojectId);
 
-                string strDatastoreTablePrefix = provider.FormData.Get("DatastoreTablePrefix");
-                logger.Debug("And we think the DatastoreTablePrefix = " + strDatastoreTablePrefix);
+                //string strDatastoreTablePrefix = provider.FormData.Get("DatastoreTablePrefix");
+                //logger.Debug("And we think the DatastoreTablePrefix = " + strDatastoreTablePrefix);
 
                 Project project = db.Projects.Find(ProjectId);
 
@@ -109,8 +109,8 @@ namespace services.Controllers
                 if (subproject == null)
                     throw new Exception("Subproject ID not found: " + SubprojectId);
 
-                if (strDatastoreTablePrefix == null)
-                    throw new Exception("DatastoreTablePrefix not found: " + strDatastoreTablePrefix);
+                //if (strDatastoreTablePrefix == null)
+                //    throw new Exception("DatastoreTablePrefix not found: " + strDatastoreTablePrefix);
 
                 //If the project/dataset folder does not exist, create it.
                 string subprojectPath = root + project.Id + "\\S\\" + subproject.Id;

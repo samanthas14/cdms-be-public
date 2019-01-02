@@ -349,6 +349,7 @@
     <Content Include="db-scripts\2018-11-05_LookupTables.sql" />
     <Content Include="db-scripts\2018-11-21_HabSitesUpdates.sql" />
     <Content Include="db-scripts\2018-12-13_VariousUpdates.sql" />
+    <Content Include="db-scripts\full_update_script.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">

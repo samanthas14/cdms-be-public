@@ -293,7 +293,7 @@ values
 ('Study Design','StudyDesign','StudyDesign','text',@newdsid,1,null,'string',null,null),
 ('Wetted Depth','WettedDepth','WettedDepth','number',@newdsid,1,null,'int',null,null),
 ('Wetted Width','WettedWidth','WettedWidth','number',@newdsid,1,null,'int',null,null),
-('Waterbody Id','WaterBodyId','WaterBodyId','number',@newdsid,1,null,'int',null,null),
+('Waterbody','WaterBodyId','WaterBodyId','select-number',@newdsid,1,'SELECT Id, Name as Label from Waterbodies','int',null,null),
 ('Create DateTime','CreateDateTime','CreateDateTime','datetime',@newdsid,1,null, 'datetime',null,null),
 ('Image Link','ImageLink','ImageLink','text',@newdsid,1,null,'string',null,null),
 ('Subproject Id','SubprojectId','SubprojectId','number',@newdsid,1,null,'int',null,null),
@@ -880,11 +880,11 @@ go
 --add project configs for lookups
 update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id = 1199;
 update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
-update projects set config = '{"Lookups":[{"Id":"8","Label":"Correspondence","Type":"Metafields"}]}' where id = 2247;
+update projects set config = '{"Lookups":[{"Id":"7","Label":"Correspondence","Type":"Metafields"}]}' where id = 2247;
 update projects set config = '{
   "Lookups": [
     {
-      "Id": "9",
+      "Id": "8",
       "Label": "Habitat",
       "Type": "Metafields"
     }
@@ -897,3 +897,10 @@ update projects set config = '{
   ]
 }' where id = 2249;
 
+go
+
+--appraisal locations linked to project
+delete from locationprojects where Project_Id = 2246;
+insert into locationprojects (Location_Id, Project_Id) 
+select id, 2246 from locations where locationtypeid=8;
+go
