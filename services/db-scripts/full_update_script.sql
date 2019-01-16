@@ -88,6 +88,18 @@ ALTER VIEW dbo.WaterTemp_VW
 
 go
 
+ALTER VIEW dbo.Metrics_vw
+AS
+SELECT        h.Id, h.YearReported, h.ByUserId, h.EffDt, a.Id AS ActivityId, a.DatasetId, a.SourceId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, d.Id AS Metrics_Detail_Id, d.WorkElementName, d.Measure, 
+                         d.PlannedValue, d.ActualValue, d.Comments, d.RowId, d.RowStatusId, d.ByUserId AS Metrics_Detail_ByUserId, d.QAStatusId, d.EffDt AS Metrics_Detail_EffDt, l.Label AS LocationLabel, aq.QAStatusName, aq.Comments AS ActivityQAComments, aq.QAStatusId AS ActivityQAStatusId
+FROM            dbo.Activities AS a INNER JOIN
+                         dbo.Metrics_Header_VW AS h ON a.Id = h.ActivityId INNER JOIN
+                         dbo.ActivityQAs_VW AS aq ON a.Id = aq.ActivityId INNER JOIN
+                         dbo.Locations AS l ON a.LocationId = l.Id LEFT OUTER JOIN
+                         dbo.Metrics_Detail_VW AS d ON h.ActivityId = d.ActivityId
+
+go
+
 --add some columns that are long overdue!
 ALTER TABLE [dbo].[Datastores] ADD [DefaultConfig] [nvarchar](max)
 ALTER TABLE [dbo].[Fields] ADD [DatastoreId] [int] NOT NULL DEFAULT 0
@@ -190,7 +202,7 @@ values
 ('Post Accuracy Check','Activity instrument post-accuracy check','PostAccuracyCheckId','post-accuracy-check-select',@activitydsid,1),
 ('Reading Timezone','Activity reading timezone','Timezone','timezone-select',@activitydsid,1),
 ('Row QA Status','Activity row QA status','QAStatusId','select',@activitydsid,1),
-('Activity Description','Activity description field','Description','text', @activitydsid, 1);
+('Activity Description','Activity description field','Description','activity-text', @activitydsid, 1);
 
 go
 

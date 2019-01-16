@@ -315,7 +315,7 @@ namespace services.Resources
                             value = filterForSQL(item.Value);
                             if (value.ToString().Contains(","))
                                 conditional = " in ";
-                            conditions.Add(field.DbColumnName + conditional + filterForSQL(item.Value)); //>100
+                            conditions.Add(field.DbColumnName + conditional + "(" + filterForSQL(item.Value) +")"); //>100
                             break;
 
                         case "text":
