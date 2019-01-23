@@ -239,6 +239,26 @@
     <Compile Include="Migrations\201812201856042_fix_carcass_detail.Designer.cs">
       <DependentUpon>201812201856042_fix_carcass_detail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812212200568_initial_rst_dataset.cs" />
+    <Compile Include="Migrations\201812212200568_initial_rst_dataset.Designer.cs">
+      <DependentUpon>201812212200568_initial_rst_dataset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812212208115_update_rst_dataset_v1.cs" />
+    <Compile Include="Migrations\201812212208115_update_rst_dataset_v1.Designer.cs">
+      <DependentUpon>201812212208115_update_rst_dataset_v1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901022333343_juvsurvival_dataset.cs" />
+    <Compile Include="Migrations\201901022333343_juvsurvival_dataset.Designer.cs">
+      <DependentUpon>201901022333343_juvsurvival_dataset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901041613057_fixed_juvsurvival.cs" />
+    <Compile Include="Migrations\201901041613057_fixed_juvsurvival.Designer.cs">
+      <DependentUpon>201901041613057_fixed_juvsurvival.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901042150269_fixed_decimal.cs" />
+    <Compile Include="Migrations\201901042150269_fixed_decimal.Designer.cs">
+      <DependentUpon>201901042150269_fixed_decimal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -282,6 +302,12 @@
     <Compile Include="Models\Data\NPT_Age.cs" />
     <Compile Include="Models\Data\NPT_Age_Detail.cs" />
     <Compile Include="Models\Data\NPT_Age_Header.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival_Detail.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival_Header.cs" />
+    <Compile Include="Models\Data\NPT_RST.cs" />
+    <Compile Include="Models\Data\NPT_RST_Detail.cs" />
+    <Compile Include="Models\Data\NPT_RST_Header.cs" />
     <Compile Include="Models\Data\ScrewTrap.cs" />
     <Compile Include="Models\Data\ScrewTrap_Detail.cs" />
     <Compile Include="Models\Data\ScrewTrap_Header.cs" />
@@ -457,6 +483,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812201856042_fix_carcass_detail.resx">
       <DependentUpon>201812201856042_fix_carcass_detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812212200568_initial_rst_dataset.resx">
+      <DependentUpon>201812212200568_initial_rst_dataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812212208115_update_rst_dataset_v1.resx">
+      <DependentUpon>201812212208115_update_rst_dataset_v1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901022333343_juvsurvival_dataset.resx">
+      <DependentUpon>201901022333343_juvsurvival_dataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901041613057_fixed_juvsurvival.resx">
+      <DependentUpon>201901041613057_fixed_juvsurvival.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901042150269_fixed_decimal.resx">
+      <DependentUpon>201901042150269_fixed_decimal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
