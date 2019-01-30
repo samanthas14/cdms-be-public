@@ -61,11 +61,18 @@ namespace services.Models.Data
 
     public class HabitatItem : Subproject
     {
+        public const int SHARINGLEVEL_PRIVATE = 1;
+        public const int SHARINGLEVEL_GROUPREAD = 2;
+        public const int SHARINGLEVEL_PUBLICREAD = 3;
+        public const int SHARINGLEVEL_GROUPWRITE = 4;
+        public const int SHARINGLEVEL_PUBLICWRITE = 5;
+
         public int SubprojectId { get; set; }
         public string ItemName { get; set; }
         public string ItemFiles { get; set; }
         public string ExternalLinks { get; set; }
         public string ItemType { get; set; }
+        public int SharingLevel { get; set; }
 
         [JsonIgnore]
         public virtual Subproject_Hab Subproject { get; set; }

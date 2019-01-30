@@ -1433,6 +1433,8 @@ namespace services.Controllers
                     logger.Debug("hi.ExternalLinks = " + hi.ExternalLinks);
                 }
             }
+
+            hi.SharingLevel = json.HabitatItem.SharingLevel.ToObject<int>();
             hi.SubprojectId = spId;
             hi.ByUserId = me.Id;
             hi.EffDt = DateTime.Now;
@@ -1497,6 +1499,7 @@ namespace services.Controllers
                     hi2.SubprojectId = hi.SubprojectId;
                     hi2.ItemType = hi.ItemType;
                     hi2.ItemName = hi.ItemName;
+                    hi2.SharingLevel = hi.SharingLevel;
                     hi2.ExternalLinks = hi.ExternalLinks;
                     hi2.ItemFiles = hi.ItemFiles;
                     hi2.ByUserId = hi.ByUserId;

@@ -5,6 +5,13 @@ namespace services.Models
 {
     public class File
     {
+
+        public const int SHARINGLEVEL_PRIVATE = 1;
+        public const int SHARINGLEVEL_GROUPREAD = 2;
+        public const int SHARINGLEVEL_PUBLICREAD = 3;
+        public const int SHARINGLEVEL_GROUPWRITE = 4;
+        public const int SHARINGLEVEL_PUBLICWRITE = 5;
+
         public int Id { get; set; }
         public int ProjectId { get; set; }
         public int UserId { get; set; }
@@ -18,6 +25,7 @@ namespace services.Models
         public int? Subproject_CrppId { get; set; }
         public int? FeatureImage { get; set; }
         public int? DatasetId { get; set; }
+        public int SharingLevel { get; set; }
 
         [JsonIgnore]
         public virtual Project Project { get; set; }

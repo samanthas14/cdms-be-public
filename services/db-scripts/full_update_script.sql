@@ -916,3 +916,17 @@ delete from locationprojects where Project_Id = 2246;
 insert into locationprojects (Location_Id, Project_Id) 
 select id, 2246 from locations where locationtypeid=8;
 go
+
+-- add SharingLevel to files table, set default to 1 (private), update all existing rows
+ALTER TABLE Files
+ADD SharingLevel int NOT NULL
+CONSTRAINT DefaultSharingLevelPrivate DEFAULT (1)
+WITH VALUES;
+go
+
+ALTER TABLE HabitatItems
+ADD SharingLevel int NOT NULL
+CONSTRAINT DefaultHabItemSharingLevelPrivate DEFAULT (1)
+WITH VALUES;
+go
+

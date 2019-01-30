@@ -134,6 +134,7 @@ namespace services.Controllers
                                 newFile.Link = rootUrl + "/services/uploads/" + ProjectId + "/" + info.Name; //file.LocalFileName;
                                 newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                                 newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
+                                newFile.SharingLevel = Models.File.SHARINGLEVEL_PRIVATE;
                                 newFile.UserId = me.Id;
                                 logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
 
@@ -526,6 +527,8 @@ namespace services.Controllers
                             newFile.Description = provider.FormData.Get("Description"); //"Description_1, etc.
                             logger.Debug("Desc = " + newFile.Description);
 
+                            newFile.SharingLevel = Convert.ToInt32(provider.FormData.Get("SharingLevel"));
+
                             newFile.Name = info.Name;//.Headers.ContentDisposition.FileName;
 
                             //newFile.Link = rootUrl + "/services/uploads/" + ProjectId + "/" + info.Name; //file.LocalFileName;
@@ -535,6 +538,7 @@ namespace services.Controllers
                             newFile.Size = (info.Length / 1024).ToString(); //file.Headers.ContentLength.ToString();
                             newFile.FileTypeId = FileType.getFileTypeFromFilename(info);
                             newFile.UserId = me.Id;
+                            //newFile.SharingLevel = Models.File.SHARINGLEVEL_PRIVATE;
                             logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
 
                             files.Add(newFile);
@@ -765,6 +769,7 @@ namespace services.Controllers
                             newFile.UserId = me.Id;
                             newFile.ProjectId = ProjectId;
                             newFile.DatasetId = DatasetId;
+                            newFile.SharingLevel = Models.File.SHARINGLEVEL_PRIVATE;
                             newFile.Subproject_CrppId = null; // No subprojectId for dataset files.
                             logger.Debug(" Adding file " + newFile.Name + " at " + newFile.Link);
 
@@ -924,6 +929,7 @@ namespace services.Controllers
 
             existing_file.Title = in_file.Title;
             existing_file.Description = in_file.Description;
+            existing_file.SharingLevel = in_file.SharingLevel;
             db.Entry(existing_file).State = EntityState.Modified;
             db.SaveChanges();
 
