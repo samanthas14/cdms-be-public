@@ -178,6 +178,7 @@
     <Compile Include="Controllers\FishermenController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\InstrumentController.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\CDMSController.cs" />

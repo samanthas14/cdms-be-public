@@ -27,27 +27,5 @@ namespace services.Controllers
         }
 
 
-        [HttpGet]
-        public dynamic GetAnalytics()
-        {
-            var db = ServicesContext.Current;
-
-            var sql = "SELECT * FROM Analytics_VW";
-
-            DataTable syslogs = new DataTable();
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
-            {
-                //using (SqlCommand cmd = new SqlCommand(query, con))
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    con.Open();
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    da.Fill(syslogs);
-                }
-            }
-
-            return syslogs;
-        }
-
     }
 }

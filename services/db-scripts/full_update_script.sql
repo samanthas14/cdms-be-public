@@ -44,10 +44,11 @@ update Datastores set LocationTypeId = 112 WHERE TablePrefix = 'Hab';
 go
 
 create view LastUpdatedDatasets_VW as 
-select a.DatasetId, a.UserId, d.ProjectId, d.DatastoreId, a.CreateDate, convert(varchar, a.CreateDate, 100) as LastUpdated, d.Name as DatasetName, p.Name as ProjectName
+select a.DatasetId, a.UserId, u.Fullname, d.ProjectId, d.DatastoreId, a.CreateDate, convert(varchar, a.CreateDate, 100) as LastUpdated, d.Name as DatasetName, p.Name as ProjectName
 from activities a
 join datasets d on d.id = a.datasetid
 join projects p on p.id = d.projectid
+join users u on a.userId = u.Id
 where a.createdate = (select max(aa.createdate) from activities aa where aa.userid=a.userid and aa.datasetid = a.datasetid)
 
 go
@@ -784,18 +785,6 @@ create table __Analytics (
 	Target INT,
 	PRIMARY KEY (Id)
 )
-go
-
-create view Analytics_VW as
-select 
-count(*) as hits, 
-convert(varchar(10),RequestTimeStamp, 120) as OnDate,
-username
-from __analytics 
-where datediff(m,RequestTimeStamp,GETDATE()) = 0
-group by 
-convert(varchar(10),RequestTimeStamp, 120),
-username
 go
 
 
