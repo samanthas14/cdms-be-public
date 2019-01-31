@@ -575,11 +575,9 @@ update metadataproperties set PossibleValues =
 "Shari Sheoships",
 "Arthur Van Pelt",
 "Teara Farrow Ferman",
-"Holly Shea Barrick",
-"Wilbur Barrick",
 "Dara Williams-Worden",
-"Julie Longenecker",
 "Julius Patrick",
+"Nathan May",
 "Kristen Tiede"]' where name = 'StaffMember';
 
 update metadataproperties set PossibleValues = 
@@ -593,6 +591,7 @@ update metadataproperties set PossibleValues =
 "Jennifer Karson Engum",
 "Julius Patrick",
 "Shari Sheoships",
+"Nathan May",
 "Teara Farrow Ferman"]' where name = 'ProjectLead';
 
 go
