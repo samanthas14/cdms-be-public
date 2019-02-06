@@ -250,18 +250,24 @@ namespace services.Controllers
             var db = ServicesContext.Current;
             User me = AuthorizationManager.getCurrentUser();
             var mydatasets = "";
+            IEnumerable<Dataset> datasets = null;
+            
             try
             {
                 mydatasets = me.UserPreferences.Where(o => o.Name == UserPreference.DATASETS).FirstOrDefault().Value;
+
+                if (mydatasets != "")
+                {
+                    datasets = db.Datasets.SqlQuery("SELECT * FROM Datasets WHERE Id in (" + mydatasets + ") ORDER BY Name");
+                }
+
             }
             catch (Exception e)
             {
                 logger.Debug("GetMyDatasets: Couldn't get your datasets -- probably don't have any favorites.");
                 logger.Debug(e);
             }
-
-            var datasets = db.Datasets.SqlQuery("SELECT * FROM Datasets WHERE Id in (" + mydatasets + ") ORDER BY Name");
-
+            
             return datasets;
         }
 
@@ -272,17 +278,21 @@ namespace services.Controllers
             var db = ServicesContext.Current;
             User me = AuthorizationManager.getCurrentUser();
             var my_projects = "";
+            IEnumerable<Project> myprojects = null;
             try
             {
                 my_projects = me.UserPreferences.Where(o => o.Name == UserPreference.PROJECTS).FirstOrDefault().Value;
+                if (my_projects != "")
+                {
+                    myprojects = db.Projects.SqlQuery("SELECT * FROM Projects WHERE Id in (" + my_projects + ") ORDER BY Name");
+                    //logger.Debug(myprojects);
+                }
             }
             catch (Exception e)
             {
                 logger.Debug("GetMyProjects: Couldn't get your projects -- probably don't have any favorites.");
                 logger.Debug(e);
             }
-
-            var myprojects = db.Projects.SqlQuery("SELECT * FROM Projects WHERE Id in (" + my_projects + ") ORDER BY Name");
 
             return myprojects;
         }
