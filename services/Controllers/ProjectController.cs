@@ -15,6 +15,7 @@ using services.Resources.Filters;
 using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 /**
  * Project Controller
@@ -66,6 +67,24 @@ namespace services.Controllers
             left join metadatavalues_vw mv_sub on mv_sub.RelationId = p.Id AND mv_sub.metadatapropertyid = 24
             where p.ProjectTypeId != (select id from projecttypes where name = 'System')";
 
+            //limit the user if they are external users to only the projects they are allowed 
+            User me = AuthorizationManager.getCurrentUser();
+            if(me.Roles.Contains("ExternalUser")){
+
+                IList<string> authorized_projects = new List<string> { };
+
+                Regex regex = new Regex(@"Project_(\d+)");
+            
+                foreach (Match match in regex.Matches(me.Roles)){
+                    logger.Debug("Limiting external user to project: " + match.Groups[1].Value);
+                    authorized_projects.Add(match.Groups[1].Value);
+                }
+
+                sql += " AND p.Id in (" + string.Join(",", authorized_projects) + ")";
+
+                logger.Debug("Final SQL: " + sql);
+            }
+
             DataTable projects = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
@@ -89,6 +108,29 @@ namespace services.Controllers
         {
             var db = ServicesContext.Current;
             logger.Info("GetProject called with id: " + id);
+
+            //limit the user if they are external users to only the projects they are allowed 
+            User me = AuthorizationManager.getCurrentUser();
+            if (me.Roles.Contains("ExternalUser"))
+            {
+
+                IList<string> authorized_projects = new List<string> { };
+
+                Regex regex = new Regex(@"Project_(\d+)");
+
+                foreach (Match match in regex.Matches(me.Roles))
+                {
+                    logger.Debug("Limiting external user to project: " + match.Groups[1].Value);
+                    authorized_projects.Add(match.Groups[1].Value);
+                }
+
+                if(!authorized_projects.Contains(id.ToString())){
+                    throw new Exception("Authorization error: user is external and not authorized for this project.");
+                }
+
+            }
+
+
             Project project = db.Projects.Find(id);
             if (project == null)
             {

@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json.Linq;
 using services.Resources;
+using System.Text.RegularExpressions;
 
 namespace services.Controllers
 {
@@ -31,6 +32,26 @@ from datasets d
 join projects p on d.ProjectId = p.Id and p.ProjectTypeId not in (select id from ProjectTypes where Name = 'System')
 join datastores ds on d.DatastoreId = ds.Id
 ";
+
+            //limit the user if they are external users to only the projects they are allowed 
+            User me = AuthorizationManager.getCurrentUser();
+            if (me.Roles.Contains("ExternalUser"))
+            {
+
+                IList<string> authorized_projects = new List<string> { };
+
+                Regex regex = new Regex(@"Project_(\d+)");
+
+                foreach (Match match in regex.Matches(me.Roles))
+                {
+                    logger.Debug("Limiting external user to project: " + match.Groups[1].Value);
+                    authorized_projects.Add(match.Groups[1].Value);
+                }
+
+                query += " WHERE p.Id in (" + string.Join(",", authorized_projects) + ")";
+
+                logger.Debug("Final SQL: " + query);
+            }
 
             DataTable dt = new DataTable();
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -63,6 +84,28 @@ join datastores ds on d.DatastoreId = ds.Id
             if (dataset == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            //limit the user if they are external users to only the projects they are allowed 
+            User me = AuthorizationManager.getCurrentUser();
+            if (me.Roles.Contains("ExternalUser"))
+            {
+
+                IList<string> authorized_projects = new List<string> { };
+
+                Regex regex = new Regex(@"Project_(\d+)");
+
+                foreach (Match match in regex.Matches(me.Roles))
+                {
+                    logger.Debug("Limiting external user to project: " + match.Groups[1].Value);
+                    authorized_projects.Add(match.Groups[1].Value);
+                }
+
+                if (!authorized_projects.Contains(dataset.ProjectId.ToString()))
+                {
+                    throw new Exception("Authorization error: user is external and not authorized for this dataset.");
+                }
+
             }
 
             return dataset;
