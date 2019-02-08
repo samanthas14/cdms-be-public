@@ -31,6 +31,7 @@ update Datastores set LocationTypeId = 106 WHERE TablePrefix = 'StreamNet_RperS'
 update Datastores set LocationTypeId = 108 WHERE TablePrefix = 'StreamNet_SAR';
 update Datastores set LocationTypeId = 107 WHERE TablePrefix = 'StreamNet_NOSA';
 update Datastores set LocationTypeId = 110 WHERE TablePrefix = 'ArtificialProduction';
+update Datastores set LocationTypeId = 111 WHERE TablePrefix = 'CrppContracts';
 update Datastores set LocationTypeId = 112 WHERE TablePrefix = 'Metrics';
 update Datastores set LocationTypeId = 114 WHERE TablePrefix = 'JvRearing';
 update Datastores set LocationTypeId = 115 WHERE TablePrefix = 'Genetic';
@@ -236,6 +237,25 @@ from datasets where datastoreid in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
 select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND DbColumnName = 'QAComments'), 1, 'QA Comments','QAComments',1,98,'qa-status-comment',null
 from datasets where datastoreid in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22);
+
+-- for crpp contracts
+
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND DbColumnName = 'ActivityDate'), 1, 'Date Received','ActivityDate',1,1,'activity-date',null
+from datasets where datastoreid in (16);
+
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND DbColumnName = 'LocationId'), 1, 'Location','LocationId',1,2,'hidden',null
+from datasets where datastoreid in (16);
+
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND Name = 'QA Status'), 1, 'QA Status','QAStatusId',1,97,'hidden',null
+from datasets where datastoreid in (16);
+
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND DbColumnName = 'QAComments'), 1, 'QA Comments','QAComments',1,98,'hidden',null
+from datasets where datastoreid in (16);
+
 
 -- add instruments to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
@@ -917,4 +937,10 @@ ADD SharingLevel int NOT NULL
 CONSTRAINT DefaultHabItemSharingLevelPrivate DEFAULT (1)
 WITH VALUES;
 go
+
+--delete these unused records
+delete from fields where FieldRoleId = 0;
+
+-- set for crppcontracts ProjectLead field
+update fields set DataSource = 'select PossibleValues from metadataproperties where name = ''ProjectLead''' where Name = 'Project Lead' and DatastoreId = 16;
 

@@ -139,6 +139,7 @@ namespace services.Controllers
                     }
 
                     var identity = new GenericIdentity(user.Username, "Basic");
+
                     string[] roles = (!String.IsNullOrEmpty(user.Roles)) ? user.Roles.Split(":".ToCharArray()) : new string[0];
 
                     logger.Debug("Roles == " + roles.ToString());

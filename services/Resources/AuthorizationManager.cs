@@ -63,8 +63,15 @@ namespace services.Resources
         public static User getUserByName(string Username)
         {
             User user = null;
-            var db = ServicesContext.Current;
-            user = db.User.SingleOrDefault(x => x.Username == Username);
+
+            try
+            {
+                var db = ServicesContext.Current;
+                user = db.User.SingleOrDefault(x => x.Username == Username);
+            }catch(Exception e){
+                logger.Debug("problem fetching that user: " + Username);
+                logger.Debug(e.InnerException);
+            }
 
             return user;
         }
@@ -89,6 +96,9 @@ namespace services.Resources
 
             if(me == null)
                 logger.Debug("user is NULL -- not valid.");
+            else {
+                 logger.Debug("have our user: " + me.Username); 
+            }
 
             return me;
         }

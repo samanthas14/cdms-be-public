@@ -35,8 +35,7 @@ join datastores ds on d.DatastoreId = ds.Id
 
             //limit the user if they are external users to only the projects they are allowed 
             User me = AuthorizationManager.getCurrentUser();
-            if (me.Roles.Contains("ExternalUser"))
-            {
+            if(!String.IsNullOrEmpty(me.Roles) && me.Roles.Contains("ExternalUser")){
 
                 IList<string> authorized_projects = new List<string> { };
 
@@ -88,7 +87,7 @@ join datastores ds on d.DatastoreId = ds.Id
 
             //limit the user if they are external users to only the projects they are allowed 
             User me = AuthorizationManager.getCurrentUser();
-            if (me.Roles.Contains("ExternalUser"))
+            if (!String.IsNullOrEmpty(me.Roles) && me.Roles.Contains("ExternalUser"))
             {
 
                 IList<string> authorized_projects = new List<string> { };

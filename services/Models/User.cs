@@ -17,6 +17,20 @@ namespace services.Models
         public string GUID { get; set; }
         public string Fullname { get; set; }
         public string Roles { get; set; }
+/*
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this.Roles))
+                    return "";
+                else
+                    return this.Roles;
+            }
+
+            set { this.Roles = value; }
+
+        }
+*/
         public string ProfileImageUrl { get; set; }
         
         public string Username { get; set; }
@@ -45,6 +59,7 @@ namespace services.Models
             DepartmentId = DEFAULT_DEPARTMENTID;
         }
 
-        public User() { }
+    public User() { }
+
     }
 }
