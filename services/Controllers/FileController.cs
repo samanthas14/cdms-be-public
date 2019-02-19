@@ -960,12 +960,13 @@ namespace services.Controllers
 
             logger.Debug("Checking list for file name...");
             services.Models.File existing_file = project.Files.Where(o => o.Id == in_file.Id).SingleOrDefault();
-            logger.Debug("existing_file.Name = " + existing_file.Name);
-
+            
             if (existing_file == null)
                 throw new System.Exception("File not found.");
             else
                 logger.Debug("The file exists.");
+
+            logger.Debug("existing_file.Name = " + existing_file.Name);
 
             //string root = System.Web.HttpContext.Current.Server.MapPath("~/uploads");
             string root = System.Configuration.ConfigurationManager.AppSettings["UploadsDirectory"] + "\\P\\";

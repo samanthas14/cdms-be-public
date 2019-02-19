@@ -734,6 +734,8 @@ select @newloctypeid = scope_identity();
 
 UPDATE Locations set LocationTypeId = @newloctypeid where subprojectid is not null and LocationTypeId = 112;
 
+UPDATE Datastores set LocationTypeId = @newloctypeid where [Name] = 'Habitat Sites';
+
 go
 
 DECLARE @entityid int = 0;
