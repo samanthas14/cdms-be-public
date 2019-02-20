@@ -6,11 +6,13 @@ namespace services.Migrations
     public partial class reset : DbMigration
     {
         public override void Up()
-        {            
+        {
+                        
         }
         
         public override void Down()
         {
+
         }
     }
 }

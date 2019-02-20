@@ -192,13 +192,9 @@
     <Compile Include="Controllers\DatastoreController.cs" />
     <Compile Include="Controllers\Private\HabSubProjectController.cs" />
     <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
-    <Compile Include="Migrations\201811052233480_reset.cs" />
-    <Compile Include="Migrations\201811052233480_reset.Designer.cs">
-      <DependentUpon>201811052233480_reset.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811072237419_project_config.cs" />
-    <Compile Include="Migrations\201811072237419_project_config.Designer.cs">
-      <DependentUpon>201811072237419_project_config.cs</DependentUpon>
+    <Compile Include="Migrations\201902202259010_reset.cs" />
+    <Compile Include="Migrations\201902202259010_reset.Designer.cs">
+      <DependentUpon>201902202259010_reset.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -389,11 +385,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811052233480_reset.resx">
-      <DependentUpon>201811052233480_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811072237419_project_config.resx">
-      <DependentUpon>201811072237419_project_config.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201902202259010_reset.resx">
+      <DependentUpon>201902202259010_reset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

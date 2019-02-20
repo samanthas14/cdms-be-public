@@ -946,3 +946,13 @@ delete from fields where FieldRoleId = 0;
 -- set for crppcontracts ProjectLead field
 update fields set DataSource = 'select PossibleValues from metadataproperties where name = ''ProjectLead''' where Name = 'Project Lead' and DatastoreId = 16;
 
+--update water quality to 9,3 decimalprecision
+DECLARE @var0 nvarchar(128)
+SELECT @var0 = name
+FROM sys.default_constraints
+WHERE parent_object_id = object_id(N'dbo.WaterQuality_Detail')
+AND col_name(parent_object_id, parent_column_id) = 'Result';
+IF @var0 IS NOT NULL
+    EXECUTE('ALTER TABLE [dbo].[WaterQuality_Detail] DROP CONSTRAINT [' + @var0 + ']')
+ALTER TABLE [dbo].[WaterQuality_Detail] ALTER COLUMN [Result] [decimal](9, 3) NULL
+

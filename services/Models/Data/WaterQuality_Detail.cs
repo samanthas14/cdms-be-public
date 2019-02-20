@@ -1,12 +1,15 @@
-﻿using System;
+﻿using services.Resources.Attributes;
+using System;
 
 namespace services.Models.Data
 {
     public class WaterQuality_Detail : DataDetail
     {
         public string CharacteristicName { get; set; }
-        //public string Result { get; set; }
+
+        [DecimalPrecision(9, 3)]
         public decimal? Result { get; set; }
+
         public string ResultUnits { get; set; }
         public string LabDuplicate { get; set; }
         public string Comments { get; set; }
