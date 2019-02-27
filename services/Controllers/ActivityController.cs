@@ -102,7 +102,7 @@ namespace services.Controllers
             if (dataset == null)
                 throw new System.Exception("Dataset could not be found: " + Id);
 
-            var data_header_name = dataset.Datastore.TablePrefix + "_Header_VW";
+            var data_header_name = dataset.Datastore.TablePrefix + "_Header";
 
             //var sql = "SELECT * FROM " + data_header_name + " vw JOIN Activities a ON a.Id = vw.ActivityId WHERE a.datasetid = "+Id;
 
