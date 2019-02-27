@@ -297,6 +297,87 @@ namespace services.Controllers
             return myprojects;
         }
 
+        //a list of my projects with just the basic project information
+        // GET /api/v1/user/GetMyProjectsList
+        [HttpGet]
+        public dynamic GetMyProjectsList()
+        {
+            var db = ServicesContext.Current;
+            User me = AuthorizationManager.getCurrentUser();
+            var my_projects = "";
+            DataTable projects = new DataTable();
+            try
+            {
+                my_projects = me.UserPreferences.Where(o => o.Name == UserPreference.PROJECTS).FirstOrDefault().Value;
+                if (my_projects != "")
+                {
+                    var sql = @"SELECT * FROM Projects WHERE Id in (" + my_projects + ") ORDER BY Name";
+
+                    using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand(sql, con))
+                        {
+                            con.Open();
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(projects);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Debug("GetMyProjects: Couldn't get your projects -- probably don't have any favorites.");
+                logger.Debug(e);
+            }
+
+            return projects;
+
+        }
+
+
+        //a list of my datasets with just the basic dataset information
+        // GET /api/v1/user/getmydatasetslist
+        [HttpGet]
+        public dynamic GetMyDatasetsList()
+        {
+            var db = ServicesContext.Current;
+            User me = AuthorizationManager.getCurrentUser();
+            var mydatasets = "";
+            DataTable datasets = new DataTable();
+
+            try
+            {
+                mydatasets = me.UserPreferences.Where(o => o.Name == UserPreference.DATASETS).FirstOrDefault().Value;
+
+                if (mydatasets != "")
+                {
+                    var sql = @"SELECT * FROM Datasets WHERE Id in (" + mydatasets + ") ORDER BY Name";
+
+                    using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand(sql, con))
+                        {
+                            con.Open();
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(datasets);
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                logger.Debug("GetMyDatasets: Couldn't get your datasets -- probably don't have any favorites.");
+                logger.Debug(e);
+            }
+
+            return datasets;
+        }
+
+
+
         // GET api/v1/user/getCrppStaff
         public IEnumerable<User> GetCrppStaff()
         {

@@ -249,7 +249,9 @@ join datastores ds on d.DatastoreId = ds.Id
             new_ds.DatastoreId = ds.Id;
             new_ds.Config = null;
 
-            // Non-WaterTemp datasets get these.
+            //TODO: this should be configured somewhere not hardcoded... ***
+
+            // Non-WaterTemp datasets get these. 
             QAStatus qa1 = db.QAStatuses.Find(5);
             QAStatus qa2 = db.QAStatuses.Find(6);
             QAStatus qa3 = db.QAStatuses.Find(1); // Default rowQA
@@ -334,54 +336,6 @@ join datastores ds on d.DatastoreId = ds.Id
 
         }
 
-
-        //TODO: this is a (currently) unused feature we will want to revisit to support NESTED DATASETS
-        // GET /api/v1/dataset/getrelationdata
-        [HttpPost]
-        public DataTable GetRelationData(JObject jsonData)
-        {
-            //int FieldId, int ActivityId, int ParentRowId)
-            var db = ServicesContext.Current;
-            dynamic json = jsonData;
-            int FieldId = json.FieldId.ToObject<int>();
-
-            Field f = db.Fields.Find(FieldId);
-
-            if (f == null || f.ControlType != "grid")
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-
-            DataTable dt = new DataTable();
-
-            if (json["ActivityId"] is JToken && json["ParentRowId"] is JToken)
-            {
-
-                int DatasetId = Convert.ToInt32(f.DataSource);
-                Dataset dataset = db.Datasets.Find(DatasetId);
-
-                if (dataset == null)
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-
-                int ActivityId = json.ActivityId.ToObject<int>();
-                int ParentRowId = json.ParentRowId.ToObject<int>();
-
-                //dbcolumname for "grid" type fields 
-                string query = "SELECT h.* FROM " + dataset.Datastore.TablePrefix + "_" + f.DbColumnName + "_VW h WHERE h.ActivityId = " + ActivityId + " AND h.ParentRowId = " + ParentRowId;
-
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        con.Open();
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(dt);
-                    }
-                }
-            }
-
-            return dt;
-        }
 
         // POST /api/v1/dataset/savedatasetfield
         [HttpPost]
