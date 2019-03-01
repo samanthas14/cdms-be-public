@@ -957,3 +957,12 @@ IF @var0 IS NOT NULL
     EXECUTE('ALTER TABLE [dbo].[WaterQuality_Detail] DROP CONSTRAINT [' + @var0 + ']')
 ALTER TABLE [dbo].[WaterQuality_Detail] ALTER COLUMN [Result] [decimal](9, 3) NULL
 
+--update dataset configs per colette
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["BulkQaChange"]}}' where DatastoreId = 1;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["ActivityDate"],"ShowFields":["Timezone","Instrument"]},"ActivitiesPage":{"ShowFields":["Location.Label","headerdata.FieldActivityType","Description","User.Fullname"]},"SpecifyActivityListFields":true,"ActivityListFields":["Description","FieldActivityType","InstrumentId","LocationId","QAStatusId"]}' where DatastoreId = 3;
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]}}' where DatastoreId = 5;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields": ["BulkQaChange","ActivityDate"]},"ActivitiesPage":{"ShowFields":["Description","Location.Label","headerdata.DataType","User.Fullname"]}}' where DatastoreId = 6;
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]}}' where DatastoreId in (7,8,9,18);
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","Location","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.RunYear","Location.Label","User.Fullname"],"HasDatasetLocations":"Yes","AllowMultipleLocations":"No"},"SpecifyActivityListFields":true,"ActivityListFields":["QAStatusId","RunYear","Technician"]}' where DatastoreId = 10;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","ActivityDate","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.YearReported","Location.Label"]}}' where DatastoreId = 17;
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["Description"]}}' where DatastoreId = 20;
