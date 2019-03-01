@@ -943,6 +943,7 @@ go
 
 --delete these unused records
 delete from fields where FieldRoleId = 0;
+go
 
 -- set for crppcontracts ProjectLead field
 --update fields set DataSource = 'select PossibleValues from metadataproperties where name = ''ProjectLead''' where Name = 'Project Lead' and DatastoreId = 16;
@@ -957,6 +958,8 @@ IF @var0 IS NOT NULL
     EXECUTE('ALTER TABLE [dbo].[WaterQuality_Detail] DROP CONSTRAINT [' + @var0 + ']')
 ALTER TABLE [dbo].[WaterQuality_Detail] ALTER COLUMN [Result] [decimal](9, 3) NULL
 
+go
+
 --update dataset configs per colette
 update datasets set Config = '{"DataEntryPage":{"HiddenFields":["BulkQaChange"]}}' where DatastoreId = 1;
 update datasets set Config = '{"DataEntryPage":{"HiddenFields":["ActivityDate"],"ShowFields":["Timezone","Instrument"]},"ActivitiesPage":{"ShowFields":["Location.Label","headerdata.FieldActivityType","Description","User.Fullname"]},"SpecifyActivityListFields":true,"ActivityListFields":["Description","FieldActivityType","InstrumentId","LocationId","QAStatusId"]}' where DatastoreId = 3;
@@ -966,3 +969,23 @@ update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","
 update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","Location","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.RunYear","Location.Label","User.Fullname"],"HasDatasetLocations":"Yes","AllowMultipleLocations":"No"},"SpecifyActivityListFields":true,"ActivityListFields":["QAStatusId","RunYear","Technician"]}' where DatastoreId = 10;
 update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","ActivityDate","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.YearReported","Location.Label"]}}' where DatastoreId = 17;
 update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["Description"]}}' where DatastoreId = 20;
+
+go
+
+--add metrics RVTouchstone field
+ALTER TABLE [dbo].[Metrics_Detail] ADD [RVTouchstone] [nvarchar](max)
+
+DECLARE @newrvtfield int = 0;
+
+insert into Fields (Name, Description, DbColumnName, ControlType, DatastoreId, FieldRoleId, PossibleValues)
+values ('RV Touchstone','Related River Vision Touchstone for this metric','RVTouchstone','text', 17, 2, '["Hydrology","Connectivity","Geomorphology","Aquatic Biota","Riparian Vegetation"]');
+
+select @newrvtfield = scope_identity();
+
+   -- add RVTouchstone field to all datasets that are metrics
+insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
+select getdate(), id, @newrvtfield, 2, 'RV Touchstone','RVTouchstone',1,70,'select',null
+from datasets where datastoreid in (17);
+
+go
+
