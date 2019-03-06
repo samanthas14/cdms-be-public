@@ -989,3 +989,19 @@ from datasets where datastoreid in (17);
 
 go
 
+-- update rule for adult weir origin column (the function is in common-functions.js)
+update datasetfields set [Rule] = '{"OnValidate": "validateOriginFinClip(row, row_errors)"}' where id in (1078, 1178, 1186)
+
+go
+
+-- update project configs per colette
+update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id in (1135,1140,1161,1188,1199,1200,1206,2232,2238,2248,2321,10018,11039, 2226);
+update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
+update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["UmHab-Metrics"]}' where id = 1223;
+update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["NFJDHab-Metrics"]}' where id = 2223;
+update projects set config = '{"Lookups":[{"Id":8,"Label":"Habitat Sites","Type":"Metafields"},{"Label":"Instruments"}],"ShowHabitatSitesForDatasets":["GrHab-Metrics"]}' where id = 2228;
+update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["TcHab-Metrics"]}' where id = 2229;
+update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["Biom-Benthic","Biom-Drift","BioM-Electrofishing","BioM-Snorkel"]}' where id = 2249;
+update projects set config = '{  "Lookups": [    {      "Id": "8",      "Label": "Habitat",      "Type": "Metafields"    },    {      "Id": "3",      "Label": "Instruments"    }  ]}' where id in (11029, 11037);
+
+go
