@@ -1005,3 +1005,34 @@ update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Me
 update projects set config = '{  "Lookups": [    {      "Id": "8",      "Label": "Habitat",      "Type": "Metafields"    },    {      "Id": "3",      "Label": "Instruments"    }  ]}' where id in (11029, 11037);
 
 go
+
+CREATE TABLE [dbo].[PitagisDatas] (
+    [Id] [int] NOT NULL IDENTITY,
+    [MarkSubbasinCode] [int] NOT NULL,
+    [MarkSubbasinSite] [nvarchar](max),
+    [MarkYear] [int] NOT NULL,
+    [MarkDate] [datetime] NOT NULL,
+    [MarkMethodCode] [nvarchar](max),
+    [ReleaseSubbasin] [int] NOT NULL,
+    [ReleaseSubbasinSite] [nvarchar](max),
+    [ReleaseSiteName] [nvarchar](max),
+    [ReleaseDate] [datetime] NOT NULL,
+    [MigrationYear] [int] NOT NULL,
+    [PittagCode] [nvarchar](max),
+    [SRRCode] [nvarchar](max),
+    [SRRName] [nvarchar](max),
+    [MarkLength] [int],
+    [MarkWeight] [decimal](9, 2),
+    [PassageSiteCode] [nvarchar](max),
+    [PassageSiteName] [nvarchar](max),
+    [FirstTimeValue] [datetime] NOT NULL,
+    [LastTimeValue] [datetime] NOT NULL,
+    [Count] [int] NOT NULL,
+    [SpeciesCode] [int] NOT NULL,
+    [SpeciesName] [nvarchar](max),
+    [RunCode] [int],
+    [RunName] [nvarchar](max),
+    [RearTypeCode] [nvarchar](max),
+    [RearTypeName] [nvarchar](max),
+    CONSTRAINT [PK_dbo.PitagisDatas] PRIMARY KEY ([Id])
+)
