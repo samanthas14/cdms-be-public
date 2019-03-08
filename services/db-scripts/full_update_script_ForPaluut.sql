@@ -902,7 +902,7 @@ go
 
 --add project configs for lookups
 update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id = 1199;
-update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
+update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1275},{"Id":"2","Label":"Seasons","DatasetId":1276}]}' where id = 1217;
 update projects set config = '{"Lookups":[{"Id":"7","Label":"Correspondence","Type":"Metafields"}]}' where id = 2247;
 update projects set config = '{
   "Lookups": [
@@ -996,7 +996,7 @@ go
 
 -- update project configs per colette
 update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id in (1135,1140,1161,1188,1199,1200,1206,2232,2238,2248,2321,10018,11039, 2226);
-update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
+update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1275},{"Id":"2","Label":"Seasons","DatasetId":1276}]}' where id = 1217;
 update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["UmHab-Metrics"]}' where id = 1223;
 update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["NFJDHab-Metrics"]}' where id = 2223;
 update projects set config = '{"Lookups":[{"Id":8,"Label":"Habitat Sites","Type":"Metafields"},{"Label":"Instruments"}],"ShowHabitatSitesForDatasets":["GrHab-Metrics"]}' where id = 2228;
