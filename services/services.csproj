@@ -370,6 +370,9 @@
   <ItemGroup>
     <Content Include="ControllerClassDiagram.cd" />
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
+    <None Include="Properties\PublishProfiles\cdms2-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\cdms2-test-dmz.pubxml" />
+    <None Include="Properties\PublishProfiles\cdms2-test-priv.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-dev.pubxml" />
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
