@@ -46,3 +46,6 @@ or DbColumnName = 'FishReleased'
 --4 records
 
 update dbo.SpawningGroundSurvey_Header set StartTime = '10:23' where ActivityId = 49337
+update SpawningGroundSurvey_Detail set Time = '13:23' where Id = 308
+update dbo.ScrewTrap_Header set TrapStopped = null where TrapStopped like '%NA%' --16 Records
+update dbo.ScrewTrap_Header set TrapStarted = null where TrapStarted like '%NA%' --16 Records
