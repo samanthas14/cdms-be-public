@@ -1014,12 +1014,12 @@ go
 
 CREATE TABLE [dbo].[PitagisDatas] (
     [Id] [int] NOT NULL IDENTITY,
-    [MarkSubbasinCode] [int] NOT NULL,
+    [MarkSubbasinCode] [nvarchar](max),
     [MarkSubbasinSite] [nvarchar](max),
     [MarkYear] [int] NOT NULL,
     [MarkDate] [datetime] NOT NULL,
     [MarkMethodCode] [nvarchar](max),
-    [ReleaseSubbasin] [int] NOT NULL,
+    [ReleaseSubbasin] [nvarchar](max),
     [ReleaseSubbasinSite] [nvarchar](max),
     [ReleaseSiteName] [nvarchar](max),
     [ReleaseDate] [datetime] NOT NULL,
@@ -1034,11 +1034,60 @@ CREATE TABLE [dbo].[PitagisDatas] (
     [FirstTimeValue] [datetime] NOT NULL,
     [LastTimeValue] [datetime] NOT NULL,
     [Count] [int] NOT NULL,
-    [SpeciesCode] [int] NOT NULL,
+    [SpeciesCode] [nvarchar](max),
     [SpeciesName] [nvarchar](max),
-    [RunCode] [int],
+    [RunCode] [nvarchar](max),
     [RunName] [nvarchar](max),
     [RearTypeCode] [nvarchar](max),
     [RearTypeName] [nvarchar](max),
+    [FishMarkToObs] [int] NOT NULL,
+    [DaysBetweenReleaseAndFirstObs] [int] NOT NULL,
+    [MarkDateMax] [datetime] NOT NULL,
+    [ReleaseDateMax] [datetime] NOT NULL,
+    [FirstObjDateMax] [datetime] NOT NULL,
     CONSTRAINT [PK_dbo.PitagisDatas] PRIMARY KEY ([Id])
 )
+go
+
+CREATE view Ptagis_DetectionsByWeek_VW as
+select 
+passagesitecode,
+sum(count) as FishCount,
+datepart(wk, lasttimevalue) as week,
+convert(varchar(10), DATEADD(wk,DATEDIFF(wk,0,lasttimevalue),0),111) as BeginDate,
+convert(varchar(10), DATEADD(wk,DATEDIFF(wk,0,lasttimevalue)+1,0)-1,111) as EndDate,
+year(lasttimevalue) as ReadingYear
+from pitagisdatas
+where 
+--year(lasttimevalue) = 2018 and
+datepart(wk, lasttimevalue) between 10 and 32 -- week 10 to week 32
+and [FishMarkToObs] > 250
+ group by 
+ year(lasttimevalue),
+ datepart(wk, lasttimevalue),
+ PassageSiteCode, 
+ convert(varchar(10), DATEADD(wk,DATEDIFF(wk,0,lasttimevalue),0),111),
+ convert(varchar(10), DATEADD(wk,DATEDIFF(wk,0,lasttimevalue)+1,0)-1,111)
+
+go
+
+CREATE view Ptagis_DetectionSitesByWeekVW as
+select 
+	begindate, enddate, ReadingYear,
+	max(case when passagesitecode in ('B2A', 'BO1', 'BO2', 'BO3', 'BO4', 'BWL') then FishCount else 0 end) as 'Bonneville',
+	max(case when passagesitecode in ('TD1', 'TD2') then FishCount else 0 end) as 'The Dalles',
+	max(case when passagesitecode in ('JDJ', 'JO1', 'JO2')  then FishCount else 0 end) as 'John Day',
+	max(case when passagesitecode in ('MC1', 'MC2')   then FishCount else 0 end) as 'McNary',
+	max(case when passagesitecode = 'PRV'  then FishCount else 0 end) as 'WW Pierce RV',
+	max(case when passagesitecode = 'BGM'  then FishCount else 0 end) as 'Burlingame',
+	max(case when passagesitecode = 'YHC'  then FishCount else 0 end) as 'Yellowhawk Creek',
+	max(case when passagesitecode = 'NBA'  then FishCount else 0 end) as 'Nursery Bridge',
+	max(case when passagesitecode = 'NFW'  then FishCount else 0 end) as 'NFWW',
+	max(case when passagesitecode = 'WW1'  then FishCount else 0 end) as 'SFWW Harris Bridge',
+	max(case when passagesitecode = 'WW2'  then FishCount else 0 end) as 'SFWW Bear Creek',
+	max(case when passagesitecode in ('ICH', 'IHA') then FishCount else 0 end) as 'Overshoot to Ice Harbor',
+	max(case when passagesitecode = 'LMA'   then FishCount else 0 end) as 'Overshoot to Lower Monumental'
+from Ptagis_DetectionsByWeek_VW
+group by begindate, enddate, ReadingYear
+
+go
