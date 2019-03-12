@@ -1044,6 +1044,7 @@ CREATE TABLE [dbo].[PitagisDatas] (
 )
 
 --Updates to fix Prod data, prior to time update
+raiserror(N'Correcing data, before converting times to UTC...', 0, 1) with nowait
 update dbo.ScrewTrap_Header set DepartTime = '10/20/16 14:20:00' where ActivityId = 57305
 update dbo.ScrewTrap_Header set DepartTime = '10/17/16 09:10:00' where ActivityId = 57302
 update dbo.ScrewTrap_Header set DepartTime = '12/10/16 11:05:00' where ActivityId = 57998
