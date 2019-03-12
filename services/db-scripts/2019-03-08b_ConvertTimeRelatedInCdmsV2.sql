@@ -1115,4 +1115,99 @@ where dbo.ScrewTrap_Header.ActivityId = r.aId and dbo.ScrewTrap_Header.TrapStopp
 and dbo.ScrewTrap_Header.TrapStopped != 'NA'
 and len(dbo.ScrewTrap_Header.TrapStopped) > 0
 
+
+raiserror(N'Updating SpawningGroundSurvey_Header StartTime, HH:mm format...', 0, 1) with nowait
+update dbo.SpawningGroundSurvey_Header
+set @theMonth = right(concat('00', convert(nvarchar(max), Datepart(MONTH, r.ActivityDate))), 2), 
+@theDay = right(concat('00', convert(nvarchar(max), Datepart(Day, r.ActivityDate))), 2),
+@theStartHour = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Header.StartTime, 
+		1, 
+		charIndex(':', dbo.SpawningGroundSurvey_Header.StartTime) - 1
+		)),
+	2),
+@theStartMinute = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Header.StartTime, 
+		charIndex(':', dbo.SpawningGroundSurvey_Header.StartTime) + 1,
+		2)), 
+	2),
+StartTime = concat(YEAR(r.ActivityDate), '-', @theMonth, '-', @theDay, ' ', @theStartHour, ':', @theStartMinute, ':00.000')
+
+from
+(select a.[Id] as aId, a.ActivityDate, h.StartTime 
+from dbo.Activities a
+inner join dbo.SpawningGroundSurvey_Header h on h.ActivityId = a.Id
+where StartTime is not null
+and len(StartTime) < 23
+and len(StartTime) > 0
+) as r
+where dbo.SpawningGroundSurvey_Header.ActivityId = r.aId and dbo.SpawningGroundSurvey_Header.StartTime is not null and len(dbo.SpawningGroundSurvey_Header.StartTime) < 23
+and len(dbo.SpawningGroundSurvey_Header.StartTime) > 0
+--280 records
+
+raiserror(N'Updating SpawningGroundSurvey_Header EndTime, HH:mm format...', 0, 1) with nowait
+update dbo.SpawningGroundSurvey_Header
+set @theMonth = right(concat('00', convert(nvarchar(max), Datepart(MONTH, r.ActivityDate))), 2), 
+@theDay = right(concat('00', convert(nvarchar(max), Datepart(Day, r.ActivityDate))), 2),
+@theStartHour = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Header.EndTime, 
+		1, 
+		charIndex(':', dbo.SpawningGroundSurvey_Header.EndTime) - 1
+		)),
+	2),
+@theStartMinute = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Header.EndTime, 
+		charIndex(':', dbo.SpawningGroundSurvey_Header.EndTime) + 1,
+		2)), 
+	2),
+EndTime = concat(YEAR(r.ActivityDate), '-', @theMonth, '-', @theDay, ' ', @theStartHour, ':', @theStartMinute, ':00.000')
+
+from
+(select a.[Id] as aId, a.ActivityDate, h.EndTime 
+from dbo.Activities a
+inner join dbo.SpawningGroundSurvey_Header h on h.ActivityId = a.Id
+where EndTime is not null
+and len(EndTime) < 23
+and len(EndTime) > 0
+) as r
+where dbo.SpawningGroundSurvey_Header.ActivityId = r.aId and dbo.SpawningGroundSurvey_Header.EndTime is not null and len(dbo.SpawningGroundSurvey_Header.EndTime) < 23
+and len(dbo.SpawningGroundSurvey_Header.EndTime) > 0
+--234 records
+
+
+raiserror(N'Updating SpawningGroundSurvey_Detail Time, HH:mm format...', 0, 1) with nowait
+update dbo.SpawningGroundSurvey_Detail
+set @theMonth = right(concat('00', convert(nvarchar(max), Datepart(MONTH, r.ActivityDate))), 2), 
+@theDay = right(concat('00', convert(nvarchar(max), Datepart(Day, r.ActivityDate))), 2),
+@theStartHour = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Detail.[Time], 
+		1, 
+		charIndex(':', dbo.SpawningGroundSurvey_Detail.[Time]) - 1
+		)),
+	2),
+@theStartMinute = right(concat('00', 
+	substring(
+		dbo.SpawningGroundSurvey_Detail.[Time], 
+		charIndex(':', dbo.SpawningGroundSurvey_Detail.[Time]) + 1,
+		2)), 
+	2),
+[Time] = concat(YEAR(r.ActivityDate), '-', @theMonth, '-', @theDay, ' ', @theStartHour, ':', @theStartMinute, ':00.000')
+
+from
+(select d.Id as dId, a.Id as aId, a.ActivityDate, d.[Time] as dTime
+from dbo.Activities a
+inner join dbo.SpawningGroundSurvey_Detail d on d.ActivityId = a.Id
+where d.[Time] is not null
+and len(d.[Time]) > 0
+) as r
+where dbo.SpawningGroundSurvey_Detail.ActivityId = r.aId and dbo.SpawningGroundSurvey_Detail.[Time] is not null
+and len(dbo.SpawningGroundSurvey_Detail.[Time]) > 0
+--23594 records
+
+
 raiserror(N'Finished!', 0, 1) with nowait
