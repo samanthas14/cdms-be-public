@@ -285,7 +285,7 @@ from datasets where datastoreid in (3);
 -- add description to all datasets that need it
 insert into DatasetFields (CreateDateTime, DatasetId, FieldId, FieldRoleId, Label, DbColumnName, SourceId, OrderIndex, ControlType, InstrumentId)
 select getdate(), id, (select id from Fields where DatastoreId = @sysdsid AND DbColumnName = 'Description'), 1, 'Description','Description',1,8,'activity-text',null
-from datasets where datastoreid in (3);
+from datasets where datastoreid in (3,6);
 
 
 go
@@ -902,7 +902,7 @@ go
 
 --add project configs for lookups
 update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id = 1199;
-update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
+update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1275},{"Id":"2","Label":"Seasons","DatasetId":1276}]}' where id = 1217;
 update projects set config = '{"Lookups":[{"Id":"7","Label":"Correspondence","Type":"Metafields"}]}' where id = 2247;
 update projects set config = '{
   "Lookups": [
@@ -961,14 +961,17 @@ ALTER TABLE [dbo].[WaterQuality_Detail] ALTER COLUMN [Result] [decimal](9, 3) NU
 go
 
 --update dataset configs per colette
-update datasets set Config = '{"DataEntryPage":{"HiddenFields":["BulkQaChange"]}}' where DatastoreId = 1;
-update datasets set Config = '{"DataEntryPage":{"HiddenFields":["ActivityDate"],"ShowFields":["Timezone","Instrument"]},"ActivitiesPage":{"ShowFields":["Location.Label","headerdata.FieldActivityType","Description","User.Fullname"]},"SpecifyActivityListFields":true,"ActivityListFields":["Description","FieldActivityType","InstrumentId","LocationId","QAStatusId"]}' where DatastoreId = 3;
-update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]}}' where DatastoreId = 5;
-update datasets set Config = '{"DataEntryPage":{"HiddenFields": ["BulkQaChange","ActivityDate"]},"ActivitiesPage":{"ShowFields":["Description","Location.Label","headerdata.DataType","User.Fullname"]}}' where DatastoreId = 6;
-update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]}}' where DatastoreId in (7,8,9,18);
-update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","Location","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.RunYear","Location.Label","User.Fullname"],"HasDatasetLocations":"Yes","AllowMultipleLocations":"No"},"SpecifyActivityListFields":true,"ActivityListFields":["QAStatusId","RunYear","Technician"]}' where DatastoreId = 10;
-update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","ActivityDate","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.YearReported","Location.Label"]}}' where DatastoreId = 17;
-update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["Description"]}}' where DatastoreId = 20;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["BulkQaChange"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["ActivityDate","CollectionType","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["ActivityDate","CollectionType","LocationId","QAStatusId"]}' where DatastoreId = 1;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["ActivityDate"],"ShowFields":["Timezone","Instrument"]},"ActivitiesPage":{"ShowFields":["Location.Label","headerdata.FieldActivityType","Description","User.Fullname"]},"SpecifyActivityListFields":true,"ActivityListFields":["Description","FieldActivityType","InstrumentId","LocationId","QAStatusId"],"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["Description","FieldActivityType","InstrumentId","LocationId"]}' where DatastoreId = 3;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","BulkQaChange"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["ActivityDate","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["ActivityDate","LocationId","QAStatusId"]}' where DatastoreId = 5;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["BulkQaChange","ActivityDate"]},"ActivitiesPage":{"ShowFields":["Description","Location.Label","headerdata.DataType","User.Fullname"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["DataType","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["DataType","LocationId","QAStatusId"]}' where DatastoreId = 6;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","BulkQaChange"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["ActivityDate","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["ActivityDate","LocationId","QAStatusId"]}' where DatastoreId in (7);
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","BulkQaChange"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["ActivityDate","ArrivalTime","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["ActivityDate","ArrivalTime","LocationId","QAStatusId"]}' where DatastoreId in (8);
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","BulkQaChange"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["ActivityDate","LocationId"],"SpecifyActivityListFields":true,"ActivityListFields":["ActivityDate","LocationId","QAStatusId"]}' where DatastoreId in (9);
+update datasets set Config = '{"DataEntryPage": {"HiddenFields": ["Instrument","BulkQaChange"]}}' where DatastoreId in (18);
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","Location","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.RunYear","Location.Label","User.Fullname"],"HasDatasetLocations":"Yes","AllowMultipleLocations":"No"},"SpecifyActivityListFields":true,"ActivityListFields":["QAStatusId","RunYear","Technician"],"AllowSaveWithErrors":true,"EnableDuplicateChecking":false}' where DatastoreId = 10;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","ActivityDate","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["headerdata.YearReported","Location.Label"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":true,"DuplicateCheckFields":["LocationId","YearReported"],"SpecifyActivityListFields":true,"ActivityListFields":["LocationId","QAStatusId","YearReported"]}' where DatastoreId = 17;
+update datasets set Config = '{"DataEntryPage":{"HiddenFields":["Instrument","BulkQaChange"]},"ActivitiesPage":{"ShowFields":["Description"]},"AllowSaveWithErrors":true,"EnableDuplicateChecking":false,"SpecifyActivityListFields":false}' where DatastoreId = 20;
 
 go
 
@@ -996,7 +999,7 @@ go
 
 -- update project configs per colette
 update projects set config = '{"Lookups":[{"Id":"3","Label":"Instruments"}]}' where id in (1135,1140,1161,1188,1199,1200,1206,2232,2238,2248,2321,10018,11039, 2226);
-update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1273},{"Id":"2","Label":"Seasons","DatasetId":1274}]}' where id = 1217;
+update projects set config = '{"Lookups":[{"Id":"1","Label":"Fishermen","DatasetId":1275},{"Id":"2","Label":"Seasons","DatasetId":1276}]}' where id = 1217;
 update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["UmHab-Metrics"]}' where id = 1223;
 update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Metafields"},{"Id":"3","Label":"Instruments"}],"ShowHabitatSitesForDatasets":["NFJDHab-Metrics"]}' where id = 2223;
 update projects set config = '{"Lookups":[{"Id":8,"Label":"Habitat Sites","Type":"Metafields"},{"Label":"Instruments"}],"ShowHabitatSitesForDatasets":["GrHab-Metrics"]}' where id = 2228;
@@ -1005,3 +1008,37 @@ update projects set config = '{"Lookups":[{"Id":"8","Label":"Habitat","Type":"Me
 update projects set config = '{  "Lookups": [    {      "Id": "8",      "Label": "Habitat",      "Type": "Metafields"    },    {      "Id": "3",      "Label": "Instruments"    }  ]}' where id in (11029, 11037);
 
 go
+
+update datasetfields set FieldRoleId = 1 where datasetid = 1005 and fieldid = 24; --fix technician dataset fieldroleid
+go
+
+CREATE TABLE [dbo].[PitagisDatas] (
+    [Id] [int] NOT NULL IDENTITY,
+    [MarkSubbasinCode] [int] NOT NULL,
+    [MarkSubbasinSite] [nvarchar](max),
+    [MarkYear] [int] NOT NULL,
+    [MarkDate] [datetime] NOT NULL,
+    [MarkMethodCode] [nvarchar](max),
+    [ReleaseSubbasin] [int] NOT NULL,
+    [ReleaseSubbasinSite] [nvarchar](max),
+    [ReleaseSiteName] [nvarchar](max),
+    [ReleaseDate] [datetime] NOT NULL,
+    [MigrationYear] [int] NOT NULL,
+    [PittagCode] [nvarchar](max),
+    [SRRCode] [nvarchar](max),
+    [SRRName] [nvarchar](max),
+    [MarkLength] [int],
+    [MarkWeight] [decimal](9, 2),
+    [PassageSiteCode] [nvarchar](max),
+    [PassageSiteName] [nvarchar](max),
+    [FirstTimeValue] [datetime] NOT NULL,
+    [LastTimeValue] [datetime] NOT NULL,
+    [Count] [int] NOT NULL,
+    [SpeciesCode] [int] NOT NULL,
+    [SpeciesName] [nvarchar](max),
+    [RunCode] [int],
+    [RunName] [nvarchar](max),
+    [RearTypeCode] [nvarchar](max),
+    [RearTypeName] [nvarchar](max),
+    CONSTRAINT [PK_dbo.PitagisDatas] PRIMARY KEY ([Id])
+)

@@ -25,6 +25,7 @@ namespace services.Models
         {
             this.Configuration.LazyLoadingEnabled = true;
             this.Configuration.ProxyCreationEnabled = true;
+            Database.SetInitializer<ServicesContext>(null); //turn off the model comparator
         }
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -71,6 +72,7 @@ namespace services.Models
         public DbSet<File> Files { get; set; }
         public DbSet<FileType> FileTypes { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<PitagisData> PitagisData { get; set; }
 
         public DbSet<Dataset> Datasets { get; set; }
         public DbSet<Datastore> Datastores { get; set; }
