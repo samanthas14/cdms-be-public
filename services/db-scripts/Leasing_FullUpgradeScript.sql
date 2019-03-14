@@ -163,6 +163,8 @@ ALTER TABLE [dbo].[LeaseProductions] ADD CONSTRAINT [FK_dbo.LeaseProductions_dbo
 ALTER TABLE [dbo].[LeaseFieldLeases] ADD CONSTRAINT [FK_dbo.LeaseFieldLeases_dbo.LeaseFields_LeaseField_FieldId] FOREIGN KEY ([LeaseField_FieldId]) REFERENCES [dbo].[LeaseFields] ([FieldId]) ON DELETE CASCADE
 ALTER TABLE [dbo].[LeaseFieldLeases] ADD CONSTRAINT [FK_dbo.LeaseFieldLeases_dbo.Leases_Lease_Id] FOREIGN KEY ([Lease_Id]) REFERENCES [dbo].[Leases] ([Id]) ON DELETE CASCADE
 
+go
+
 IF object_id(N'[dbo].[FK_dbo.LeaseCropPlans_dbo.Leases_LeaseId]', N'F') IS NOT NULL
     ALTER TABLE [dbo].[LeaseCropPlans] DROP CONSTRAINT [FK_dbo.LeaseCropPlans_dbo.Leases_LeaseId]
 IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'IX_LeaseId' AND object_id = object_id(N'[dbo].[LeaseCropPlans]', N'U'))
@@ -184,50 +186,7 @@ ALTER TABLE [dbo].[LeaseProductions] ADD [Comments] [nvarchar](max)
 
 GO
 
-
-
-if object_id('Lease_AvailableFields_VW','V') is not null
-		drop view Lease_AvailableFields_VW;
-
-go
-
-create view Lease_AvailableFields_VW as
---fields without any lease ever
-select 
-	lsf.*,
-	null as LeaseAcres,
-	null as FSATractNumber,
-	null as TAAMSNumber,
-	null as DateAvailable,
-	null as LastLeaseId,
-	'n/a' as Expiration from leasefields lsf where FieldId not in (select LeaseField_FieldId from LeaseFieldLeases)
-
-union
-
---lease is expired or expiring in the next 3 months
-select 
-	lf.*,
-	ls.LeaseAcres,
-	ls.FSATractNumber,
-	ls.TAAMSNumber,
-	dateadd(day,1,ls.LeaseEnd) ,
-	ls.Id,
-	case 
-		when ls.LeaseEnd < getdate() THEN 'Expired'
-		else concat(datediff(month, getdate(), ls.LeaseEnd), ' months')
-	end
-	from leasefields as lf
-join leasefieldleases lfl on lfl.LeaseField_FieldId = lf.FieldId
-join leases ls on lfl.Lease_Id = ls.Id
-where ls.status = 1 and 
-	  ls.LeaseEnd = (select max(s_ls.LeaseEnd) from leasefields as s_lf
-					join leasefieldleases s_lfl on s_lfl.LeaseField_FieldId = s_lf.FieldId
-					join leases s_ls on s_lfl.Lease_Id = s_ls.Id 
-					where s_lf.FieldId = lf.FieldId)
-	and ls.LeaseEnd < dateadd(month, 3, getdate())
-
-GO
-            
+    
 
 ALTER TABLE [dbo].[LeaseOperators] ADD [Inactive] [bit] NOT NULL DEFAULT 0
 
@@ -274,6 +233,7 @@ CREATE TABLE [dbo].[LeaseRevisions] (
     [TAAMSNumber] [nvarchar](max),
     CONSTRAINT [PK_dbo.LeaseRevisions] PRIMARY KEY ([Id])
 )
+go
 
 ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationIsResolved] [bit] NOT NULL DEFAULT 0
 ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationResolution] [nvarchar](max)
@@ -287,14 +247,6 @@ ALTER TABLE [dbo].[LeaseCropPlans] ADD [ChangedDate] [datetime]
 ALTER TABLE [dbo].[LeaseCropPlans] ADD [ChangedBy] [nvarchar](max)
 ALTER TABLE [dbo].[LeaseCropPlans] ADD [ChangedReason] [nvarchar](max)
 
-ALTER TABLE [dbo].[WaterTemp_Detail] ADD [Discharge] [float]
-
-                INSERT INTO dbo.Fields(FieldCategoryId, Name, [Description], Units, Validation, DataType, PossibleValues, DbColumnName, ControlType, [Rule]) 
-                VALUES
-                (2,'Discharge','Volumetric flow rate of water that is transported through a given location. It includes any suspended solids, dissolved chemicals, or biologic material in addition to the water itself',
-                    'cfs','[0,5000]','float',null,'Discharge','number',null)
-           
-
 ALTER TABLE [dbo].[Leases] ADD [UnderInternalReview] [bit]
 ALTER TABLE [dbo].[Leases] ADD [InternalReviewStartDate] [datetime]
 
@@ -303,6 +255,9 @@ ALTER TABLE [dbo].[LeaseRevisions] ADD [InternalReviewStartDate] [datetime]
 
 ALTER TABLE [dbo].[LeaseRevisions] ADD [TransactionDate] [datetime]
 ALTER TABLE [dbo].[Leases] ADD [TransactionDate] [datetime]
+
+go
+
 DECLARE @var1 nvarchar(128)
 SELECT @var1 = name
 FROM sys.default_constraints
@@ -320,6 +275,8 @@ IF @var2 IS NOT NULL
     EXECUTE('ALTER TABLE [dbo].[Leases] DROP CONSTRAINT [' + @var2 + ']')
 ALTER TABLE [dbo].[Leases] ALTER COLUMN [DueDate] [nvarchar](max) NULL
 
+go
+
 CREATE TABLE [dbo].[LeaseCropShares] (
     [Id] [int] NOT NULL IDENTITY,
     [LeaseId] [int] NOT NULL,
@@ -329,6 +286,9 @@ CREATE TABLE [dbo].[LeaseCropShares] (
     [CostSharePercent] [decimal](5, 2),
     CONSTRAINT [PK_dbo.LeaseCropShares] PRIMARY KEY ([Id])
 )
+
+go
+
 CREATE INDEX [IX_LeaseId] ON [dbo].[LeaseCropShares]([LeaseId])
 ALTER TABLE [dbo].[LeaseRevisions] ADD [PaymentDueType] [nvarchar](max)
 ALTER TABLE [dbo].[LeaseRevisions] ADD [PaymentDueDescription] [nvarchar](max)
@@ -343,3 +303,136 @@ ALTER TABLE [dbo].[Leases] ADD [PaymentUnit] [nvarchar](max)
 
 ALTER TABLE [dbo].[LeaseCropShares] ADD [Comment] [nvarchar](max)
 
+go
+
+CREATE VIEW dbo.LeaseAllotments_VW
+AS
+SELECT 
+null as LeaseAcres,
+null as FSATractNumber,
+null as TAAMSNumber,
+null as DateAvailable,
+null as LastLeaseId,
+'n/a' as Expiration,
+null AS FieldId, 
+null AS FieldLandUse, 
+null AS FieldAcres, 
+cad.OBJECTID AS CadasterObjectid, 
+cad.ALLOTMENT AS AllotmentName, 
+cad.TAXLOT, 
+cad.PARCELID, 
+cad.ACRES_CTY AS AcresCty, 
+cad.ACRES_GIS AS AcresGIS, 
+cad.PLSS, 
+cad.PLSS2, 
+cad.PLSS3, 
+cad.PLSS_label AS PLSSLabel, 
+cad.last_edited_date AS LastEditedDate
+FROM sdevector.sde.Cadaster_evw AS cad 
+WHERE cad.ALLOTMENT is not null AND cad.ALLOTMENT != ''
+
+go
+
+CREATE VIEW dbo.LeaseFields_VW
+AS
+SELECT 
+ft.OBJECTID AS FieldId, 
+ft.Land_Use AS FieldLandUse, 
+ft.Acres AS FieldAcres, 
+cad.OBJECTID AS CadasterObjectid, 
+cad.ALLOTMENT AS AllotmentName, 
+cad.TAXLOT, 
+cad.PARCELID, 
+cad.ACRES_CTY AS AcresCty, 
+cad.ACRES_GIS AS AcresGIS, 
+cad.PLSS, 
+cad.PLSS2, 
+cad.PLSS3, 
+cad.PLSS_label AS PLSSLabel, 
+cad.last_edited_date AS LastEditedDate
+FROM sdevector.sde.Cadaster_evw AS cad INNER JOIN
+sdevector.sde.FARMTRACTS_RAF_evw AS ft ON ft.Allotment = cad.ALLOTMENT
+
+go
+
+CREATE VIEW dbo.LeaseInspComp_vw
+AS
+SELECT        dbo.LeaseInspections.LeaseYear, dbo.LeaseInspections.InspectionType, dbo.Leases.AllotmentName, dbo.Leases.LeaseNumber, dbo.Leases.LeaseStart, dbo.Leases.LeaseEnd, dbo.LeaseInspections.InspectionDateTime, 
+                         dbo.LeaseInspections.CropPresent, dbo.LeaseInspections.Weeds1, dbo.LeaseInspections.Weeds2, dbo.LeaseInspections.Weeds3, dbo.LeaseInspections.CropResiduePct, dbo.LeaseInspections.GreenCoverPct, 
+                         dbo.LeaseInspections.ClodPct, dbo.LeaseInspections.FieldRecordsReceived, dbo.LeaseInspections.OutOfCompliance, dbo.LeaseInspections.Notes, dbo.LeaseInspections.Id
+FROM            dbo.Leases INNER JOIN
+                         dbo.LeaseInspections ON dbo.Leases.Id = dbo.LeaseInspections.LeaseId
+
+go
+
+
+if object_id('Lease_AvailableFields_VW','V') is not null
+		drop view Lease_AvailableFields_VW;
+
+go
+
+create view Lease_AvailableFields_VW as
+
+--fields without any lease ever
+select 
+	lsf.*,
+	null as LeaseAcres,
+	null as FSATractNumber,
+	null as TAAMSNumber,
+	null as DateAvailable,
+	null as LastLeaseId,
+	'n/a' as Expiration from LeaseFields_VW lsf where FieldId not in (select LeaseField_FieldId from LeaseFieldLeases)
+
+union
+
+--lease is expired or expiring in the next 9 months
+select 
+	lf.*,
+	ls.LeaseAcres,
+	ls.FSATractNumber,
+	ls.TAAMSNumber,
+	dateadd(day,1,ls.LeaseEnd) ,
+	ls.Id,
+	case 
+		when ls.LeaseEnd < getdate() THEN 'Expired'
+		else concat(datediff(month, getdate(), ls.LeaseEnd), ' months')
+	end
+	from LeaseFields_VW as lf
+join leasefieldleases lfl on lfl.LeaseField_FieldId = lf.FieldId
+join leases ls on lfl.Lease_Id = ls.Id
+where (ls.status not in (3) --not pending 
+		and ls.LeaseEnd = (select max(s_ls.LeaseEnd) from LeaseFields_VW as s_lf
+					join leasefieldleases s_lfl on s_lfl.LeaseField_FieldId = s_lf.FieldId
+					join leases s_ls on s_lfl.Lease_Id = s_ls.Id 
+					where s_lf.FieldId = lf.FieldId
+			)
+		)
+		and ls.LeaseEnd < dateadd(month, 9, getdate())
+GO
+        
+
+
+-- metafields for leasing
+DECLARE @leasingmdid int = 0;
+DECLARE @leasingsysid int = 0;
+
+insert into MetadataEntities (Name, Description) values ('Leasing','Leasing related properties');
+select @leasingmdid = scope_identity();
+insert into MetadataEntities (Name, Description) values ('LeasingSystem','Leasing system related properties');
+select @leasingsysid = scope_identity();
+
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Crop Options', N'Crop Options', N'string', N'["Alfalfa","Barley","Canola","CCRP","Chick Peas","CREP","CRP","Dry Peas","Fallow","Garbanzo Beans","Grain","Grass Hay","Green Peas","Hay","Insurance","Lentils","Mustard","Oats","Pasture","Pea Hay","Pea Vine","Spring Barley","Straw","W Wheat","n/a"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Weeds', N'Weeds', N'string', N'["Austrian Peaweed","Camelthorn","Canada Thistle","Cereal Rye","Common Bugloss","Common Crupina","Creeping Yellow Cress","Dalmation Toadflax","Dodder","Diffuse Knapweed","Flowering Rush","Garlic Mustard","Hoary Cress","Japanese Knotweed","Johnsongrass","Jointed Goatgrass","Kochia","Leafy Spurge","Marijuana","Meadow Knapweed","Mediterranean Sage","Musk Thistle","Myrtyle Spurge","Poison Hemlock","Puncturevine","Purple Loosestrife","Purple Starthistle","Quackgrass","Ragweed","Rush Skeletonweed","Russian Knapweed","Scotch Thistle","Spike Weed","Spotted Knapweed","St.Johnswort","Tansy Ragwort","Viper''s Bugloss","Yellow Flag Iris","Yellow Starthistle","Bur chervil","Multiflora rose","Bur chervil","Russian Olive","Bachelor''s button","Multiflora rose","Spreading hedge-parsley","Black locust","Bulbous bluegrass","Catchweed","Downy brome","Common mullein","Common Teasel","Rattail fescue","Russian thistle","Smooth brome","Sweetbriar rose","Tall oatgrass","Ventenata"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Residue Types', N'Residue Types', N'string', N'["Canola","Legume","New Residue","Oats","Other","Peas","Spring Grain","Winter Grain"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Sub Practices', N'Sub Practices', N'string', N'["Chisel plow","Contour farming","Disking","Divided slope","Early seeding","No-till","Strip farming","Sub-soiling","Other"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Animal Types', N'Animal Types', N'string', N'["Cattle","Goats","Horses","Mules","Sheep","None"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Production Types', N'Production Types', N'string', N'["Austrian Winter Peas","Barley","Canner","Crop Insurance","Crop Residue","Damages","Dark N. Spring","Dry Peas","Fall","Feed","Feeder","Freezer","Fresh","Fresh/Frozen","Frz Peas","Grass Alfalfa","Grass Hay","Grass Triticale","Green Freezer","Green Pea","Green Peas","Hard Red Wheat","Hay","Haybet Barley Hay","HRW","HRWW","Malt","Mix","Mix - Barley Wheat","New Seeding","No Pods","Not Harvested","Pea","Processing","Rain Damaged","Residue","Small Reds","Smooth Green","Spanish White","Spring","SSW","Straw","Stubble","Sudan","Sudan Grass","SW","SWW","Triticale","Wheat","White","Winter","Wrinkle","Yellow"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Inspection Violations', N'Inspection Violations', N'string', N'["Dismissed","Fee Paid","No Resolution","Other"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Production Delivery Unit', N'Production Delivery Unit', N'string', N'["ACRE","AUM","BU","LB","TON"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Lease Types', N'Lease Types', N'string', N'["Farming","Conservation","Grazing","Range Unit","Residential","Storage"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Operator City', N'Operator Cities', N'string', N'["Adams","Arlington","Athena","Baker City","Boardman","Centerville","Cove","Enterprise","Fort Worth","Grass Valley","Helix","Hermiston","Ione","Irrigon","Kennewick","LaGrande","Lowden","Malibu","Milton-Freewater","Pendleton","Pullman","Pilot Rock","Salem","Seattle","Stanfield","Sunnyside","Toppenish","Touchet","Ukiah","Union","Walla Walla","Wallowa","Weston"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Operator State', N'Operator States', N'string', N'["CA","ID","OR","TX","WA"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Number', N'The last lease number we used. Increment for next', N'int', N'9604', N'hidden')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Expired Run', N'The last date we checked for expired leases', N'date', N'1/24/2019', N'hidden')
+
+GO
