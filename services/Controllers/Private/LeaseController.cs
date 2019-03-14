@@ -417,19 +417,19 @@ namespace services.Controllers.Private
                 //if this is a brand new lease, it should have FieldsToLink array of ids
                 if (fields_to_link != null && fields_to_link.Length > 0)
                 {
-                    //logger.Debug(" incoming fields to link: "+ JsonConvert.SerializeObject(fields_to_link));
+                    logger.Debug(" incoming fields to link: "+ JsonConvert.SerializeObject(fields_to_link));
 
 
                     lease.LeaseFields = new List<LeaseField>();
 
                     foreach (int fieldid in fields_to_link)
                     {
-                        //logger.Debug("Adding field: " + fieldid + " to " + lease.Id);
+                        logger.Debug("Adding field: " + fieldid + " to " + lease.Id);
                         LeaseField field = db.LeaseField().Find(fieldid);
                         lease.LeaseFields.Add(field);
                     }
 
-                    //logger.Debug(JsonConvert.SerializeObject(lease));
+                    logger.Debug(JsonConvert.SerializeObject(lease));
 
                     db.Entry(lease).State = EntityState.Modified;
                     db.SaveChanges();
