@@ -127,6 +127,7 @@ namespace services.Controllers.Private
                 l.GreenCoverRequiredPct,
                 l.ClodRequiredPct,
                 l.OptionalAlternativeCrop,
+                l.HEL,
                 l.GrazeStart,
                 l.GrazeEnd,
                 l.AUMs,
@@ -186,6 +187,7 @@ namespace services.Controllers.Private
                              l.GreenCoverRequiredPct,
                              l.ClodRequiredPct,
                              l.OptionalAlternativeCrop,
+                             l.HEL,
                              l.GrazeStart,
                              l.GrazeEnd,
                              l.AUMs,
@@ -485,7 +487,7 @@ namespace services.Controllers.Private
 
             int sequenceid = 1;
 
-            LeaseCropPlan first_one = db.Lease().Find(lease.Id).LeaseCropPlans.FirstOrDefault();
+            LeaseCropPlan first_one = db.Lease().Find(lease.Id).LeaseCropPlans.FirstOrDefault(); //TODO: is this returning the LAST one (highest sequence #?)
             if (first_one != null)
                 sequenceid = first_one.SequenceId;
 

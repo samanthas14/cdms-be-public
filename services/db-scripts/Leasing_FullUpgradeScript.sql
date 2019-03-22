@@ -287,6 +287,9 @@ ALTER TABLE [dbo].[Leases] ADD [PaymentUnit] [nvarchar](max)
 
 ALTER TABLE [dbo].[LeaseCropShares] ADD [Comment] [nvarchar](max)
 
+ALTER TABLE [dbo].[Leases] ADD [HEL] [bit]
+ALTER TABLE [dbo].[LeaseRevisions] ADD [HEL] [bit]
+
 go
 
 CREATE VIEW dbo.LeaseAllotments_VW

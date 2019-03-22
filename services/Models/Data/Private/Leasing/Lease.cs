@@ -81,6 +81,7 @@ namespace services.Models.Data
         public int? ClodRequiredPct { get; set; }
 
         public Boolean? OptionalAlternativeCrop { get; set; }
+        public Boolean? HEL { get; set; }
         public DateTime? GrazeStart { get; set; }
         public DateTime? GrazeEnd { get; set; }
 
@@ -180,6 +181,7 @@ namespace services.Models.Data
             rev.PaymentDueDescription = this.PaymentDueDescription;
             rev.FieldNumber = this.FieldNumber;
             rev.PaymentUnit = this.PaymentUnit;
+            rev.HEL = this.HEL;
 
             return rev;
         }

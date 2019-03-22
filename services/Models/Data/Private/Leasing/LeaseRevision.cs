@@ -82,6 +82,7 @@ namespace services.Models.Data
         public int? ClodRequiredPct { get; set; }
 
         public Boolean? OptionalAlternativeCrop { get; set; }
+        public Boolean? HEL { get; set; }
         public DateTime? GrazeStart { get; set; }
         public DateTime? GrazeEnd { get; set; }
 
