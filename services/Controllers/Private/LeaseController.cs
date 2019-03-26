@@ -45,9 +45,9 @@ namespace services.Controllers.Private
             return lease;
         }
 
-        //GET /api/v1/lease/getleasebyfield/5
+        //GET /api/v1/lease/getleasesbyfield/5
         [HttpGet]
-        public Lease GetLeaseByField(int id)
+        public IEnumerable<Lease> GetLeasesByField(int id)
         {
 
             //user must be in the "Leasing" group in order to do anything here.
@@ -63,6 +63,7 @@ namespace services.Controllers.Private
             lfl.LeaseField_FieldId = " + id;
 
             Lease lease = null;
+            List<Lease> result = new List<Lease>();
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
             {
@@ -73,6 +74,7 @@ namespace services.Controllers.Private
                 {
                     int leaseId = Convert.ToInt32(reader["Lease_Id"]);
                     lease = db.Lease().Find(leaseId);
+                    result.Add(lease);
                 }
             }
 
@@ -81,7 +83,7 @@ namespace services.Controllers.Private
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return lease;
+            return result;
         }
 
         [HttpGet]
@@ -225,6 +227,35 @@ namespace services.Controllers.Private
             var db = ServicesContext.Current;
             return db.LeaseOperator().AsEnumerable();
         }
+
+        [HttpGet]
+        public HttpResponseMessage DeleteOperator(int Id){
+            var db = ServicesContext.Current;
+            
+            User me = AuthorizationManager.getCurrentUser();
+
+            if (!me.hasRole(ROLE_REQUIRED))
+                throw new Exception("Not Authorized.");
+
+            if(Id == 0)
+                throw new System.Exception("Configuration error.");
+
+            LeaseOperator lo = db.LeaseOperator().Find(Id);
+
+            if (lo != null){ 
+                db.LeaseOperator().Remove(lo);
+                db.SaveChanges();
+                logger.Debug("Deleted operator " + lo.Id + " for " + me.Username);
+            }
+            else
+            {
+                logger.Debug("Tried to delete lease operator " + lo.Id + " but it was not found.");
+                throw new System.Exception("Operator not found");
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+    
 
 
         [HttpGet]

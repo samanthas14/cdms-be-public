@@ -424,6 +424,27 @@ INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [D
 
 GO
 
+
+DECLARE @var0 nvarchar(128)
+SELECT @var0 = name
+FROM sys.default_constraints
+WHERE parent_object_id = object_id(N'dbo.LeaseRevisions')
+AND col_name(parent_object_id, parent_column_id) = 'LeaseStart';
+IF @var0 IS NOT NULL
+    EXECUTE('ALTER TABLE [dbo].[LeaseRevisions] DROP CONSTRAINT [' + @var0 + ']')
+ALTER TABLE [dbo].[LeaseRevisions] ALTER COLUMN [LeaseStart] [datetime] NULL
+DECLARE @var1 nvarchar(128)
+SELECT @var1 = name
+FROM sys.default_constraints
+WHERE parent_object_id = object_id(N'dbo.Leases')
+AND col_name(parent_object_id, parent_column_id) = 'LeaseStart';
+IF @var1 IS NOT NULL
+    EXECUTE('ALTER TABLE [dbo].[Leases] DROP CONSTRAINT [' + @var1 + ']')
+ALTER TABLE [dbo].[Leases] ALTER COLUMN [LeaseStart] [datetime] NULL
+
+go
+
+
 SET IDENTITY_INSERT [dbo].[LeaseOperators] ON 
 
 INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [LastName], [Suffix], [MailingAddress1], [MailingAddress2], [MailingCity], [MailingState], [MailingZip], [PhysicalAddress1], [PhysicalAddress2], [PhysicalCity], [PhysicalState], [PhysicalZip], [IsMailingDifferent], [Phone], [Cell], [Fax], [Email], [LastUpdated], [UpdatedBy], [Inactive]) VALUES (1, N'AB & A Brook Lieuallen', N'Mr.', N'Brooks', N'Lieuallen', NULL, N'PO Box 426', NULL, N'Athena', N'OR', N'97813', N'50586 Brooks Road', NULL, N'Athena', N'OR', N'97813', 1, N'5415663825', N'5419699041', NULL, NULL, CAST(N'2018-09-19 09:05:03.000' AS DateTime), N'Colette Coiner', 0)

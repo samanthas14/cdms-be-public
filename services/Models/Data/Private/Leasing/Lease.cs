@@ -51,7 +51,7 @@ namespace services.Models.Data
         public decimal? ProductiveAcres { get; set; }
 
         public string LeaseDuration { get; set; }
-        public DateTime LeaseStart { get; set; }
+        public DateTime? LeaseStart { get; set; }
         public DateTime? LeaseEnd { get; set; }
         public string DueDate { get; set; }
 
