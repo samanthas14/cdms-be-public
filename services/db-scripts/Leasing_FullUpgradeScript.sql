@@ -425,8 +425,8 @@ INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [D
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Operator State', N'Operator States', N'string', N'["CA","ID","OR","TX","WA"]', N'select')
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Number', N'The last lease number we used. Increment for next', N'int', N'9604', N'hidden')
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Expired Run', N'The last date we checked for expired leases', N'date', N'1/24/2019', N'hidden')
-INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Compliance Inspection Types', N'Compliance Inspection Types', N'string', N'["Routine","Landowner","Other request",]', N'select')
-INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Violation Types', N'Violation Types', N'string', N'["Rental","Construction","Environmental Resource Depletion","Other"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Compliance Inspection Types', N'Compliance Inspection Types', N'string', N'["Routine","Landowner","Other request"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Violation Types', N'Violation Types', N'string', N'["Rental", Construction","Environmental Resource Depletion","Other"]', N'select')
 
 GO
 

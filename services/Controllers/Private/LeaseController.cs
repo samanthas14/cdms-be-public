@@ -609,6 +609,8 @@ namespace services.Controllers.Private
             inspection.ViolationHoursSpent = incoming.ViolationHoursSpent;
             inspection.ViolationIsResolved = incoming.ViolationIsResolved;
             inspection.ViolationResolution = incoming.ViolationResolution;
+            inspection.ViolationType = incoming.ViolationType;
+            inspection.ViolationOwnerType = incoming.ViolationOwnerType;
 
             db.Entry(inspection).State = EntityState.Modified;
             try
