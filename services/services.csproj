@@ -197,8 +197,15 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904082125377_VisitMetricsAddTables.cs" />
+    <Compile Include="Migrations\201904082125377_VisitMetricsAddTables.Designer.cs">
+      <DependentUpon>201904082125377_VisitMetricsAddTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Data\VisitMetrics.cs" />
+    <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
+    <Compile Include="Models\Data\VisitMetrics_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -411,6 +418,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904082125377_VisitMetricsAddTables.resx">
+      <DependentUpon>201904082125377_VisitMetricsAddTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
