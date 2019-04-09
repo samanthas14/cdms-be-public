@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class VisitMetricsAddTables : IMigrationMetadata
+    public sealed partial class AddChannelUnitMetricsTables : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(VisitMetricsAddTables));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddChannelUnitMetricsTables));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904082125377_VisitMetricsAddTables"; }
+            get { return "201904091824243_AddChannelUnitMetricsTables"; }
         }
         
         string IMigrationMetadata.Source
