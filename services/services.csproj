@@ -367,6 +367,8 @@
     <Content Include="db-scripts\2018-12-13_VariousUpdates.sql" />
     <Content Include="db-scripts\2019-03-08b_ConvertTimeRelatedInCdmsV2.sql" />
     <Content Include="db-scripts\2019-03-08a_UpdatesForDbPriorToRunningConvertTimeRelated.sql" />
+    <Content Include="db-scripts\2019-04-08_01_AddVisitMetricsTables.sql" />
+    <Content Include="db-scripts\2019-04-08_02_AddVisitMetricsViews.sql" />
     <Content Include="db-scripts\full_update_script.sql" />
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
