@@ -373,8 +373,13 @@
     <Content Include="db-scripts\2019-04-08_01_AddVisitMetricsTables.sql" />
     <Content Include="db-scripts\2019-04-08_02_AddVisitMetricsViews.sql" />
     <Content Include="db-scripts\2019-04-08_03_AddVisitMetricsData.sql" />
+    <Content Include="db-scripts\2019-04-09_01_AddChannelUnitMetricsTables.sql" />
+    <Content Include="db-scripts\2019-04-09_02_AddChannelUnitMetricsViews.sql" />
+    <Content Include="db-scripts\2019-04-09_03_AddChannelUnitMetricsData.sql" />
     <Content Include="db-scripts\full_update_script.sql" />
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
+    <Content Include="db-scripts\full_update_script_ForChannelUnitMetrics.sql" />
+    <Content Include="db-scripts\full_update_script_ForChanUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
     <Content Include="db-scripts\full_update_script_ForVisitMetrics.sql" />
     <Content Include="db-scripts\Leasing-01.sql" />
