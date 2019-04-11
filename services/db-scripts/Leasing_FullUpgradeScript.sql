@@ -747,3 +747,18 @@ INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [Las
 INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [LastName], [Suffix], [MailingAddress1], [MailingAddress2], [MailingCity], [MailingState], [MailingZip], [PhysicalAddress1], [PhysicalAddress2], [PhysicalCity], [PhysicalState], [PhysicalZip], [IsMailingDifferent], [Phone], [Cell], [Fax], [Email], [LastUpdated], [UpdatedBy], [Inactive]) VALUES (1292, N'Krebs Livestock', N'Mr.', N'Cameron', N'Krebs', NULL, NULL, NULL, NULL, NULL, NULL, N'69956 Hwy 74', NULL, N'Ione', N'OR', N'97843', NULL, N'5417600368', NULL, NULL, N'cameron.l.krebs@gmail.com', CAST(N'2019-03-12 07:35:30.000' AS DateTime), N'Gordy Schumacher', 0)
 INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [LastName], [Suffix], [MailingAddress1], [MailingAddress2], [MailingCity], [MailingState], [MailingZip], [PhysicalAddress1], [PhysicalAddress2], [PhysicalCity], [PhysicalState], [PhysicalZip], [IsMailingDifferent], [Phone], [Cell], [Fax], [Email], [LastUpdated], [UpdatedBy], [Inactive]) VALUES (1294, NULL, NULL, N'Sharon', N'Weathers', NULL, NULL, NULL, NULL, NULL, NULL, N'53788 Bingham Raod', NULL, N'Pendleton', N'OR', N'97801', NULL, NULL, NULL, NULL, NULL, CAST(N'2019-03-25 15:21:14.000' AS DateTime), N'Colette Coiner', 0)
 SET IDENTITY_INSERT [dbo].[LeaseOperators] OFF
+
+
+-- Update the existing users, to give them permissions to Leasing.
+update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor"]' where Username = 'kenb'
+update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor","LeaseCropAdmin"]' where Username = 'colettec'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'gordys'
+update dbo.users set Roles = '["DECD","Leasing"]' where Username = 'rachelm'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'stephanieq'
+update dbo.users set Roles = '["DECD","Leasing","LeasingEditor"]' where Username = 'kokoh'
+update dbo.users set Roles = '["Admin","DECD","CRPP","WRS","Leasing","LeasingEditor"]' where Username = 'georgec'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'candicep'
+
+-- Add the following user.
+insert into dbo.Users (OrganizationId, Username, [Description], LastLogin, DepartmentId, Fullname, Roles)
+values (1, 'amandas', CONVERT(VARCHAR(23), GETDATE(), 121), 1, 'amandas', '["Leasing","LeaseCropAdmin","LeasingEditor"]')
