@@ -184,8 +184,8 @@ go
 
 -- Add the views
 --Up
-Drop view dbo.VisitMetrics_Detail_VW
-go
+--Drop view dbo.VisitMetrics_Detail_VW
+--go
 create view dbo.VisitMetrics_Detail_VW
 as
 SELECT        Id, Alkalinity, BankErosion, BankfullArea, BankfullChannelBraidedness, BankfullChannelCount, BankfullChannelIslandCount, BankfullChannelQualifyingIslandArea, BankfullChannelQualifyingIslandCount, 
@@ -214,8 +214,8 @@ WHERE        (EffDt =
 go
 
 
-drop view dbo.VisitMetrics_Header_VW
-go
+--drop view dbo.VisitMetrics_Header_VW
+--go
 create view dbo.VisitMetrics_Header_VW
 AS
 SELECT        Id, AemChampID, VisitYear, ProtocolID, SiteName, VisitID, ByUserId, EffDt, ActivityId
@@ -227,8 +227,8 @@ WHERE        (EffDt =
 go
 
 
-drop view dbo.VisitMetrics_vw
-go
+--drop view dbo.VisitMetrics_vw
+--go
 create view dbo.VisitMetrics_vw
 AS
 SELECT        a.Id AS ActivityId, a.DatasetId, a.SourceId, a.LocationId, a.UserId, a.ActivityTypeId, a.CreateDate, a.ActivityDate, aq.UserId AS ActivityQAUserId, aq.Comments, aq.QAStatusName, aq.QAStatusId AS ActivityQAStatusId, h.Id, 
