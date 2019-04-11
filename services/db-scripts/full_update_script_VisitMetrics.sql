@@ -2197,3 +2197,20 @@ drop table #ProjectInfo
 drop table #NewLocationTypeIds
 drop table #NewFieldInfo
 drop table #QaStatusIds
+
+
+-- Add system activity fields to DatasetFields
+declare @DatasetId as int;
+declare @FieldId as int;
+
+set @DatasetId = (select Id from dbo.Datasets where [Name] like '%Visit%');
+
+set @FieldId = (select Id from dbo.Fields where DatastoreId in (select Id from dbo.Datastores where [Name] like '%ActivitySystem%') and [DbColumnName] = 'ActivityDate');
+
+insert into DatasetFields (DatasetId, FieldId, FieldRoleId, CreateDateTime, Label, DbColumnName, [Validation], SourceId, InstrumentId, OrderIndex, ControlType)
+values (@DatasetId, @FieldId, 1, CONVERT(VARCHAR(23), GETDATE(), 121), 'Activity Date', 'ActivityDate', null, 1, null, 3, 'hidden');
+
+set @FieldId = (select Id from dbo.Fields where DatastoreId in (select Id from dbo.Datastores where [Name] like '%ActivitySystem%') and DbColumnName = 'LocationId');
+
+insert into DatasetFields (DatasetId, FieldId, FieldRoleId, CreateDateTime, Label, DbColumnName, [Validation], SourceId, InstrumentId, OrderIndex, ControlType)
+values (@DatasetId, @FieldId, 1, CONVERT(VARCHAR(23), GETDATE(), 121), 'Location', 'LocationId', null, 1, null, 5, 'location-select');
