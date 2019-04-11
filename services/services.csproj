@@ -199,6 +199,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
+    <Compile Include="Models\Data\ChannelUnitMetrics_Detail.cs" />
+    <Compile Include="Models\Data\ChannelUnitMetrics_Header.cs" />
     <Compile Include="Models\Data\VisitMetrics.cs" />
     <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
     <Compile Include="Models\Data\VisitMetrics_Header.cs" />
@@ -363,7 +366,11 @@
     <Content Include="db-scripts\2018-12-13_VariousUpdates.sql" />
     <Content Include="db-scripts\2019-03-08b_ConvertTimeRelatedInCdmsV2.sql" />
     <Content Include="db-scripts\2019-03-08a_UpdatesForDbPriorToRunningConvertTimeRelated.sql" />
+    <Content Include="db-scripts\2019-04-09_01_AddChannelUnitMetricsTables.sql" />
+    <Content Include="db-scripts\2019-04-09_02_AddChannelUnitMetricsViews.sql" />
+    <Content Include="db-scripts\2019-04-09_03_AddChannelUnitMetricsData.sql" />
     <Content Include="db-scripts\full_update_script.sql" />
+    <Content Include="db-scripts\full_update_script_ChanUnitMet.sql" />
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
     <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
