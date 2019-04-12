@@ -197,10 +197,6 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904112225166_Tier1.cs" />
-    <Compile Include="Migrations\201904112225166_Tier1.Designer.cs">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
@@ -425,9 +421,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904112225166_Tier1.resx">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
