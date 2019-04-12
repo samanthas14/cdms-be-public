@@ -2197,6 +2197,7 @@ drop table #ProjectInfo
 drop table #NewLocationTypeIds
 drop table #NewFieldInfo
 drop table #QaStatusIds
+drop table #NewDatasetIds
 
 
 -- Add system activity fields to DatasetFields
