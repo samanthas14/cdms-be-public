@@ -9,50 +9,50 @@ using services.ExtensionMethods;
 
 namespace services.ExtensionMethods
 {
-    public static class ChannelUnitMetricsExtensions
+    public static class Tier1Extensions
     {
         //Extension method to give ServicesContext this property.
-        public static DbSet<ChannelUnitMetrics_Header> ChannelUnitMetrics_Header(this ServicesContext ctx)
+        public static DbSet<Tier1_Header> Tier1_Header(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("ChannelUnitMetrics_Header").Cast<ChannelUnitMetrics_Header>();
+            return ctx.GetDbSet("Tier1_Header").Cast<Tier1_Header>();
         }
 
-        public static DbSet<ChannelUnitMetrics_Detail> ChannelUnitMetrics_Detail(this ServicesContext ctx)
+        public static DbSet<Tier1_Detail> Tier1_Detail(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("ChannelUnitMetrics_Detail").Cast<ChannelUnitMetrics_Detail>();
+            return ctx.GetDbSet("Tier1_Detail").Cast<Tier1_Detail>();
         }
     }
 }
 namespace services.Models.Data
 {
-    public class ChannelUnitMetrics : DatasetData
+    public class Tier1 : DatasetData
     {
         private Boolean debugMode = true;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public Dataset Dataset { get; set; }
-        public ChannelUnitMetrics_Header Header { get; set; }
-        public List<ChannelUnitMetrics_Detail> Details { get; set; }
+        public Tier1_Header Header { get; set; }
+        public List<Tier1_Detail> Details { get; set; }
 
-        public ChannelUnitMetrics()
+        public Tier1()
         {
-            Details = new List<ChannelUnitMetrics_Detail>();
+            Details = new List<Tier1_Detail>();
         }
 
 
         // load an existing one
-        public ChannelUnitMetrics(int ActivityId)
+        public Tier1(int ActivityId)
         {
             var db = ServicesContext.Current;
             if (debugMode) logger.Info("db = " + db);
-            Details = new List<ChannelUnitMetrics_Detail>();
+            Details = new List<Tier1_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in db.ChannelUnitMetrics_Header()
+            var headers_q = from h in db.Tier1_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in db.ChannelUnitMetrics_Header()
+                                    from hh in db.Tier1_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -72,12 +72,12 @@ namespace services.Models.Data
             if (debugMode) logger.Info("Dataset = " + Dataset);
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in db.ChannelUnitMetrics_Detail()
+            var details_q = from h in db.Tier1_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in db.ChannelUnitMetrics_Detail()
+                                    from hh in db.Tier1_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

@@ -197,15 +197,14 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904091824243_AddChannelUnitMetricsTables.cs" />
-    <Compile Include="Migrations\201904091824243_AddChannelUnitMetricsTables.Designer.cs">
-      <DependentUpon>201904091824243_AddChannelUnitMetricsTables.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics_Detail.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics_Header.cs" />
+    <Compile Include="Models\Data\Tier1.cs" />
+    <Compile Include="Models\Data\Tier1_Detail.cs" />
+    <Compile Include="Models\Data\Tier1_Header.cs" />
     <Compile Include="Models\Data\VisitMetrics.cs" />
     <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
     <Compile Include="Models\Data\VisitMetrics_Header.cs" />
@@ -377,10 +376,12 @@
     <Content Include="db-scripts\2019-04-09_02_AddChannelUnitMetricsViews.sql" />
     <Content Include="db-scripts\2019-04-09_03_AddChannelUnitMetricsData.sql" />
     <Content Include="db-scripts\full_update_script.sql" />
+    <Content Include="db-scripts\full_update_script_ChanUnitMet.sql" />
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
     <Content Include="db-scripts\full_update_script_ForChannelUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForChanUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
+    <Content Include="db-scripts\full_update_script_Tier1.sql" />
     <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
     <Content Include="db-scripts\Leasing-01.sql" />
     <Content Include="db-scripts\Leasing_FullUpgradeScript.sql" />
@@ -430,9 +431,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904091824243_AddChannelUnitMetricsTables.resx">
-      <DependentUpon>201904091824243_AddChannelUnitMetricsTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

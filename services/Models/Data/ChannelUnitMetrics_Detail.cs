@@ -18,5 +18,6 @@ namespace services.Models.Data
         public decimal? DpthThlwgExit { get; set; }
         public decimal? DpthResid { get; set; }
         public int? CountOfLWD { get; set; }
+
     }
 }
