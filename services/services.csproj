@@ -205,6 +205,9 @@
     <Compile Include="Models\Data\Tier1.cs" />
     <Compile Include="Models\Data\Tier1_Detail.cs" />
     <Compile Include="Models\Data\Tier1_Header.cs" />
+    <Compile Include="Models\Data\Tier2.cs" />
+    <Compile Include="Models\Data\Tier2_Detail.cs" />
+    <Compile Include="Models\Data\Tier2_Header.cs" />
     <Compile Include="Models\Data\VisitMetrics.cs" />
     <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
     <Compile Include="Models\Data\VisitMetrics_Header.cs" />
@@ -382,6 +385,7 @@
     <Content Include="db-scripts\full_update_script_ForChanUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
     <Content Include="db-scripts\full_update_script_Tier1.sql" />
+    <Content Include="db-scripts\full_update_script_Tier2.sql" />
     <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
     <Content Include="db-scripts\Leasing-01.sql" />
     <Content Include="db-scripts\Leasing_FullUpgradeScript.sql" />
