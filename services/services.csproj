@@ -197,9 +197,9 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904112225166_Tier1.cs" />
-    <Compile Include="Migrations\201904112225166_Tier1.Designer.cs">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
+    <Compile Include="Migrations\201904120008311_Tier2.cs" />
+    <Compile Include="Migrations\201904120008311_Tier2.Designer.cs">
+      <DependentUpon>201904120008311_Tier2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
@@ -209,6 +209,9 @@
     <Compile Include="Models\Data\Tier1.cs" />
     <Compile Include="Models\Data\Tier1_Detail.cs" />
     <Compile Include="Models\Data\Tier1_Header.cs" />
+    <Compile Include="Models\Data\Tier2.cs" />
+    <Compile Include="Models\Data\Tier2_Detail.cs" />
+    <Compile Include="Models\Data\Tier2_Header.cs" />
     <Compile Include="Models\Data\VisitMetrics.cs" />
     <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
     <Compile Include="Models\Data\VisitMetrics_Header.cs" />
@@ -378,6 +381,7 @@
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
     <Content Include="db-scripts\full_update_script_Tier1.sql" />
+    <Content Include="db-scripts\full_update_script_Tier2.sql" />
     <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
     <Content Include="db-scripts\Leasing-01.sql" />
     <Content Include="db-scripts\Leasing_FullUpgradeScript.sql" />
@@ -426,8 +430,8 @@
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904112225166_Tier1.resx">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904120008311_Tier2.resx">
+      <DependentUpon>201904120008311_Tier2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Tier1 : IMigrationMetadata
+    public sealed partial class Tier2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Tier1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Tier2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904112225166_Tier1"; }
+            get { return "201904120008311_Tier2"; }
         }
         
         string IMigrationMetadata.Source
