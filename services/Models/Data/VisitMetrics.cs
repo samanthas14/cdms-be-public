@@ -23,7 +23,6 @@ namespace services.ExtensionMethods
         }
     }
 }
-
 namespace services.Models.Data
 {
     public class VisitMetrics : DatasetData

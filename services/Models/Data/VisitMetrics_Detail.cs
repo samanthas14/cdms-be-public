@@ -154,5 +154,6 @@ namespace services.Models.Data
         public decimal? WettedWidthToDepthRatioCV { get; set; }
         public decimal? WettedWidthToMaxDepthRatioAvg { get; set; }
         public decimal? WettedWidthToMaxDepthRatioCV { get; set; }
+        
     }
 }

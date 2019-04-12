@@ -381,7 +381,7 @@
     <Content Include="db-scripts\full_update_script_ForChannelUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForChanUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
-    <Content Include="db-scripts\full_update_script_ForVisitMetrics.sql" />
+    <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
     <Content Include="db-scripts\Leasing-01.sql" />
     <Content Include="db-scripts\Leasing_FullUpgradeScript.sql" />
     <Content Include="db-scripts\WaterTemp-01.sql" />

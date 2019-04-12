@@ -42,7 +42,10 @@ namespace services.Models.Data
         public string Animals { get; set; }
         public string Notes { get; set; }
 
-        //inspection violations fields
+        //violations fields
+        public string ViolationLandAreaCode { get; set; }
+        public string ViolationOwnerType { get; set; }
+        public string ViolationType { get; set; }
         public Boolean ViolationIsResolved { get; set; }
         public string ViolationResolution { get; set; }
 

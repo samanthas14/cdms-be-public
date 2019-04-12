@@ -290,6 +290,10 @@ ALTER TABLE [dbo].[LeaseCropShares] ADD [Comment] [nvarchar](max)
 ALTER TABLE [dbo].[Leases] ADD [HEL] [bit]
 ALTER TABLE [dbo].[LeaseRevisions] ADD [HEL] [bit]
 
+ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationLandAreaCode] [nvarchar](max)
+ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationOwnerType] [nvarchar](max)
+ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationType] [nvarchar](max)
+
 go
 
 CREATE VIEW dbo.LeaseAllotments_VW
@@ -421,6 +425,8 @@ INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [D
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Operator State', N'Operator States', N'string', N'["CA","ID","OR","TX","WA"]', N'select')
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Number', N'The last lease number we used. Increment for next', N'int', N'9604', N'hidden')
 INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingsysid, N'Last Lease Expired Run', N'The last date we checked for expired leases', N'date', N'1/24/2019', N'hidden')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Compliance Inspection Types', N'Compliance Inspection Types', N'string', N'["Routine","Landowner","Other request"]', N'select')
+INSERT [dbo].[MetadataProperties] ([MetadataEntityId], [Name], [Description], [DataType], [PossibleValues], [ControlType]) VALUES ( @leasingmdid, N'Violation Types', N'Violation Types', N'string', N'["Rental", Construction","Environmental Resource Depletion","Other"]', N'select')
 
 GO
 
@@ -743,16 +749,15 @@ INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [Las
 SET IDENTITY_INSERT [dbo].[LeaseOperators] OFF
 
 --Update the Roles for the following existing users.
-update dbo.Users set Roles = '["Admin","DECD","CRPP","Leasing"]' where Username = 'kenb'
-update dbo.Users set Roles = '["Admin","DECD","CRPP","Leasing","LeaseCropAdmin"]' where Username = 'colettec'
-update dbo.Users set Roles = '["Leasing"]' where Username = 'gordys'
-update dbo.Users set Roles = '["DECD","Leasing"]' where Username = 'rachelm'
-update dbo.Users set Roles = '["DECD","Leasing"]' where Username = 'stephanieq'
-update dbo.Users set Roles = '["DECD","Leasing"]' where Username = 'candicec'
-update dbo.Users set Roles = '["DECD","Leasing"]' where Username = 'kokoh'
-update dbo.Users set Roles = '["Admin","DECD","CRPP","WRS","Leasing"]' where Username = 'georgec'
-update dbo.Users set Roles = '["DECD","Leasing"]' where Username = 'candicep'
+update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor"]' where Username = 'kenb'
+update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor","LeaseCropAdmin"]' where Username = 'colettec'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'gordys'
+update dbo.users set Roles = '["DECD","Leasing"]' where Username = 'rachelm'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'stephanieq'
+update dbo.users set Roles = '["DECD","Leasing","LeasingEditor"]' where Username = 'kokoh'
+update dbo.users set Roles = '["Admin","DECD","CRPP","WRS","Leasing","LeasingEditor"]' where Username = 'georgec'
+update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'candicep'
 
---Add the following user.
-insert into dbo.Users(OrganizationId, Username, [Description], [LastLogin], DepartmentId, Fullname, Roles)
-values(1, 'amandas', 'Soil Conservationist', '2019-02-06 15:51:35.000', 1, 'Amanda Schachtschneider', '["Leasing"]')
+-- Add the following user.
+insert into dbo.Users (OrganizationId, Username, [Description], LastLogin, DepartmentId, Fullname, Roles)
+values (1, 'amandas', null, CONVERT(VARCHAR(23), GETDATE(), 121), 1, 'amandas', '["Leasing","LeaseCropAdmin","LeasingEditor"]')

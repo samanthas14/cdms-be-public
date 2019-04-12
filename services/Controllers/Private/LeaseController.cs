@@ -62,7 +62,6 @@ namespace services.Controllers.Private
             where
             lfl.LeaseField_FieldId = " + id;
 
-            Lease lease = null;
             List<Lease> result = new List<Lease>();
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
@@ -70,17 +69,12 @@ namespace services.Controllers.Private
                 con.Open();
                 SqlCommand cmd = new SqlCommand(query, con);
                 SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                while (reader.Read())
                 {
                     int leaseId = Convert.ToInt32(reader["Lease_Id"]);
-                    lease = db.Lease().Find(leaseId);
+                    Lease lease = db.Lease().Find(leaseId);
                     result.Add(lease);
                 }
-            }
-
-            if (lease == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
             return result;
@@ -462,7 +456,7 @@ namespace services.Controllers.Private
                         lease.LeaseFields.Add(field);
                     }
 
-                    logger.Debug(JsonConvert.SerializeObject(lease));
+                    //logger.Debug(JsonConvert.SerializeObject(lease));
 
                     db.Entry(lease).State = EntityState.Modified;
                     db.SaveChanges();
@@ -609,6 +603,8 @@ namespace services.Controllers.Private
             inspection.ViolationHoursSpent = incoming.ViolationHoursSpent;
             inspection.ViolationIsResolved = incoming.ViolationIsResolved;
             inspection.ViolationResolution = incoming.ViolationResolution;
+            inspection.ViolationType = incoming.ViolationType;
+            inspection.ViolationOwnerType = incoming.ViolationOwnerType;
 
             db.Entry(inspection).State = EntityState.Modified;
             try
