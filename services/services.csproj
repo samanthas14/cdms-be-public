@@ -197,10 +197,6 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904112225166_Tier1.cs" />
-    <Compile Include="Migrations\201904112225166_Tier1.Designer.cs">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
@@ -373,9 +369,17 @@
     <Content Include="db-scripts\2018-12-13_VariousUpdates.sql" />
     <Content Include="db-scripts\2019-03-08b_ConvertTimeRelatedInCdmsV2.sql" />
     <Content Include="db-scripts\2019-03-08a_UpdatesForDbPriorToRunningConvertTimeRelated.sql" />
+    <Content Include="db-scripts\2019-04-08_01_AddVisitMetricsTables.sql" />
+    <Content Include="db-scripts\2019-04-08_02_AddVisitMetricsViews.sql" />
+    <Content Include="db-scripts\2019-04-08_03_AddVisitMetricsData.sql" />
+    <Content Include="db-scripts\2019-04-09_01_AddChannelUnitMetricsTables.sql" />
+    <Content Include="db-scripts\2019-04-09_02_AddChannelUnitMetricsViews.sql" />
+    <Content Include="db-scripts\2019-04-09_03_AddChannelUnitMetricsData.sql" />
     <Content Include="db-scripts\full_update_script.sql" />
     <Content Include="db-scripts\full_update_script_ChanUnitMet.sql" />
     <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
+    <Content Include="db-scripts\full_update_script_ForChannelUnitMetrics.sql" />
+    <Content Include="db-scripts\full_update_script_ForChanUnitMetrics.sql" />
     <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
     <Content Include="db-scripts\full_update_script_Tier1.sql" />
     <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
@@ -403,6 +407,7 @@
   <ItemGroup>
     <Content Include="ControllerClassDiagram.cd" />
     <None Include="Properties\PublishProfiles\cdms-local.pubxml" />
+    <None Include="Properties\PublishProfiles\cdms-test.pubxml" />
     <None Include="Properties\PublishProfiles\cdms2-dev.pubxml" />
     <None Include="Properties\PublishProfiles\cdms2-test-dmz.pubxml" />
     <None Include="Properties\PublishProfiles\cdms2-test-priv.pubxml" />
@@ -410,6 +415,7 @@
     <None Include="Properties\PublishProfiles\gis-dev02-services-test.pubxml" />
     <None Include="Properties\PublishProfiles\gisweb02-production.pubxml" />
     <None Include="Properties\PublishProfiles\local-services-dev.pubxml" />
+    <None Include="Properties\PublishProfiles\paluut-test.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="stdole">
@@ -425,9 +431,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904112225166_Tier1.resx">
-      <DependentUpon>201904112225166_Tier1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
