@@ -1,4 +1,4 @@
--- Add tables
+-- Add the tables
 CREATE TABLE [dbo].[ChannelUnitMetrics_Detail] (
     [Id] [int] NOT NULL IDENTITY,
     [ChUnitID] [int],
@@ -53,7 +53,7 @@ ALTER TABLE [dbo].[ChannelUnitMetrics_Header] ADD CONSTRAINT [FK_dbo.ChannelUnit
 go
 
 
--- Add views
+-- Add the views
 --Drop view dbo.ChannelUnitMetrics_Detail_VW
 --go
 create view dbo.ChannelUnitMetrics_Detail_VW
@@ -97,7 +97,7 @@ FROM            dbo.Activities AS a INNER JOIN
 go
 
 
--- Add data
+-- Add the data
 declare @datasetBaseName as varchar(max) = 'Channel Unit Metrics'
 declare @categoryName as varchar(max) = @datasetBaseName
 declare @datastoreName as varchar(max) = @datasetBaseName
