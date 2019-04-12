@@ -748,8 +748,7 @@ INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [Las
 INSERT [dbo].[LeaseOperators] ([Id], [Organization], [Prefix], [FirstName], [LastName], [Suffix], [MailingAddress1], [MailingAddress2], [MailingCity], [MailingState], [MailingZip], [PhysicalAddress1], [PhysicalAddress2], [PhysicalCity], [PhysicalState], [PhysicalZip], [IsMailingDifferent], [Phone], [Cell], [Fax], [Email], [LastUpdated], [UpdatedBy], [Inactive]) VALUES (1294, NULL, NULL, N'Sharon', N'Weathers', NULL, NULL, NULL, NULL, NULL, NULL, N'53788 Bingham Raod', NULL, N'Pendleton', N'OR', N'97801', NULL, NULL, NULL, NULL, NULL, CAST(N'2019-03-25 15:21:14.000' AS DateTime), N'Colette Coiner', 0)
 SET IDENTITY_INSERT [dbo].[LeaseOperators] OFF
 
-
--- Update the existing users, to give them permissions to Leasing.
+--Update the Roles for the following existing users.
 update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor"]' where Username = 'kenb'
 update dbo.users set Roles = '["Admin","DECD","CRPP","Leasing","LeasingEditor","LeaseCropAdmin"]' where Username = 'colettec'
 update dbo.users set Roles = '["Leasing","LeasingEditor"]' where Username = 'gordys'

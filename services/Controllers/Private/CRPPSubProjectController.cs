@@ -501,7 +501,7 @@ namespace services.Controllers
 
             logger.Debug("correspondenceEvent = " + correspondenceEvent.Id);
 
-            string strDatastoreTablePrefix = json.DatastoreTablePrefix.ToObject<string>();
+            //string strDatastoreTablePrefix = json.DatastoreTablePrefix.ToObject<string>();
 
             var files_in_subproject = (from file in db.Files
                                        where file.Subproject_CrppId == subproject.Id
