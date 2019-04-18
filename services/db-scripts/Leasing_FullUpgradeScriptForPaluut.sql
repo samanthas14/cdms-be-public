@@ -296,6 +296,25 @@ ALTER TABLE [dbo].[LeaseInspections] ADD [ViolationType] [nvarchar](max)
 
 go
 
+
+DECLARE @var0 nvarchar(128)
+SELECT @var0 = name
+FROM sys.default_constraints
+WHERE parent_object_id = object_id(N'dbo.LeaseRevisions')
+AND col_name(parent_object_id, parent_column_id) = 'LeaseStart';
+IF @var0 IS NOT NULL
+    EXECUTE('ALTER TABLE [dbo].[LeaseRevisions] DROP CONSTRAINT [' + @var0 + ']')
+ALTER TABLE [dbo].[LeaseRevisions] ALTER COLUMN [LeaseStart] [datetime] NULL
+DECLARE @var1 nvarchar(128)
+SELECT @var1 = name
+FROM sys.default_constraints
+WHERE parent_object_id = object_id(N'dbo.Leases')
+AND col_name(parent_object_id, parent_column_id) = 'LeaseStart';
+IF @var1 IS NOT NULL
+    EXECUTE('ALTER TABLE [dbo].[Leases] DROP CONSTRAINT [' + @var1 + ']')
+ALTER TABLE [dbo].[Leases] ALTER COLUMN [LeaseStart] [datetime] NULL
+
+
 CREATE VIEW dbo.LeaseAllotments_VW
 AS
 SELECT 
