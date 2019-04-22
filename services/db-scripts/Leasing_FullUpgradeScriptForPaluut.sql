@@ -313,7 +313,7 @@ AND col_name(parent_object_id, parent_column_id) = 'LeaseStart';
 IF @var1 IS NOT NULL
     EXECUTE('ALTER TABLE [dbo].[Leases] DROP CONSTRAINT [' + @var1 + ']')
 ALTER TABLE [dbo].[Leases] ALTER COLUMN [LeaseStart] [datetime] NULL
-
+GO
 
 CREATE VIEW dbo.LeaseAllotments_VW
 AS
