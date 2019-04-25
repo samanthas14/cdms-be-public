@@ -220,6 +220,11 @@ namespace services.Controllers
                         logger.Debug("user.Inactive = " + user.Inactive);
                         if (user.Inactive == null || user.Inactive == 0)
                         {
+                            //Moved this code so cookie is only set if user.Inactive is null or 0
+                            FormsAuthentication.SetAuthCookie(model.Username, true);
+                            logger.Debug("User authenticated!! So, why returning inactive? : " + model.Username);
+                            logger.Debug("--> " + System.Web.HttpContext.Current.Request.LogonUserIdentity.Name);
+                            //code chunk above came from Joe, necessary to stop inactive users from getting cookie
                             logger.Debug("User is active...");
                             user.BumpLastLoginDate();
                             db.Entry(user).State = EntityState.Modified;
