@@ -197,10 +197,6 @@
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904172204200_AddSgsHeaderFields.cs" />
-    <Compile Include="Migrations\201904172204200_AddSgsHeaderFields.Designer.cs">
-      <DependentUpon>201904172204200_AddSgsHeaderFields.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
@@ -441,9 +437,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904172204200_AddSgsHeaderFields.resx">
-      <DependentUpon>201904172204200_AddSgsHeaderFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
