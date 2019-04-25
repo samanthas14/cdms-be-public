@@ -179,7 +179,6 @@
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\InstrumentController.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
-    <Compile Include="Controllers\Private\LeaseController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\ListController.cs" />
     <Compile Include="Controllers\CDMSController.cs" />
@@ -191,26 +190,12 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
-    <Compile Include="Controllers\Private\HabSubProjectController.cs" />
-    <Compile Include="Controllers\Private\CRPPSubProjectController.cs" />
     <Compile Include="Migrations\201903252145334_reset.cs" />
     <Compile Include="Migrations\201903252145334_reset.Designer.cs">
       <DependentUpon>201903252145334_reset.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
-    <Compile Include="Models\Data\ChannelUnitMetrics.cs" />
-    <Compile Include="Models\Data\ChannelUnitMetrics_Detail.cs" />
-    <Compile Include="Models\Data\ChannelUnitMetrics_Header.cs" />
-    <Compile Include="Models\Data\Tier1.cs" />
-    <Compile Include="Models\Data\Tier1_Detail.cs" />
-    <Compile Include="Models\Data\Tier1_Header.cs" />
-    <Compile Include="Models\Data\Tier2.cs" />
-    <Compile Include="Models\Data\Tier2_Detail.cs" />
-    <Compile Include="Models\Data\Tier2_Header.cs" />
-    <Compile Include="Models\Data\VisitMetrics.cs" />
-    <Compile Include="Models\Data\VisitMetrics_Detail.cs" />
-    <Compile Include="Models\Data\VisitMetrics_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -223,19 +208,7 @@
     <Compile Include="Models\Data\BSample_Detail.cs" />
     <Compile Include="Models\Data\BSample_Header.cs" />
     <Compile Include="Models\Data\DataEntity.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseCropShare.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseRevision.cs" />
-    <Compile Include="Models\Data\Private\Leasing\Lease.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseComplianceAction.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseCropPlan.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseField.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseInspection.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseOperator.cs" />
-    <Compile Include="Models\Data\Private\Leasing\LeaseProduction.cs" />
     <Compile Include="Models\Data\Subproject.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts_Detail.cs" />
-    <Compile Include="Models\Data\Private\CrppContracts_Header.cs" />
     <Compile Include="Models\Data\Drift.cs" />
     <Compile Include="Models\Data\Drift_Detail.cs" />
     <Compile Include="Models\Data\Drift_Header.cs" />
@@ -267,9 +240,6 @@
     <Compile Include="Models\Data\Electrofishing_Detail.cs" />
     <Compile Include="Models\Data\SnorkelFish_Header.cs" />
     <Compile Include="Models\Data\Electrofishing_Header.cs" />
-    <Compile Include="Models\Data\Private\Appraisal.cs" />
-    <Compile Include="Models\Data\Private\Appraisal_Detail.cs" />
-    <Compile Include="Models\Data\Private\Appraisal_Header.cs" />
     <Compile Include="Models\Data\ArtificialProduction.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Detail.cs" />
     <Compile Include="Models\Data\ArtificialProduction_Header.cs" />
@@ -291,8 +261,6 @@
     <Compile Include="Models\Data\StreamNet_NOSA_Header .cs" />
     <Compile Include="Models\Data\StreamNet_SAR_Header.cs" />
     <Compile Include="Models\Data\StreamNet_RperS_Header.cs" />
-    <Compile Include="Models\Data\Private\Subproject_Crpp.cs" />
-    <Compile Include="Models\Data\Private\Subproject_Hab.cs" />
     <Compile Include="Models\Data\WaterQuality.cs" />
     <Compile Include="Models\Data\SpawningGroundSurvey.cs" />
     <Compile Include="Models\Data\WaterQuality_Detail.cs" />
@@ -358,40 +326,6 @@
     <Content Include="App_Readme\Elmah.SqlServer.sql" />
     <Content Include="App_Readme\Elmah.SqlServer.txt" />
     <Content Include="App_Readme\Elmah.txt" />
-    <Content Include="db-scripts\2018-10-03_AddLocationTypeIdToDatastore.sql" />
-    <Content Include="db-scripts\2018-10-12_AddLastDatasetUpdatedView.sql" />
-    <Content Include="db-scripts\2018-10-16_CTUIRFixes.sql" />
-    <Content Include="db-scripts\2018-10-19_RemoveFieldCategory.sql" />
-    <Content Include="db-scripts\2018-10-22_ActivitySystemFields.sql" />
-    <Content Include="db-scripts\2018-10-23_AddActivityFieldsToDatasets.sql" />
-    <Content Include="db-scripts\2018-10-30_LocationSystemFields.sql" />
-    <Content Include="db-scripts\2018-11-01_CorrespondenceAndHabitat.sql" />
-    <Content Include="db-scripts\2018-11-02_MetadataUpdates.sql" />
-    <Content Include="db-scripts\2018-11-05_LookupTables.sql" />
-    <Content Include="db-scripts\2018-11-21_HabSitesUpdates.sql" />
-    <Content Include="db-scripts\2018-12-13_VariousUpdates.sql" />
-    <Content Include="db-scripts\2019-03-08b_ConvertTimeRelatedInCdmsV2.sql" />
-    <Content Include="db-scripts\2019-03-08a_UpdatesForDbPriorToRunningConvertTimeRelated.sql" />
-    <Content Include="db-scripts\2019-04-08_01_AddVisitMetricsTables.sql" />
-    <Content Include="db-scripts\2019-04-08_02_AddVisitMetricsViews.sql" />
-    <Content Include="db-scripts\2019-04-08_03_AddVisitMetricsData.sql" />
-    <Content Include="db-scripts\2019-04-09_01_AddChannelUnitMetricsTables.sql" />
-    <Content Include="db-scripts\2019-04-09_02_AddChannelUnitMetricsViews.sql" />
-    <Content Include="db-scripts\2019-04-09_03_AddChannelUnitMetricsData.sql" />
-    <Content Include="db-scripts\full_update_script.sql" />
-    <Content Include="db-scripts\full_update_script_ChanUnitMet.sql" />
-    <Content Include="db-scripts\full_update_script_ForCdmsPriv.sql" />
-    <Content Include="db-scripts\full_update_script_ForPaluut.sql" />
-    <Content Include="db-scripts\full_update_script_SgsAddFldsPal.sql" />
-    <Content Include="db-scripts\full_update_script_SgsAddFldsPriv.sql" />
-    <Content Include="db-scripts\full_update_script_VisitMetricsForPrivTablesViews.sql" />
-    <Content Include="db-scripts\full_update_script_Tier1.sql" />
-    <Content Include="db-scripts\full_update_script_Tier2.sql" />
-    <Content Include="db-scripts\full_update_script_VisitMetrics.sql" />
-    <Content Include="db-scripts\Leasing-01.sql" />
-    <Content Include="db-scripts\Leasing_FullUpgradeScript.sql" />
-    <Content Include="db-scripts\Leasing_FullUpgradeScriptForPaluut.sql" />
-    <Content Include="db-scripts\WaterTemp-01.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
@@ -401,7 +335,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />
-    <Folder Include="db-scripts\archive\" />
+    <Folder Include="db-scripts\" />
     <Folder Include="Views\CrppDataset\" />
     <Folder Include="Views\Season\" />
   </ItemGroup>
