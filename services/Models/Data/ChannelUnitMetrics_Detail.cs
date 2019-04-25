@@ -9,8 +9,8 @@ namespace services.Models.Data
     {
         public int? ChUnitID { get; set; }
         public int? ChUnitNum { get; set; }
-        public int? Tier1 { get; set; }
-        public int? Tier2 { get; set; }
+        public string Tier1 { get; set; }
+        public string Tier2 { get; set; }
         public decimal? AreaTotal { get; set; }
         public decimal? PolyArea { get; set; }
         public decimal? TotalVol { get; set; }
