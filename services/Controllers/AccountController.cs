@@ -106,10 +106,6 @@ namespace services.Controllers
                 if ((model.Password == System.Configuration.ConfigurationManager.AppSettings[MASQUERADE_KEY]) ||
                 (isValidLocalUser(user, model.Password)) || (Membership.Provider.Name == "ADMembershipProvider" && Membership.ValidateUser(model.Username, model.Password)))
                 {
-                    FormsAuthentication.SetAuthCookie(model.Username, true);
-                    logger.Debug("User authenticated : " + model.Username);
-                    logger.Debug("--> " + System.Web.HttpContext.Current.Request.LogonUserIdentity.Name);
-
                     if (user == null) //If user doesn't exist in our system, create it.
                     {
                         logger.Debug("New user.  Adding...");
@@ -137,6 +133,10 @@ namespace services.Controllers
                             return result;
                         }
                     }
+
+                    FormsAuthentication.SetAuthCookie(model.Username, true);
+                    logger.Debug("User authenticated : " + model.Username);
+                    logger.Debug("--> " + System.Web.HttpContext.Current.Request.LogonUserIdentity.Name);
 
                     var identity = new GenericIdentity(user.Username, "Basic");
 
