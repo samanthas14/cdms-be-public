@@ -48,6 +48,7 @@ namespace services.Models.Data
 
         //TagsMarks data
         public string TransmitterType { get; set; } //combined radio and acoustic tag fields
+        public string RadioTag { get; set; }
         public string Vendor { get; set; }
         public string SerialNumber { get; set; }
         public string Frequency { get; set; }

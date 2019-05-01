@@ -259,6 +259,10 @@
     <Compile Include="Migrations\201901042150269_fixed_decimal.Designer.cs">
       <DependentUpon>201901042150269_fixed_decimal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904302129581_radio_tag_field.cs" />
+    <Compile Include="Migrations\201904302129581_radio_tag_field.Designer.cs">
+      <DependentUpon>201904302129581_radio_tag_field.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -498,6 +502,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901042150269_fixed_decimal.resx">
       <DependentUpon>201901042150269_fixed_decimal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904302129581_radio_tag_field.resx">
+      <DependentUpon>201904302129581_radio_tag_field.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
