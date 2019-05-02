@@ -263,6 +263,10 @@
     <Compile Include="Migrations\201904302129581_radio_tag_field.Designer.cs">
       <DependentUpon>201904302129581_radio_tag_field.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905021641378_DM_issues_dataset.cs" />
+    <Compile Include="Migrations\201905021641378_DM_issues_dataset.Designer.cs">
+      <DependentUpon>201905021641378_DM_issues_dataset.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Collaborator.cs" />
@@ -282,6 +286,9 @@
     <Compile Include="Models\Data\CreelSurvey.cs" />
     <Compile Include="Models\Data\CreelSurvey_Detail.cs" />
     <Compile Include="Models\Data\CreelSurvey_Header.cs" />
+    <Compile Include="Models\Data\DM_Issues.cs" />
+    <Compile Include="Models\Data\DM_Issues_Detail.cs" />
+    <Compile Include="Models\Data\DM_Issues_Header.cs" />
     <Compile Include="Models\Data\Drift.cs" />
     <Compile Include="Models\Data\Drift_Detail.cs" />
     <Compile Include="Models\Data\Drift_Header.cs" />
@@ -505,6 +512,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904302129581_radio_tag_field.resx">
       <DependentUpon>201904302129581_radio_tag_field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905021641378_DM_issues_dataset.resx">
+      <DependentUpon>201905021641378_DM_issues_dataset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
