@@ -196,6 +196,27 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Data\DM_Issues.cs" />
+    <Compile Include="Models\Data\DM_Issues_Detail.cs" />
+    <Compile Include="Models\Data\DM_Issues_Header.cs" />
+    <Compile Include="Models\Data\NPT_Age.cs" />
+    <Compile Include="Models\Data\NPT_Age_Detail.cs" />
+    <Compile Include="Models\Data\NPT_Age_Header.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival_Detail.cs" />
+    <Compile Include="Models\Data\NPT_JuvSurvival_Header.cs" />
+    <Compile Include="Models\Data\NPT_RST.cs" />
+    <Compile Include="Models\Data\NPT_RST_Detail.cs" />
+    <Compile Include="Models\Data\NPT_RST_Header.cs" />
+    <Compile Include="Models\Data\SGS_Carcass.cs" />
+    <Compile Include="Models\Data\SGS_Carcass_Detail.cs" />
+    <Compile Include="Models\Data\SGS_Carcass_Header.cs" />
+    <Compile Include="Models\Data\SGS_Redd.cs" />
+    <Compile Include="Models\Data\SGS_Redd_Detail.cs" />
+    <Compile Include="Models\Data\SGS_Redd_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -387,7 +408,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62741</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
