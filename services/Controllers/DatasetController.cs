@@ -438,5 +438,70 @@ join datastores ds on d.DatastoreId = ds.Id
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
+        //RK added endpoint to return the full big bucket
+
+        // GET /api/v1/dataset/getfulldatasetview/5
+        public DataTable GetFullDatasetView(int id, int? ProjectId = null, int? WaterBodyId = null, int? LocationId = null)
+        {
+            logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
+            var db = ServicesContext.Current;
+            Datastore datastore = db.Datastores.Find(id); //change Datasets to Datastores; returns the entire record
+            if (datastore == null)
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+
+            /* string query = "SELECT * FROM " + datastore.TablePrefix + "_VW"; */
+
+            var sb = new System.Text.StringBuilder("SELECT * FROM " + datastore.TablePrefix + "_VW WHERE 1=1");
+
+            /* if (Species != null)
+             {
+                 sb.Append(" AND Species = " + Species);
+             }
+
+             if (Run != null)
+             {
+                 sb.Append(" AND Run = " + Run);
+             }
+
+             if (SurveyYear != null)
+             {
+                 sb.Append(" AND SurveyYear = " + SurveyYear);
+             } */
+
+            if (ProjectId != null)
+            {
+                sb.Append(" AND ProjectId = " + ProjectId);
+            }
+
+            if (WaterBodyId != null)
+            {
+                sb.Append(" AND WaterBodyId = " + WaterBodyId);
+            }
+
+            if (LocationId != null)
+            {
+                sb.Append(" AND LocationId = " + LocationId);
+            }
+
+            string query = sb.ToString();
+
+            logger.Debug(query);
+
+            DataTable dt = new DataTable();
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ServicesContext"].ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
     }
 }
