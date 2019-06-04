@@ -255,6 +255,22 @@ namespace services.Resources
             return retval;
         }
 
+        //TRIBAL CDMS EDIT
+        //Checks dynamic object for a key name passed as string
+        public static bool isPropertyExists(dynamic item, string key_name)
+        {
+
+            string val = (string)item.SelectToken(key_name);
+            if (val == null)
+            {
+                logger.Debug("Nope--property " + key_name + " was not found");
+                return false;
+            }
+            logger.Debug("Yep--property " + key_name + " was found");
+            return true;
+        }
+
+
         //returns an SQL query with conditions for each of the fields in jsonFields
         // list = getQueryConditions(dataset.Fields, json.Fields) where json.Fields is { DbColumnName: "FieldName", Value: "Value" }
         // then you might say: var criteria_string = string.Join(" AND ", conditions.ToArray());
@@ -369,9 +385,28 @@ namespace services.Resources
                                 conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate, true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate, true) + "'");
                             }
                             break;
-                        case "activity-date": 
-                            conditions.Add("CONVERT(date,'" + filterForSQL(item.Value, true) + "') = CONVERT(date,ActivityDate)");
-                            break;
+                        case "activity-date":
+                            logger.Debug("An activity-date!");
+
+                            if (isPropertyExists(item, "Value.ParamFieldDateType"))
+                            {
+
+                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate, true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate, true) + "'");
+                                logger.Debug("format as date range query request");
+                                break;
+                            }
+                            else
+                            {
+
+                                conditions.Add("CONVERT(date,'" + filterForSQL(item.Value, true) + "') = CONVERT(date,ActivityDate)");
+                                logger.Debug("format for duplicate checking!");
+                                break;
+                            }
+
+                            //CDMS 2.0 Original code 
+                            //Commented out because this only works for duplicate checking and not on the query page
+                            //conditions.Add("CONVERT(date,'" + filterForSQL(item.Value, true) + "') = CONVERT(date,ActivityDate)");
+                            //break;
                     }
                 }
 
