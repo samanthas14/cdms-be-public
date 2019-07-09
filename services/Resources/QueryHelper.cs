@@ -328,7 +328,10 @@ namespace services.Resources
                             break;
                         case "currency":
                         case "time":
-                        case "easting":
+							//JN - Tribal CDMS 2.0 edit to handle time values
+							conditions.Add(field.DbColumnName + " = '" + item.Value + "'");
+							break;
+						case "easting":
                         case "northing":
                             logger.Debug("A currency, time, northing, or easting");
                             conditions.Add(field.DbColumnName + "=" + filterForSQL(item.Value)); //>100
