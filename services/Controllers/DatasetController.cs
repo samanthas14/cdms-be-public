@@ -441,7 +441,7 @@ join datastores ds on d.DatastoreId = ds.Id
         //RK added endpoint to return the full big bucket
 
         // GET /api/v1/dataset/getfulldatasetview/5
-        public DataTable GetFullDatasetView(int id, char? Species = null, int? Run = null, char? POP_NAME = null, int? SurveyYear = null, int? ProjectId = null, int? WaterBodyId = null, int? LocationId = null)
+        public DataTable GetFullDatasetView(int id, string Species = null, string Run = null, string POP_NAME = null, int? SurveyYear = null, int? ProjectId = null, int? WaterBodyId = null, int? LocationId = null)
         {
             logger.Debug("Inside DatasetController.cs, GetFullDatasetView...");
             var db = ServicesContext.Current;
@@ -457,17 +457,17 @@ join datastores ds on d.DatastoreId = ds.Id
 
             if (Species != null)
             {
-                sb.Append(" AND Species = " + Species);
+                sb.Append(" AND Species = '" + Species + "'");
             }
 
             if (Run != null)
             {
-                sb.Append(" AND Run = " + Run);
+                sb.Append(" AND Run = '" + Run + "'");
             }
 
             if (POP_NAME != null)
             {
-                sb.Append(" AND POP_NAME = " + POP_NAME);
+                sb.Append(" AND POP_NAME = '" + POP_NAME + "'");
             }
 
             if (SurveyYear != null)

@@ -399,31 +399,7 @@ namespace services.Resources
 
                             break;
                         case "activity-date":
-<<<<<<< HEAD
-                            logger.Debug("An activity-date!");
 
-                            if (isPropertyExists(item, "Value.ParamFieldDateType"))
-                            {
-
-                                conditions.Add(field.DbColumnName + " between '" + filterForSQL(item.Value.BetweenFromFieldDate, true) + "' and '" + filterForSQL(item.Value.BetweenToFieldDate, true) + "'");
-                                logger.Debug("format as date range query request");
-                                break;
-                            }
-                            else
-                            {
-
-                                conditions.Add("CONVERT(date,'" + filterForSQL(item.Value, true) + "') = CONVERT(date,ActivityDate)");
-                                logger.Debug("format for duplicate checking!");
-                                break;
-                            }
-
-                            //CDMS 2.0 Original code 
-                            //Commented out because this only works for duplicate checking and not on the query page
-                            //conditions.Add("CONVERT(date,'" + filterForSQL(item.Value, true) + "') = CONVERT(date,ActivityDate)");
-                            //break;
-                    }
-                }
-=======
 							logger.Debug("An activity-date!");
 						
 							if (isPropertyExists(item, "Value.ParamFieldDateType"))
@@ -447,7 +423,6 @@ namespace services.Resources
 							//break;
 					}
 				}
->>>>>>> upstream/TribalCDMS2
 
             }
 
