@@ -311,7 +311,7 @@ join datastores ds on d.DatastoreId = ds.Id
                                   select d.FieldRoleId).FirstOrDefault();
 
                 //pick up the fieldroleid from the way it is used in datasetfields.
-                the_ds_field.FieldRoleId = (field_role != 1) ? field_role : 2; //default to DETAIL (2)
+                the_ds_field.FieldRoleId = (field_role != 0) ? field_role : 2; //default to DETAIL (2)
 
                 the_ds_field.CreateDateTime = DateTime.Now;
                 the_ds_field.Label = the_field.Name;
