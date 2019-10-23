@@ -43,5 +43,4 @@ UpgradeLog*.htm
 /.vs/*
 
 services/Migrations/*
-services/services.csproj
 
