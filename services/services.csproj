@@ -196,6 +196,15 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency_Header.cs" />
+    <Compile Include="Models\Data\Arrays_POP.cs" />
+    <Compile Include="Models\Data\Arrays_POP_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_POP_Header.cs" />
+    <Compile Include="Models\Data\Arrays_Site.cs" />
+    <Compile Include="Models\Data\Arrays_Site_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_Site_Header.cs" />
     <Compile Include="Models\Data\DM_Issues.cs" />
     <Compile Include="Models\Data\DM_Issues_Detail.cs" />
     <Compile Include="Models\Data\DM_Issues_Header.cs" />
@@ -208,6 +217,9 @@
     <Compile Include="Models\Data\NPT_RST.cs" />
     <Compile Include="Models\Data\NPT_RST_Detail.cs" />
     <Compile Include="Models\Data\NPT_RST_Header.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon_Detail.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon_Header.cs" />
     <Compile Include="Models\Data\SGS_Carcass.cs" />
     <Compile Include="Models\Data\SGS_Carcass_Detail.cs" />
     <Compile Include="Models\Data\SGS_Carcass_Header.cs" />
