@@ -41,3 +41,7 @@ UpgradeLog*.htm
 *.pubxml
 /TestingProject/*
 /.vs/*
+
+services/Migrations/*
+services/services.csproj
+
