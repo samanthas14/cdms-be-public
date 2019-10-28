@@ -13,10 +13,7 @@ namespace services.Models.Data
         public int FirstSequentialNumber { get; set; }
         public int LastSequentialNumber { get; set; }
         public string RelatedGroupType { get; set; }
-        public string SpeciesRun { get; set; }
         public int? BroodYear { get; set; }
-        public string FirstReleaseDate { get; set; }
-        public string LastReleaseDate { get; set; }
         public string HatcheryLocation { get; set; }
         public string StockLocation { get; set; }
         public string ReleaseStage { get; set; }
