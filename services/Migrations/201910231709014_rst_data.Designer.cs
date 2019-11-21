@@ -7,13 +7,13 @@ namespace services.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class reset : IMigrationMetadata
+    public sealed partial class rst_data : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(reset));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(rst_data));
         
         string IMigrationMetadata.Id
         {
-            get { return "201903252145334_reset"; }
+            get { return "201910231709014_rst_data"; }
         }
         
         string IMigrationMetadata.Source

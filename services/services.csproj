@@ -190,12 +190,29 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\DatasetController.cs" />
     <Compile Include="Controllers\DatastoreController.cs" />
-    <Compile Include="Migrations\201903252145334_reset.cs" />
-    <Compile Include="Migrations\201903252145334_reset.Designer.cs">
-      <DependentUpon>201903252145334_reset.cs</DependentUpon>
+    <Compile Include="Migrations\201910231634161_initial.cs" />
+    <Compile Include="Migrations\201910231634161_initial.Designer.cs">
+      <DependentUpon>201910231634161_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910231638083_release.cs" />
+    <Compile Include="Migrations\201910231638083_release.Designer.cs">
+      <DependentUpon>201910231638083_release.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910231709014_rst_data.cs" />
+    <Compile Include="Migrations\201910231709014_rst_data.Designer.cs">
+      <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_Efficiency_Header.cs" />
+    <Compile Include="Models\Data\Arrays_POP.cs" />
+    <Compile Include="Models\Data\Arrays_POP_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_POP_Header.cs" />
+    <Compile Include="Models\Data\Arrays_Site.cs" />
+    <Compile Include="Models\Data\Arrays_Site_Detail.cs" />
+    <Compile Include="Models\Data\Arrays_Site_Header.cs" />
     <Compile Include="Models\Data\DM_Issues.cs" />
     <Compile Include="Models\Data\DM_Issues_Detail.cs" />
     <Compile Include="Models\Data\DM_Issues_Header.cs" />
@@ -208,6 +225,15 @@
     <Compile Include="Models\Data\NPT_RST.cs" />
     <Compile Include="Models\Data\NPT_RST_Detail.cs" />
     <Compile Include="Models\Data\NPT_RST_Header.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon_Detail.cs" />
+    <Compile Include="Models\Data\NPT_Sturgeon_Header.cs" />
+    <Compile Include="Models\Data\Release_Data.cs" />
+    <Compile Include="Models\Data\Release_Data_Detail.cs" />
+    <Compile Include="Models\Data\Release_Data_Header.cs" />
+    <Compile Include="Models\Data\RST_Data.cs" />
+    <Compile Include="Models\Data\RST_Data_Detail.cs" />
+    <Compile Include="Models\Data\RST_Data_Header.cs" />
     <Compile Include="Models\Data\SGS_Carcass.cs" />
     <Compile Include="Models\Data\SGS_Carcass_Detail.cs" />
     <Compile Include="Models\Data\SGS_Carcass_Header.cs" />
@@ -390,8 +416,14 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903252145334_reset.resx">
-      <DependentUpon>201903252145334_reset.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910231634161_initial.resx">
+      <DependentUpon>201910231634161_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910231638083_release.resx">
+      <DependentUpon>201910231638083_release.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910231709014_rst_data.resx">
+      <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
