@@ -210,6 +210,10 @@
     <Compile Include="Migrations\201910281844314_release_fix_2.Designer.cs">
       <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912201555351_lamprey_dataset.cs" />
+    <Compile Include="Migrations\201912201555351_lamprey_dataset.Designer.cs">
+      <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -224,6 +228,9 @@
     <Compile Include="Models\Data\DM_Issues.cs" />
     <Compile Include="Models\Data\DM_Issues_Detail.cs" />
     <Compile Include="Models\Data\DM_Issues_Header.cs" />
+    <Compile Include="Models\Data\Lamprey_Data.cs" />
+    <Compile Include="Models\Data\Lamprey_Data_Detail.cs" />
+    <Compile Include="Models\Data\Lamprey_Data_Header.cs" />
     <Compile Include="Models\Data\NPT_Age.cs" />
     <Compile Include="Models\Data\NPT_Age_Detail.cs" />
     <Compile Include="Models\Data\NPT_Age_Header.cs" />
@@ -438,6 +445,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910281844314_release_fix_2.resx">
       <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201555351_lamprey_dataset.resx">
+      <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
