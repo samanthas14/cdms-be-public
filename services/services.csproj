@@ -218,6 +218,10 @@
     <Compile Include="Migrations\201912201607088_juv_detail.Designer.cs">
       <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912201620582_nosa_fix.cs" />
+    <Compile Include="Migrations\201912201620582_nosa_fix.Designer.cs">
+      <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -458,6 +462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912201607088_juv_detail.resx">
       <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201620582_nosa_fix.resx">
+      <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
