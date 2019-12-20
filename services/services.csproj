@@ -214,6 +214,10 @@
     <Compile Include="Migrations\201912201555351_lamprey_dataset.Designer.cs">
       <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912201607088_juv_detail.cs" />
+    <Compile Include="Migrations\201912201607088_juv_detail.Designer.cs">
+      <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -258,6 +262,9 @@
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -448,6 +455,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912201555351_lamprey_dataset.resx">
       <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201607088_juv_detail.resx">
+      <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
