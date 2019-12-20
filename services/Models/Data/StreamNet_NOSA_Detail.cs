@@ -15,6 +15,7 @@ namespace services.Models.Data
         public string WaterBody { get; set; }
         public string SpawningYear { get; set; }
         public string TRTmethod { get; set; }
+        public string NOSADefinition { get; set; }
         public string MethodNumber { get; set; }
         public string NOSAIJ { get; set; }
         public string NOSAEJ { get; set; }
