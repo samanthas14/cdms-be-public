@@ -202,6 +202,14 @@
     <Compile Include="Migrations\201910231709014_rst_data.Designer.cs">
       <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910281748448_release_fix.cs" />
+    <Compile Include="Migrations\201910281748448_release_fix.Designer.cs">
+      <DependentUpon>201910281748448_release_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910281844314_release_fix_2.cs" />
+    <Compile Include="Migrations\201910281844314_release_fix_2.Designer.cs">
+      <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -424,6 +432,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910231709014_rst_data.resx">
       <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910281748448_release_fix.resx">
+      <DependentUpon>201910281748448_release_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910281844314_release_fix_2.resx">
+      <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
