@@ -222,6 +222,14 @@
     <Compile Include="Migrations\201912201620582_nosa_fix.Designer.cs">
       <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912301853419_change_data_type.cs" />
+    <Compile Include="Migrations\201912301853419_change_data_type.Designer.cs">
+      <DependentUpon>201912301853419_change_data_type.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912301936154_rm_shadowid.cs" />
+    <Compile Include="Migrations\201912301936154_rm_shadowid.Designer.cs">
+      <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -465,6 +473,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912201620582_nosa_fix.resx">
       <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912301853419_change_data_type.resx">
+      <DependentUpon>201912301853419_change_data_type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912301936154_rm_shadowid.resx">
+      <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
