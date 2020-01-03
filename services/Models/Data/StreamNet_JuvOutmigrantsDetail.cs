@@ -11,47 +11,47 @@ using services.ExtensionMethods;
  */
 namespace services.ExtensionMethods
 {
-    public static class StreamNet_JuvOutmigrationDetailExtensions
+    public static class StreamNet_JuvOutmigrantsDetailExtensions
     {
         //Extension method to give ServicesContext this property.
-        public static DbSet<StreamNet_JuvOutmigrationDetail_Header> StreamNet_JuvOutmigrationDetail_Header(this ServicesContext ctx)
+        public static DbSet<StreamNet_JuvOutmigrantsDetail_Header> StreamNet_JuvOutmigrantsDetail_Header(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("StreamNet_JuvOutmigrationDetail_Header").Cast<StreamNet_JuvOutmigrationDetail_Header>();
+            return ctx.GetDbSet("StreamNet_JuvOutmigrantsDetail_Header").Cast<StreamNet_JuvOutmigrantsDetail_Header>();
         }
 
-        public static DbSet<StreamNet_JuvOutmigrationDetail_Detail> StreamNet_JuvOutmigrationDetail_Detail(this ServicesContext ctx)
+        public static DbSet<StreamNet_JuvOutmigrantsDetail_Detail> StreamNet_JuvOutmigrantsDetail_Detail(this ServicesContext ctx)
         {
-            return ctx.GetDbSet("StreamNet_JuvOutmigrationDetail_Detail").Cast<StreamNet_JuvOutmigrationDetail_Detail>();
+            return ctx.GetDbSet("StreamNet_JuvOutmigrantsDetail_Detail").Cast<StreamNet_JuvOutmigrantsDetail_Detail>();
         }
     }
 }
 
 namespace services.Models.Data
 {
-    public class StreamNet_JuvOutmigrationDetail : DatasetData
+    public class StreamNet_JuvOutmigrantsDetail : DatasetData
     {
         public Dataset Dataset { get; set; }
-        public StreamNet_JuvOutmigrationDetail_Header Header { get; set; }
-        public List<StreamNet_JuvOutmigrationDetail_Detail> Details { get; set; }
+        public StreamNet_JuvOutmigrantsDetail_Header Header { get; set; }
+        public List<StreamNet_JuvOutmigrantsDetail_Detail> Details { get; set; }
 
-        public StreamNet_JuvOutmigrationDetail()
+        public StreamNet_JuvOutmigrantsDetail()
         {
-            Details = new List<StreamNet_JuvOutmigrationDetail_Detail>();
+            Details = new List<StreamNet_JuvOutmigrantsDetail_Detail>();
         }
 
 
         // load an existing one
-        public StreamNet_JuvOutmigrationDetail(int ActivityId)
+        public StreamNet_JuvOutmigrantsDetail(int ActivityId)
         {
             var ndb = ServicesContext.Current;
-            Details = new List<StreamNet_JuvOutmigrationDetail_Detail>();
+            Details = new List<StreamNet_JuvOutmigrantsDetail_Detail>();
 
             //select header by activityid (taking effdt into account)
-            var headers_q = from h in ndb.StreamNet_JuvOutmigrationDetail_Header()
+            var headers_q = from h in ndb.StreamNet_JuvOutmigrantsDetail_Header()
                             where h.ActivityId == ActivityId
                             join h2 in
                                 (
-                                    from hh in ndb.StreamNet_JuvOutmigrationDetail_Header()
+                                    from hh in ndb.StreamNet_JuvOutmigrantsDetail_Header()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by hh.ActivityId into cig
@@ -66,12 +66,12 @@ namespace services.Models.Data
             Dataset = Header.Activity.Dataset;
 
             //select detail by activityid (taking effdt into account)
-            var details_q = from h in ndb.StreamNet_JuvOutmigrationDetail_Detail()
+            var details_q = from h in ndb.StreamNet_JuvOutmigrantsDetail_Detail()
                             where h.ActivityId == ActivityId
                             where h.RowStatusId == DataDetail.ROWSTATUS_ACTIVE
                             join h2 in
                                 (
-                                    from hh in ndb.StreamNet_JuvOutmigrationDetail_Detail()
+                                    from hh in ndb.StreamNet_JuvOutmigrantsDetail_Detail()
                                     where hh.EffDt <= DateTime.Now
                                     where hh.ActivityId == ActivityId
                                     group hh by new { hh.ActivityId, hh.RowId } into cig

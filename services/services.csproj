@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201912301936154_rm_shadowid.Designer.cs">
       <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001031710498_changed_name.cs" />
+    <Compile Include="Migrations\202001031710498_changed_name.Designer.cs">
+      <DependentUpon>202001031710498_changed_name.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -274,9 +278,9 @@
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
-    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail.cs" />
-    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail_Detail.cs" />
-    <Compile Include="Models\Data\StreamNet_JuvOutmigrationDetail_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -479,6 +483,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912301936154_rm_shadowid.resx">
       <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001031710498_changed_name.resx">
+      <DependentUpon>202001031710498_changed_name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
