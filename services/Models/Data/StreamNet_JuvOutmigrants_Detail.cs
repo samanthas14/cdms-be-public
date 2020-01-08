@@ -4,10 +4,10 @@ namespace services.Models.Data
 {
     public class StreamNet_JuvOutmigrants_Detail : DataDetail
     {
-        public StreamNet_JuvOutmigrants_Detail()
-        {
-            ShadowId = Guid.NewGuid().ToString();
-        }
+        //public StreamNet_JuvOutmigrants_Detail()
+        //{
+        //    ShadowId = Guid.NewGuid().ToString();
+        //}
 
         public string CommonName { get; set; }
         public string Run { get; set; }

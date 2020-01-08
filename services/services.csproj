@@ -202,6 +202,38 @@
     <Compile Include="Migrations\201910231709014_rst_data.Designer.cs">
       <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910281748448_release_fix.cs" />
+    <Compile Include="Migrations\201910281748448_release_fix.Designer.cs">
+      <DependentUpon>201910281748448_release_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910281844314_release_fix_2.cs" />
+    <Compile Include="Migrations\201910281844314_release_fix_2.Designer.cs">
+      <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912201555351_lamprey_dataset.cs" />
+    <Compile Include="Migrations\201912201555351_lamprey_dataset.Designer.cs">
+      <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912201607088_juv_detail.cs" />
+    <Compile Include="Migrations\201912201607088_juv_detail.Designer.cs">
+      <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912201620582_nosa_fix.cs" />
+    <Compile Include="Migrations\201912201620582_nosa_fix.Designer.cs">
+      <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912301853419_change_data_type.cs" />
+    <Compile Include="Migrations\201912301853419_change_data_type.Designer.cs">
+      <DependentUpon>201912301853419_change_data_type.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912301936154_rm_shadowid.cs" />
+    <Compile Include="Migrations\201912301936154_rm_shadowid.Designer.cs">
+      <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001031710498_changed_name.cs" />
+    <Compile Include="Migrations\202001031710498_changed_name.Designer.cs">
+      <DependentUpon>202001031710498_changed_name.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\Data\Arrays_Efficiency.cs" />
@@ -216,6 +248,9 @@
     <Compile Include="Models\Data\DM_Issues.cs" />
     <Compile Include="Models\Data\DM_Issues_Detail.cs" />
     <Compile Include="Models\Data\DM_Issues_Header.cs" />
+    <Compile Include="Models\Data\Lamprey_Data.cs" />
+    <Compile Include="Models\Data\Lamprey_Data_Detail.cs" />
+    <Compile Include="Models\Data\Lamprey_Data_Header.cs" />
     <Compile Include="Models\Data\NPT_Age.cs" />
     <Compile Include="Models\Data\NPT_Age_Detail.cs" />
     <Compile Include="Models\Data\NPT_Age_Header.cs" />
@@ -243,6 +278,9 @@
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Detail.cs" />
     <Compile Include="Models\Data\StreamNet_JuvOutmigrants_Header.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail_Detail.cs" />
+    <Compile Include="Models\Data\StreamNet_JuvOutmigrantsDetail_Header.cs" />
     <Compile Include="Models\PitagisData.cs" />
     <Compile Include="Models\LookupTable.cs" />
     <Compile Include="Models\Seasons.cs" />
@@ -424,6 +462,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910231709014_rst_data.resx">
       <DependentUpon>201910231709014_rst_data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910281748448_release_fix.resx">
+      <DependentUpon>201910281748448_release_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910281844314_release_fix_2.resx">
+      <DependentUpon>201910281844314_release_fix_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201555351_lamprey_dataset.resx">
+      <DependentUpon>201912201555351_lamprey_dataset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201607088_juv_detail.resx">
+      <DependentUpon>201912201607088_juv_detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912201620582_nosa_fix.resx">
+      <DependentUpon>201912201620582_nosa_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912301853419_change_data_type.resx">
+      <DependentUpon>201912301853419_change_data_type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912301936154_rm_shadowid.resx">
+      <DependentUpon>201912301936154_rm_shadowid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001031710498_changed_name.resx">
+      <DependentUpon>202001031710498_changed_name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
